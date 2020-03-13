@@ -32,5 +32,5 @@ int main(void)
             return (0);
         write(1, "&> ", 3);
     }
-    return (0);
+    return (1);
 }
