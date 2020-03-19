@@ -3,61 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madelaco <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/10 09:46:33 by madelaco          #+#    #+#             */
-/*   Updated: 2019/10/14 15:04:49 by madelaco         ###   ########.fr       */
+/*   Created: 2019/10/07 18:20:56 by avan-pra          #+#    #+#             */
+/*   Updated: 2019/10/07 18:20:57 by avan-pra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	return_value(unsigned long n, int s)
-{
-	if ((n > 2147483647) && (s == 1))
-		return (-1);
-	if ((n > 2147483648) && (s == -1))
-		return (0);
-	return ((int)n * s);
-}
-
-int	signe_atoi(char *str, int *i)
-{
-	int s;
-
-	s = 1;
-	if (str[*i] == '-')
-	{
-		s = -1;
-		*i += 1;
-	}
-	else if (str[*i] == '+')
-		*i += 1;
-	return (s);
-}
-
 int	ft_atoi(const char *str)
 {
 	int				i;
-	int				s;
-	int				min;
-	unsigned long	n;
-	unsigned long	d;
+	int				ret;
+	unsigned long	result;
 
 	i = 0;
-	d = 1;
-	n = 0;
-	while (str[i] == 32 || ((str[i] > 8) && (str[i] < 14)))
+	ret = 1;
+	if (!str)
+		return (0);
+	while ((str[i] >= 9 && str[i] <= 13) || str[i] == ' ')
 		i++;
-	s = signe_atoi((char *)str, &i);
-	min = i;
-	while (ft_isdigit(str[i]))
-		i++;
-	i--;
-	while (i >= min)
+	if (str[i] == '-' || str[i] == '+')
 	{
-		n += (str[i--] - '0') * d;
-		d *= 10;
+		if (str[i] == '-')
+			ret = -1;
+		i++;
 	}
-	return (return_value(n, s));
+	result = 0;
+	while (str[i] >= '0' && str[i] <= '9')
+	{
+		result = result * 10 + (str[i] - '0');
+		i++;
+	}
+	return ((int)result * ret);
 }

@@ -1,22 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_front.c                                  :+:      :+:    :+:   */
+/*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: delacourt <delacourt@student.42.fr>        +#+  +:+       +#+        */
+/*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/16 14:46:32 by delacourt         #+#    #+#             */
-/*   Updated: 2019/10/16 14:48:39 by delacourt        ###   ########.fr       */
+/*   Created: 2019/10/16 14:02:15 by avan-pra          #+#    #+#             */
+/*   Updated: 2019/10/16 14:02:16 by avan-pra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void ft_lstadd_front(t_list **alst, t_list *new)
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *))
 {
-  if (alst && new)
-  {
-    new->next = *alst;
-    *alst = new;
-  }
+	t_list *maille;
+
+	if (!lst || (*f))
+		return (NULL);
+	if (!(maille = ft_lstnew((*f)(lst->content))))
+		return (NULL);
+	maille->next = ft_lstmap(lst->next, (*f));
+	return (maille);
 }

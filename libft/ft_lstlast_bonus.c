@@ -1,25 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   char_in_str.c                                      :+:      :+:    :+:   */
+/*   ft_lstlast_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madelaco <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/08 14:28:59 by madelaco          #+#    #+#             */
-/*   Updated: 2019/10/08 14:30:18 by madelaco         ###   ########.fr       */
+/*   Created: 2019/10/10 15:55:56 by avan-pra          #+#    #+#             */
+/*   Updated: 2019/10/10 15:55:58 by avan-pra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	char_in_str(char c, char *str)
-{
-	int i;
+#include "libft.h"
 
-	i = 0;
-	while (str[i])
-	{
-		if (c == str[i])
-			return (1);
-		i++;
-	}
-	return (0);
+t_list	*ft_lstlast(t_list *lst)
+{
+	if (!(lst))
+		return (NULL);
+	while (lst->next != NULL)
+		lst = lst->next;
+	return (lst);
 }
