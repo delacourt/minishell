@@ -33,48 +33,36 @@ int exec_prog(char *line, char **argv, char **envp)
 int is_broken_quote(char *line)
 {
 	int i;
-	char quote[1024];
-	char j;
-	int sq;
-	int dq;
 
 	i = 0;
-	j = 0;
-	ft_memset(quote, 0, 1024);
 	while (line[i] != '\0')
 	{
-		if (line[i] == '\\')
-		{
-			++i;
-			if (line[i] == '\0')
-				return (1);
-		}
-		else if (line[i] == '\"')
-			quote[j++] = '\"';
-		else if (line[i] == '\'')
-			quote[j++] = '\'';
-		++i;
-	}
-	j = ft_strlen(quote);
-	if (j % 2 == 1)
-		return (1);
-	printf("%s\n", quote);
-	i = 0;
-	sq = 0;
-	dq = 0;
-	while (line[i] != '\0')
-	{
-		if (line[i] == '\'')
-		{
-			++sq;
-		}
 		if (line[i] == '\"')
 		{
-			++dq;
+			++i;
+			while (line[i] != '\"' && line[i] != '\0')
+			{
+				if (line[i] == '\\')
+					++i;
+				++i;
+			}
 		}
-
-
-
+		else if (line[i] == '\'')
+		{
+			++i;
+			while (line[i] != '\'' && line[i] != '\0')
+			{
+				
+				if (line[i] == '\\' && line[i + 1] != '\'')
+					++i;
+				++i;
+			}
+		}
+		else if (line[i] == '\\')
+			++i;
+		if (line[i] == '\0')
+			return (1);
+		++i;
 	}
 	return (0); // a changer
 }
@@ -82,18 +70,24 @@ int is_broken_quote(char *line)
 int isbuiltin(char *line)
 {
 	char **tab;
-	char *resu;
 	int i;
 
 	i = is_broken_quote(line);
-	printf("%d\n", i);
-	// tab = ft_split(line, ' ');
-	// i = 0;
-	// while(tab[i] != NULL)
-	// {
-	// 	printf("%s\n", tab[i]);
-	// 	++i;
-	// }
+	if (i != 0)
+	{
+		printf("broken pipe\n");
+		return (i);
+	}
+	while (line[i] == ' ')
+		++i;
+	if (ft_strncmp(&line[i], "echo", 4) == 0 || ft_strncmp(&line[i], "cd", 2) == 0 || ft_strncmp(&line[i], "pwd", 3) == 0
+		|| ft_strncmp(&line[i], "export", 6) == 0 || ft_strncmp(&line[i], "unset", 5) == 0 || ft_strncmp(&line[i], "env", 3) == 0
+		|| ft_strncmp(&line[i], "exit", 2) == 0)
+	{
+		printf("yes\n");
+	}
+	else
+		printf("no\n");
 	// if (ft_strncmp("cd", tab[0], 2) == 0)
 	// 	cd(line);
 	// if (ft_strncmp("pwd", tab[0], 3) == 0)
@@ -109,7 +103,6 @@ int main(int argc, char **argv, char **envp)
 	char *path;
 
     print_new_line();
-	
 	while (1)
     {
         i = get_next_line(0, &line);
@@ -117,7 +110,7 @@ int main(int argc, char **argv, char **envp)
 		if (isbuiltin(line) == 1)
 			;
 		else
-			exec_prog(line, NULL, envp);
+			;//exec_prog(line, NULL, envp);
         if (i == 0)
         	return (0);
 		print_new_line();
