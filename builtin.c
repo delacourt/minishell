@@ -3,14 +3,23 @@
 int echo(char **tab)
 {
 	int i;
+	int is_n;
 
 	i = 0;
+	is_n = 0;
+	if (ft_strncmp(tab[0], "-n", 2) == 0)
+	{
+		is_n = 1;
+		i = 1;
+	}
 	while (tab[i] != NULL)
 	{
 		write(1, tab[i], ft_strlen(tab[i]));
-		write(1, " ", 1);
 		++i;
+		if (tab[i] != NULL)
+			write(1, " ", 1);
 	}
+	if (is_n == 0)
 	write(1, "\n", 1);
 	return (0);
 }
@@ -26,13 +35,18 @@ int pwd()
 	return (1);
 }
 
+void end(char **tab)
+{
+	int i;
+
+	i = 0;
+	while(tab[i] != NULL)
+		++i;
+	free_arr(tab, i);
+	exit(0);
+}
+
 int cd(char *line)
 {
-	int i = 0;
-
-	while(line[i] == ' ')
-		++i;
-	i = i + 2;
-	printf("yo\n");
 	return (1);
 }

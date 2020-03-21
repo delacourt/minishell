@@ -21,11 +21,15 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <stdio.h>
+#include <signal.h>
 
 int cd(char *line);
 int pwd();
 int echo(char **tab);
+void end(char **tab);
 void	*free_arr(char **tab, int j);
 char	**ft_enhanced_split(char const *str);
+void sighandler(int signum);
+void print_new_line();
 
 #endif

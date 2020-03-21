@@ -78,21 +78,27 @@ int isbuiltin(char *line)
 		printf("broken pipe\n");
 		return (i);
 	}
-	while (line[i] == ' ')
-		++i;
-	if (ft_strncmp(&line[i], "echo", 4) == 0 || ft_strncmp(&line[i], "cd", 2) == 0 || ft_strncmp(&line[i], "pwd", 3) == 0
-		|| ft_strncmp(&line[i], "export", 6) == 0 || ft_strncmp(&line[i], "unset", 5) == 0 || ft_strncmp(&line[i], "env", 3) == 0
-		|| ft_strncmp(&line[i], "exit", 2) == 0)
+
+	tab = ft_enhanced_split(line);
+	if (ft_strncmp(tab[0], "echo", 4) == 0 || ft_strncmp(tab[0], "cd", 2) == 0 || ft_strncmp(tab[0], "pwd", 3) == 0
+	|| ft_strncmp(tab[0], "export", 6) == 0 || ft_strncmp(tab[0], "unset", 5) == 0 || ft_strncmp(tab[0], "env", 3) == 0
+	|| ft_strncmp(tab[0], "exit", 2) == 0)
 	{
-		tab = ft_enhanced_split(line);
 		if (ft_strncmp("echo", tab[0], 5) == 0)
 			echo(&tab[1]);
 		else if (ft_strncmp("pwd", tab[0], 3) == 0)
 			pwd();
+		else if (ft_strncmp("exit", tab[0], 4) == 0)
+			end(tab);
 		free_arr(tab, i);
 	}
 	else
-		printf("not a builtin\n");
+	{
+		if (ft_strncmp("./", tab[0], 2) == 0)
+		{
+			exec_prog(tab[0], &tab[1], NULL);
+		}
+	}
 	return (i);
 }
 
@@ -103,6 +109,7 @@ int main(int argc, char **argv, char **envp)
 	char *path;
 
     print_new_line();
+	signal(SIGINT, sighandler);
 	while (1)
     {
         i = get_next_line(0, &line);
