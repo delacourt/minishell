@@ -84,15 +84,15 @@ int isbuiltin(char *line)
 		|| ft_strncmp(&line[i], "export", 6) == 0 || ft_strncmp(&line[i], "unset", 5) == 0 || ft_strncmp(&line[i], "env", 3) == 0
 		|| ft_strncmp(&line[i], "exit", 2) == 0)
 	{
-		printf("yes\n");
+		tab = ft_enhanced_split(line);
+		if (ft_strncmp("echo", tab[0], 5) == 0)
+			echo(&tab[1]);
+		else if (ft_strncmp("pwd", tab[0], 3) == 0)
+			pwd();
+		free_arr(tab, i);
 	}
 	else
-		printf("no\n");
-	// if (ft_strncmp("cd", tab[0], 2) == 0)
-	// 	cd(line);
-	// if (ft_strncmp("pwd", tab[0], 3) == 0)
-	// 	pwd();
-	// //free_le_tab
+		printf("not a builtin\n");
 	return (i);
 }
 

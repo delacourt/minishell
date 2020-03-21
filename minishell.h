@@ -24,6 +24,8 @@
 
 int cd(char *line);
 int pwd();
-int echo();
+int echo(char **tab);
+void	*free_arr(char **tab, int j);
+char	**ft_enhanced_split(char const *str);
 
 #endif

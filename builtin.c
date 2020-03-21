@@ -1,8 +1,18 @@
 #include "minishell.h"
 
-int echo()
+int echo(char **tab)
 {
-	return (1);
+	int i;
+
+	i = 0;
+	while (tab[i] != NULL)
+	{
+		write(1, tab[i], ft_strlen(tab[i]));
+		write(1, " ", 1);
+		++i;
+	}
+	write(1, "\n", 1);
+	return (0);
 }
 
 int pwd()

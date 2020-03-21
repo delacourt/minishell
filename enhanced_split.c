@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static void	*free_arr(char **tab, int j)
+void	*free_arr(char **tab, int j)
 {
 	while (j >= 0)
 	{
@@ -15,7 +15,6 @@ static int	count_split(const char *str)
 {
 	int i;
 	int ret;
-	int oldret;
 
 	i = 0;
 	ret = 1;
@@ -23,18 +22,15 @@ static int	count_split(const char *str)
 		i++;
 	while (str[i] != '\0')
 	{
+		// printf("ret = %d  str = %s\n", ret, &str[i]);
 		if (str[i] == ' ')
 		{
-			++ret;
 			while (str[i] == ' ')
 				i++;
 			--i;
 		}
 		else if (str[i] == '\"')
 		{
-			oldret = ret;
-			if (str[i + 1] == '\"')
-				--ret;
 			++ret;
 			++i;
 			while (str[i] != '\"' && str[i] != '\0')
@@ -43,14 +39,11 @@ static int	count_split(const char *str)
 					++i;
 				++i;
 			}
-			if (str[i + 1] != ' ' && oldret != ret)
+			if (str[i + 1] != ' ')
 				--ret;
 		}
 		else if (str[i] == '\'')
 		{
-			oldret = ret;
-			if (str[i + 1] == '\"')
-				--ret;
 			++ret;
 			++i;
 			while (str[i] != '\'' && str[i] != '\0')
@@ -59,11 +52,18 @@ static int	count_split(const char *str)
 					++i;
 				++i;
 			}
-			if (str[i + 1] != ' ' && oldret != ret)
+			if (str[i + 1] != ' ')
 				--ret;
 		}
 		else if (str[i] == '\\')
 			++i;
+		else
+		{
+			++ret;
+			while (str[i] != ' ' && str[i] != '\0')
+				++i;
+			--i;
+		}
 		i++;
 	}
 	if (i > 0 && str[i - 1] == ' ')
@@ -78,16 +78,16 @@ static int	count_words(const char *str)
 
 	i = 0;
 	ret = 0;
+	while (str[i] == ' ')
+		++i;
 	while (str[i] != '\0' && str[i] != ' ')
 	{
-		while (str[i] == ' ')
-			++i;
 		if (str[i] == '\"')
 		{
 			++i;
 			while (str[i] != '\"' && str[i] != '\0')
 			{
-				if (str[i] == '\\')
+				if (str[i] == '\\' && str[i + 1] == '\"')
 					++i;
 				++i;
 				++ret;
@@ -98,28 +98,105 @@ static int	count_words(const char *str)
 			++i;
 			while (str[i] != '\'' && str[i] != '\0')
 			{
-				if (str[i] == '\\' && str[i + 1] != '\'')
-					++i;
 				++i;
 				++ret;
 			}
 		}
 		else if (str[i] == '\\')
-			++i;
-		else
 		{
 			++i;
 			++ret;
 		}
+		else
+			++ret;
+		++i;
 	}
 	return (ret);
 }
 
-char *fill_word(char *str)
+char *fill_word(const char *str, int plac)
 {
-	char *mal; // a malloc en callant count words et return
+	int i;
+	char *word;
+	char dep;
 
-	//checker si oui ou non il faut le charactere en question, 
+	if (!(word = malloc((count_words(&str[plac]) * sizeof(char)))))
+		return (NULL);
+	i = 0;
+	dep = 0;
+	while (str[i] == ' ')
+		++i;
+	while (str[i] != '\0' && str[i] != ' ')
+	{
+		if (str[i] == '\"')
+		{
+			++i;
+			while (str[i] != '\"' && str[i] != '\0')
+			{
+				if (str[i] == '\\' && str[i + 1] == '\"')
+					++i;
+				word[dep] = str[i];
+				++dep;
+				++i;
+			}
+		}
+		else if (str[i] == '\'')
+		{
+			++i;
+			while (str[i] != '\'' && str[i] != '\0')
+			{
+				word[dep] = str[i];
+				++dep;
+				++i;
+			}
+		}
+		else if (str[i] == '\\')
+		{
+			++i;
+			word[dep] = str[i];
+			++dep;
+		}
+		else
+		{
+			word[dep] = str[i];
+			++dep;
+		}
+		++i;
+	}
+	word[dep] = '\0';
+	return (word);
+}
+
+int advance(const char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i] == ' ')
+		++i;
+	while (str[i] != '\0' && str[i] != ' ')
+	{
+		if (str[i] == '\"')
+		{
+			++i;
+			while (str[i] != '\"' && str[i] != '\0')
+			{
+				if (str[i] == '\\' && str[i + 1] == '\"')
+					++i;
+				++i;
+			}
+		}
+		else if (str[i] == '\'')
+		{
+			++i;
+			while (str[i] != '\'' && str[i] != '\0')
+				++i;
+		}
+		else if (str[i] == '\\')
+			++i;
+		++i;
+	}
+	return (i);
 }
 
 char		**ft_enhanced_split(char const *str)
@@ -130,21 +207,25 @@ char		**ft_enhanced_split(char const *str)
 	int		k;
 
 	i = 0;
-
+	// printf("str init = %s\n", str);
+	// printf("split nbr = %d\n", count_split(str));
 	if (!(tab = malloc((count_split(str) + 1) * sizeof(char*))))
 		return (NULL);
 	i = 0;
 	j = 0;
-	while (str[i] == ' ')
-		i++;
 	while (j < count_split(str))
 	{
+		// printf("count = %d\n", count_words(&str[i]));
 		k = 0;
-		tab[j] = fill_word(&str[i]);
-		tab[j][k] = '\0';
-		j++;
+	 	tab[j] = fill_word(&str[i], i);
+	 	j++;
+		i = i + advance(&str[i]);
 		//rajouter des trucs ici pour passer au prochain mots (sarreter au prochain espace pas dans des quotes)
 	}
 	tab[j] = NULL;
+	i = 0;
+	// while(tab[i] != NULL)
+	//  	printf("finale: %s\n", tab[i++]);
+	// free_arr(tab, j);
 	return (tab);
 }

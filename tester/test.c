@@ -7,7 +7,7 @@ int main(int argc, char **argv)
 	int i;
 	char **tab;
 
-	tab = ft_enhanced_split(argv[1]);
+	tab = ft_enhanced_split("echo \"hello\"");
 	// i = 0;
 	// while (tab[i] != NULL)
 	// 	printf("%s\n", tab[i++]);
