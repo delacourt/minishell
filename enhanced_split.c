@@ -17,7 +17,7 @@ static int	count_split(const char *str)
 	int ret;
 
 	i = 0;
-	ret = 1;
+	ret = 0;
 	while (str[i] == ' ')
 		i++;
 	while (str[i] != '\0')
@@ -55,8 +55,6 @@ static int	count_split(const char *str)
 			if (str[i + 1] != ' ')
 				--ret;
 		}
-		else if (str[i] == '\\')
-			++i;
 		else
 		{
 			++ret;
@@ -66,8 +64,6 @@ static int	count_split(const char *str)
 		}
 		i++;
 	}
-	if (i > 0 && str[i - 1] == ' ')
-		ret--;
 	return (ret);
 }
 
