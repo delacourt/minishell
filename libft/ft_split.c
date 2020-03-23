@@ -3,107 +3,91 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: delacourt <delacourt@student.42.fr>        +#+  +:+       +#+        */
+/*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/08 14:26:24 by madelaco          #+#    #+#             */
-/*   Updated: 2019/10/16 12:32:42 by delacourt        ###   ########.fr       */
+/*   Created: 2019/10/08 15:40:48 by avan-pra          #+#    #+#             */
+/*   Updated: 2019/10/08 15:40:49 by avan-pra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		malloc_arr(char ***arr, char *str, char c)
+static void	*free_arr(char **tab, int j)
+{
+	while (j >= 0)
+	{
+		free(tab[j]);
+		j--;
+	}
+	free(tab);
+	return (NULL);
+}
+
+static int	is_charset(char myl, char c)
+{
+	if (myl == c)
+		return (1);
+	return (0);
+}
+
+static int	count_split(const char *str, char c)
 {
 	int i;
-	int r;
+	int ret;
 
 	i = 0;
-	r = 1;
-	while (str[i])
+	ret = 1;
+	while (is_charset(str[i], c) == 1)
+		i++;
+	while (str[i] != '\0')
 	{
-		if (str[i] == c)
+		if (is_charset(str[i], c) == 1)
 		{
-			r++;
-			i++;
-			while (str[i] == c)
+			ret++;
+			while (is_charset(str[i], c) == 1)
 				i++;
 		}
 		else
 			i++;
 	}
-	if (!(*arr = malloc(sizeof(**arr) * (r + 1))))
-		return (0);
-	return (1);
+	if (i > 0 && is_charset(str[i - 1], c) == 1)
+		ret--;
+	return (ret);
 }
 
-int		malloc_str(char **arr_k, char ***arr, int j)
+static int	count_words(const char *str, char c)
 {
-	int i;
+	int ret;
 
-	i = 0;
-	if (!(*arr_k = malloc(sizeof(char) * (j))))
-	{
-		while (*arr[i])
-			free(*arr[i++]);
-		free(*arr);
-		return (0);
-	}
-	return (1);
+	ret = 0;
+	while (is_charset(str[ret], c) == 0 && str[ret] != '\0')
+		ret++;
+	return (ret);
 }
 
-void	str_malloc(char *str, char c, char **arr)
+char		**ft_split(char const *s, char c)
 {
-	int k;
-	int j;
-
-	k = 0;
-	j = 0;
-	while (*str)
-	{
-		while ((*str == c) && *str)
-			str++;
-		if (!(*str == c) && *str)
-		{
-			if (k > 0)
-				malloc_str(&arr[k - 1], &arr, (j + 1));
-			j = (k++ > 0) ? 0 : j;
-		}
-		while (!(*str == c) && *str)
-		{
-			j++;
-			str++;
-		}
-	}
-	if (k > 0)
-		malloc_str(&arr[k - 1], &arr, (j + 1));
-	arr[k] = malloc(sizeof(NULL));
-}
-
-char	**ft_split(char const *str, char c)
-{
+	char	**tab;
+	int		i;
 	int		j;
 	int		k;
-	char	**arr;
 
-	malloc_arr(&arr, (char *)str, c);
-  str_malloc((char *)str, c, arr);
-  j = 0;
-	k = 0;
-	while (*str)
+	if (!(tab = malloc((count_split(s, c) + 1) * sizeof(char*))))
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (j < count_split(s, c) && s[0] != '\0' && s != NULL)
 	{
-		while ((*str == c) && *str)
-			str++;
-		if (!(*str == c) && *str)
-		{
-			if (k > 0)
-				arr[k - 1][j] = '\0';
-			j = (k++ > 0) ? 0 : j;
-		}
-		while (!(*str == c) && *str)
-			arr[k - 1][j++] = *(str++);
+		k = 0;
+		while (is_charset(s[i], c) == 1)
+			i++;
+		if (!(tab[j] = malloc((count_words(&s[i], c) + 1) * sizeof(char))))
+			return (free_arr(tab, j));
+		while (s[i] != '\0' && is_charset(s[i], c) == 0)
+			tab[j][k++] = s[i++];
+		tab[j][k] = '\0';
+		j++;
 	}
-	if (k > 0)
-		arr[k - 1][j] = '\0';
-	arr[k] = NULL;
-	return (arr);
+	tab[j] = NULL;
+	return (tab);
 }

@@ -3,59 +3,73 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madelaco <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/09 15:03:04 by madelaco          #+#    #+#             */
-/*   Updated: 2019/10/10 08:41:56 by madelaco         ###   ########.fr       */
+/*   Created: 2019/10/09 10:12:45 by avan-pra          #+#    #+#             */
+/*   Updated: 2019/10/09 10:12:46 by avan-pra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		size_array(int n)
+static char	*next(char *str, long n, int len)
 {
-	int		r;
-	long	nbr;
+	int i;
+	int neg;
 
-	r = 0;
-	nbr = (long)n;
-	if (nbr == 0)
-		return (2);
-	if (nbr < 0)
+	if (n < 0)
 	{
-		r++;
-		nbr = nbr * -1;
+		str[len + 1] = '\0';
+		str[0] = '-';
 	}
-	while (nbr > 0)
+	else
+		str[len + 1] = '\0';
+	i = len;
+	if (n < 0)
+		neg = 1;
+	else
+		neg = 0;
+	n < 0 ? n = n * -1 : n;
+	while (i >= neg)
 	{
-		r++;
-		nbr /= 10;
+		str[i] = (n % 10) + '0';
+		n = n / 10;
+		i--;
 	}
-	return (r + 1);
+	return (str);
 }
 
-char	*ft_itoa(int n)
+static void	ft_setup(int n, long *k, int *len, long *nb)
 {
-	char	*str;
-	int		i;
-	long	nbr;
+	*nb = (long)n;
+	*len = 1;
+	*k = *nb;
+}
 
-	i = 0;
-	nbr = (long)n;
-	if (!(str = malloc(sizeof(char) * size_array(n))))
-		return (NULL);
-	if (nbr == 0)
-		str[i++] = '0';
-	if (nbr < 0)
-		nbr = nbr * -1;
-	while (nbr > 0)
+char		*ft_itoa(int n)
+{
+	long	k;
+	int		len;
+	char	*str;
+	long	nb;
+
+	ft_setup(n, &k, &len, &nb);
+	k < 0 ? k = k * -1 : k;
+	while (k >= 10)
 	{
-		str[i++] = nbr % 10 + '0';
-		nbr /= 10;
+		k = k / 10;
+		len = len + 1;
 	}
-	if (n < 0)
-		str[i++] = '-';
-	str[i] = '\0';
-	ft_revstr(str);
-	return (str);
+	if (nb < 0)
+	{
+		if (!(str = malloc((len + 2) * sizeof(char))))
+			return (NULL);
+	}
+	else
+	{
+		if (!(str = malloc((len + 1) * sizeof(char))))
+			return (NULL);
+		len = len - 1;
+	}
+	return (next(str, nb, len));
 }

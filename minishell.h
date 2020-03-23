@@ -15,5 +15,21 @@
 
 # define BUFFER_SIZE 32
 #include "get_next_line/get_next_line.h"
+#include "libft/libft.h"
+#include <unistd.h>
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <stdio.h>
+#include <signal.h>
+
+int cd(char *line);
+int pwd();
+int echo(char **tab);
+void end(char **tab);
+void	*free_arr(char **tab, int j);
+char	**ft_enhanced_split(char const *str);
+void sighandler(int signum);
+void print_new_line();
 
 #endif

@@ -3,53 +3,70 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: delacourt <delacourt@student.42.fr>        +#+  +:+       +#+        */
+/*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/08 14:01:18 by madelaco          #+#    #+#             */
-/*   Updated: 2019/10/14 15:06:17 by madelaco         ###   ########.fr       */
+/*   Created: 2019/10/08 15:19:49 by avan-pra          #+#    #+#             */
+/*   Updated: 2019/10/08 15:19:50 by avan-pra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int		trim_len(char *s1, char *set)
+static int		is_set(char s, const char *set)
 {
 	int i;
-	int r;
 
 	i = 0;
-	r = 0;
-	while (char_in_str(s1[i], set))
-		i++;
-	while (s1[i++])
-		r++;
-	i = i - 2;
-	while (i >= 0 && char_in_str(s1[i], set))
+	while (set[i] != '\0')
 	{
-		r--;
-		i--;
+		if (set[i] == s)
+			return (1);
+		i++;
 	}
-	return (r + 1);
+	return (0);
 }
 
-char	*ft_strtrim(char const *s1, char const *set)
+static int		trim_calc(const char *s1, const char *set)
+{
+	int i;
+	int k;
+	int ret;
+
+	i = 0;
+	ret = 0;
+	k = 0;
+	while (is_set(s1[i], set) == 1 && s1[i] != '\0')
+		i++;
+	while (s1[k] != '\0')
+		k++;
+	k--;
+	while (k >= 0 && is_set(s1[k], set) == 1)
+		k--;
+	if (k - i < -1)
+		return (-1);
+	return (k - i);
+}
+
+char			*ft_strtrim(char const *s1, char const *set)
 {
 	char	*str;
 	int		i;
 	int		j;
-	int		size;
+	int		k;
 
-	i = 0;
-	j = 0;
-	size = trim_len((char *)s1, (char *)set);
-	if (size <= 0)
-		size = 1;
-	if (!(str = malloc(sizeof(char) * size)))
+	if (!(str = malloc((trim_calc(s1, set) + 2) * sizeof(char))))
 		return (NULL);
-	while (char_in_str(s1[i], (char *)set))
+	i = 0;
+	k = 0;
+	while (is_set(s1[i], set) == 1 && s1[i] != '\0')
 		i++;
-	while (j < size - 1)
-		str[j++] = s1[i++];
-	str[j] = '\0';
-	return (str);
+	j = i + trim_calc(s1, set);
+	while (i <= j)
+	{
+		str[k] = s1[i];
+		k++;
+		i++;
+	}
+	str[k] = '\0';
+	return (&str[0]);
 }

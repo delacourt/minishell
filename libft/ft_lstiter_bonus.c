@@ -1,35 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_revstr.c                                        :+:      :+:    :+:   */
+/*   ft_lstiter_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: madelaco <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/09 15:17:34 by madelaco          #+#    #+#             */
-/*   Updated: 2019/10/09 15:18:35 by madelaco         ###   ########.fr       */
+/*   Created: 2019/10/16 13:59:08 by avan-pra          #+#    #+#             */
+/*   Updated: 2019/10/16 13:59:09 by avan-pra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_revstr(char *str)
+void	ft_lstiter(t_list *lst, void (*f)(void *))
 {
-	char	t;
-	int		i;
-	int		j;
-	int		size;
-
-	size = 0;
-	while (str[size])
-		size++;
-	i = size - 1;
-	j = 0;
-	while (i > j)
+	if (lst && (*f))
 	{
-		t = str[i];
-		str[i] = str[j];
-		str[j] = t;
-		j++;
-		i--;
+		while (lst->next != NULL)
+		{
+			(*f)(lst->content);
+			lst = lst->next;
+		}
 	}
 }
