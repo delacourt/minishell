@@ -12,14 +12,14 @@
 
 #include "libft.h"
 
-static void	*free_arr(char **tab, int j)
+static void	*free_arr(char **tabl, int j)
 {
 	while (j >= 0)
 	{
-		free(tab[j]);
+		free(tabl[j]);
 		j--;
 	}
-	free(tab);
+	free(tabl);
 	return (NULL);
 }
 
@@ -67,12 +67,12 @@ static int	count_words(const char *str, char c)
 
 char		**ft_split(char const *s, char c)
 {
-	char	**tab;
+	char	**tabl;
 	int		i;
 	int		j;
 	int		k;
 
-	if (!(tab = malloc((count_split(s, c) + 1) * sizeof(char*))))
+	if (!(tabl = malloc((count_split(s, c) + 1) * sizeof(char*))))
 		return (NULL);
 	i = 0;
 	j = 0;
@@ -81,13 +81,13 @@ char		**ft_split(char const *s, char c)
 		k = 0;
 		while (is_charset(s[i], c) == 1)
 			i++;
-		if (!(tab[j] = malloc((count_words(&s[i], c) + 1) * sizeof(char))))
-			return (free_arr(tab, j));
+		if (!(tabl[j] = malloc((count_words(&s[i], c) + 1) * sizeof(char))))
+			return (free_arr(tabl, j));
 		while (s[i] != '\0' && is_charset(s[i], c) == 0)
-			tab[j][k++] = s[i++];
-		tab[j][k] = '\0';
+			tabl[j][k++] = s[i++];
+		tabl[j][k] = '\0';
 		j++;
 	}
-	tab[j] = NULL;
-	return (tab);
+	tabl[j] = NULL;
+	return (tabl);
 }
