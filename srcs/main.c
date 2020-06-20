@@ -180,6 +180,8 @@ int main(int argc, char **argv, char **envp)
 		tabl = split_semi_colon(line);
 		//printf("%s\n", tabl[0]);
 		i = 0;
+		// for (int j = 0; tabl[j] != NULL; ++j)
+		// 	printf("%d\n", tabl[j][0]);
 		while (tabl[i] != NULL)
 		{
 			if (*tabl[0] == 0)

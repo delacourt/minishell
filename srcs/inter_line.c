@@ -24,33 +24,46 @@ void put_in_histo(t_env *enviro, char *tst)
 {
 	char *tmp;
 	char *tmp2;
-	int i;
+	int i = 9;
 
 	enviro->histo[0] = tst;
-	tmp = enviro->histo[1];
-	enviro->histo[1] = enviro->histo[0];
-	tmp2 = enviro->histo[2];
-	enviro->histo[2] = tmp;
-	tmp = enviro->histo[3];
-	enviro->histo[3] = tmp2;
-	tmp2 = enviro->histo[4];
-	enviro->histo[4] = tmp;
-	tmp = enviro->histo[5];
-	enviro->histo[5] = tmp2;
-	tmp2 = enviro->histo[6];
-	enviro->histo[6] = tmp;
-	tmp = enviro->histo[7];
-	enviro->histo[7] = tmp2;
-	tmp2 = enviro->histo[8];
-	enviro->histo[8] = tmp;
-	tmp = enviro->histo[9];
-	enviro->histo[9] = tmp2;
-	tmp2 = enviro->histo[10];
-	enviro->histo[10] = tmp;
+	while (i >= 0)
+	{
+		enviro->histo[i + 1] = enviro->histo[i];
+		--i;
+	}
+	if (enviro->histo[10] != NULL)
+	{
+		free(enviro->histo[10]);
+		enviro->histo[10] = NULL;
+	}
+	// tmp = enviro->histo[1];
+	// enviro->histo[1] = enviro->histo[0];
+	// tmp2 = enviro->histo[2];
+	// enviro->histo[2] = tmp;
+	// tmp = enviro->histo[3];
+	// enviro->histo[3] = tmp2;
+	// tmp2 = enviro->histo[4];
+	// enviro->histo[4] = tmp;
+	// tmp = enviro->histo[5];
+	// enviro->histo[5] = tmp2;
+	// tmp2 = enviro->histo[6];
+	// enviro->histo[6] = tmp;
+	// tmp = enviro->histo[7];
+	// enviro->histo[7] = tmp2;
+	// tmp2 = enviro->histo[8];
+	// enviro->histo[8] = tmp;
+	// tmp = enviro->histo[9];
+	// enviro->histo[9] = tmp2;
+	// tmp2 = enviro->histo[10];
+	// enviro->histo[10] = tmp;
 	
-	free(enviro->histo[10]);
-	free(tmp2);
-	enviro->histo[10] = NULL;
+	// free(enviro->histo[10]);
+	// free(tmp2);
+	// enviro->histo[10] = NULL;
+	
+	// for (i = 0; enviro->histo[i] != NULL; ++i)
+	// 	printf("%d  %s\n", i, enviro->histo[i]);
 }
 
 void test1213(char *tst, int len, char c)
@@ -97,8 +110,6 @@ int inter_line(char **line, t_env *enviro)
 		
 			free(hold);
 		}
-		for (int i = 0; tst[i] != '\0'; ++i)
-			;//printf("%d\n", tst[i]);
 		if (t == '\n')
 		{
 			put_in_histo(enviro, tst);
