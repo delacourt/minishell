@@ -1,20 +1,26 @@
 #include "../head/minishell.h"
 
-int exec_prog(char *line, char **argv, char **envp)
+int exec_prog(char *line, char **argv, char **envp, t_r_output redir)
 {
 	pid_t pid;
 
     pid = fork();
     if (pid == 0)
-        execve(line, argv, envp);
-    else
+	{
+		if (redir.out != 1)
+    		dup2(redir.out, 1);
+		if (redir.in != 0)
+			dup2(redir.in, 0);
+		execve(line, argv, envp);
+	}
+	else
 	{
         wait(&pid);
 	}
 	return (pid);
 }
 
-int search_and_exec(char **tabl, char **envp, int *lsc)
+int search_and_exec(char **tabl, char **envp, int *lsc, t_r_output redir)
 {
 	struct stat statbuff;
 	char *path = NULL;
@@ -41,9 +47,9 @@ int search_and_exec(char **tabl, char **envp, int *lsc)
 		if (stat(tabl[0], &statbuff) == 0) //est ce que le fichier / dossier existe
 		{
 			if (S_ISDIR(statbuff.st_mode) == 1) //check si cest un directory
-				cd(tabl);
+				cd(tabl, lsc);
 			else if (S_ISDIR(statbuff.st_mode) == 0) //ou un file
-				*lsc = exec_prog(tabl[0], tabl, envp);
+				*lsc = exec_prog(tabl[0], tabl, envp, redir);
 		}
 		else
 		{
@@ -84,7 +90,7 @@ int search_and_exec(char **tabl, char **envp, int *lsc)
 
 			if (stat(try, &statbuff) == 0) //check si ce dernier existe
 			{
-				*lsc = exec_prog(try, tabl, envp); //virer le null et remplacer par lenv
+				*lsc = exec_prog(try, tabl, envp, redir); //virer le null et remplacer par lenv
 				free(try);
 				free_env(pathed);
 				return (0);

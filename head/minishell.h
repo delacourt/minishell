@@ -47,31 +47,46 @@ typedef struct	s_key
 	char b[4];
 }				t_key;
 
+typedef struct  s_r_output
+{
+    int out;
+    int in;
+	char *ret;
+}           t_r_output;
 
-int cd(char **tabl);
-int pwd();
-int echo2(char **tabl);
+
+int cd(char **tabl, int *lsc);
+int pwd(int fd, int *lsc);
+int echo2(char **tabl, int fd, int *lsc);
 void end(char **tabl, t_env *enviro);
 void	*free_arr(char **tabl, int j);
-char	**ft_enhanced_split(char const *str, char **envp);
+char	**ft_enhanced_split(char const *str, t_env *enviro);
 void sighandler(int signum);
 void print_new_line();
-int exec_prog(char *line, char **argv, char **envp);
-int search_and_exec(char **tabl, char **envp, int *lsc);
+int exec_prog(char *line, char **argv, char **envp, t_r_output redir);
+int search_and_exec(char **tabl, char **envp, int *lsc, t_r_output redir);
 char **split_semi_colon(char *line);
 char **new_env(char **envp);
 int env_len(char **env);
-void print_env(char **envp);
+void print_env(char **envp, int fd, int *lsc);
 void free_env(char **envp);
 int search_the_equal(char *str);
 int	count_words(const char *str);
 int search_the_equal(char *str);
 
-char *test1212(int *dep, int *i, char *word, const char *str, char **envp);
+char	*fill_word(const char *str, t_env *enviro);
+int		advance(const char *str);
+
+char *test1212(int *dep, int *i, char *word, const char *str, t_env enviro);
 
 char **export_new(char **arg, t_env *enviro);
 char **unset_new(char **arg, t_env *enviro);
 
 int inter_line(char **line, t_env *enviro);
+
+int		split_r_in_out(char *line, t_r_output *redir, t_env *enviro);
+void    close_redirect(t_r_output *redir);
+int     ft_strlen_redirect(char *line, char red);
+char    *get_file_name(char *str, t_env *enviro);
 
 #endif

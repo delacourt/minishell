@@ -97,7 +97,7 @@ int is_broken_quote(char *line)
 	return (0); // a changer
 }
 
-int parse_exec(char *line, t_env *enviro)
+int parse_exec(char *line, t_r_output redir, t_env *enviro)
 {
 	char **tabl;
 	int i;
@@ -108,22 +108,22 @@ int parse_exec(char *line, t_env *enviro)
 		printf("broken pipe\n");
 		return (i);
 	}
-	tabl = ft_enhanced_split(line, enviro->envp);
+	tabl = ft_enhanced_split(line, enviro);
 	int j = 0;
 	if (ft_strncmp(tabl[0], "echo", 5) == 0 || ft_strncmp(tabl[0], "cd", 3) == 0 || ft_strncmp(tabl[0], "pwd", 4) == 0
 	|| ft_strncmp(tabl[0], "export", 7) == 0 || ft_strncmp(tabl[0], "unset", 6) == 0 || ft_strncmp(tabl[0], "env", 4) == 0
 	|| ft_strncmp(tabl[0], "exit", 5) == 0 || ft_strncmp(tabl[0], "cd", 3) == 0)
 	{
 		if (ft_strncmp("echo", tabl[0], 5) == 0)
-			echo2(&tabl[1]);
+			echo2(&tabl[1], redir.out, &enviro->lsc);
 		else if (ft_strncmp("pwd", tabl[0], 4) == 0)
-			pwd();
+			pwd(redir.out, &enviro->lsc);
 		else if (ft_strncmp("exit", tabl[0], 5) == 0)
 			end(tabl, enviro);
 		else if (ft_strncmp("cd", tabl[0], 3) == 0)
-			cd(&tabl[1]);
+			cd(&tabl[1], &enviro->lsc);
 		else if (ft_strncmp("env", tabl[0], 4) == 0)
-			print_env(enviro->envp);
+			print_env(enviro->envp, redir.out, &enviro->lsc);
 		else if (ft_strncmp("export", tabl[0], 7) == 0)
 			enviro->envp = export_new(&tabl[1], enviro);
 		else if (ft_strncmp("unset", tabl[0], 6) == 0)
@@ -131,7 +131,7 @@ int parse_exec(char *line, t_env *enviro)
 	}
 	else if (tabl[0] != NULL)
 	{
-		search_and_exec(tabl, enviro->envp, &enviro->lsc);
+		search_and_exec(tabl, enviro->envp, &enviro->lsc, redir);
 	}
 	free_env(tabl);
 	return (i);
@@ -155,6 +155,7 @@ int main(int argc, char **argv, char **envp)
 	enviro.lsc = 0;
 	struct termios s_set;
 	struct termios backup;
+	t_r_output redir;
 
 	// tcgetattr(0, &s_set);
 	// s_set.c_lflag &= ~(ICANON | ECHO | ISIG);
@@ -178,25 +179,29 @@ int main(int argc, char **argv, char **envp)
 
 		write(1, "\n", 1);
 		tabl = split_semi_colon(line);
-		//printf("%s\n", tabl[0]);
 		i = 0;
-		// for (int j = 0; tabl[j] != NULL; ++j)
-		// 	printf("%d\n", tabl[j][0]);
+
+		
 		while (tabl[i] != NULL)
 		{
-			if (*tabl[0] == 0)
-				;
-			else if (parse_exec(tabl[i], &enviro) == 1)
+
+			if (split_r_in_out(tabl[i], &redir, &enviro) > 0)
+			{
+				enviro.lsc = 1;
+				write(1, "mash: syntax error, unexpected token\n", 37);
+			}
+			else if (parse_exec(redir.ret, redir, &enviro) == 1)
 			{
 				;
 			}
-			//print_env(envp);
-			//free(tabl[i]);
+			close_redirect(&redir);
+			//printf("%s\n", tabl[i]);
+			free(tabl[i]);
 			++i;
 		}
-		//free(tabl[i]);
-		//free(tabl);
-		free_env(tabl);
+		free(tabl);
+		//print_env(tabl, 1, &enviro.lsc);
+		//free_env(tabl);
 		print_new_line(enviro.lsc);
 	}
     return (0);

@@ -78,7 +78,7 @@ int	count_words(const char *str)
 	ret = 0;
 	while (str[i] == ' ')
 		++i;
-	while (str[i] != '\0' && str[i] != ' ')
+	while (str[i] != '\0' && str[i] != ' ' && str[i] != '<' && str[i] != '>')
 	{
 		if (str[i] == '\"')
 		{
@@ -112,7 +112,7 @@ int	count_words(const char *str)
 	return (ret);
 }
 
-char *fill_word(const char *str, char **envp)
+char *fill_word(const char *str, t_env *enviro)
 {
 	int i;
 	char *word;
@@ -125,7 +125,7 @@ char *fill_word(const char *str, char **envp)
 	dep = 0;
 	while (str[i] == ' ')
 		++i;
-	while (str[i] != '\0' && str[i] != ' ')
+	while (str[i] != '\0' && str[i] != ' ' && str[i] != '<' && str[i] != '>')
 	{
 		if (str[i] == '\"')
 		{
@@ -136,7 +136,7 @@ char *fill_word(const char *str, char **envp)
 					++i;
 				else if (str[i] == '$')
 				{
-					word = test1212(&dep, &i, word, str, envp);
+					word = test1212(&dep, &i, word, str, *enviro);
 					++i;
 				}
 				else
@@ -154,7 +154,7 @@ char *fill_word(const char *str, char **envp)
 			{
 				if (str[i] == '$')
 				{
-					word = test1212(&dep, &i, word, str, envp);
+					word = test1212(&dep, &i, word, str, *enviro);
 					++i;
 				}
 				else
@@ -175,7 +175,7 @@ char *fill_word(const char *str, char **envp)
 		{
 			if (str[i] == '$')
 			{
-				word = test1212(&dep, &i, word, str, envp);
+				word = test1212(&dep, &i, word, str, *enviro);
 			}
 			else
 			{
@@ -196,7 +196,7 @@ int advance(const char *str)
 	i = 0;
 	while (str[i] == ' ')
 		++i;
-	while (str[i] != '\0' && str[i] != ' ')
+	while (str[i] != '\0' && str[i] != ' ' && str[i] != '<' && str[i] != '>')
 	{
 		if (str[i] == '\"')
 		{
@@ -221,7 +221,7 @@ int advance(const char *str)
 	return (i);
 }
 
-char		**ft_enhanced_split(char const *str, char **envp)
+char		**ft_enhanced_split(char const *str, t_env *enviro)
 {
 	char	**tabl;
 	int		i;
@@ -237,7 +237,7 @@ char		**ft_enhanced_split(char const *str, char **envp)
 	while (j < count_split(str))
 	{
 		// printf("count = %d\n", count_words(&str[i]));
-	 	tabl[j] = fill_word(&str[i], envp);
+	 	tabl[j] = fill_word(&str[i], enviro);
 		j++;
 		i = i + advance(&str[i]);
 		//rajouter des trucs ici pour passer au prochain mots (sarreter au prochain espace pas dans des quotes)

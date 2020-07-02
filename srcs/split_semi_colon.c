@@ -9,6 +9,7 @@
 /*   Updated: 2020/04/01 09:55:31 by delacourt        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "../head/minishell.h"
 
 int count_semi_colon(char *line)
@@ -26,7 +27,7 @@ int count_semi_colon(char *line)
             q++;
         else if (line[i] == '\"' && q == 1)
             q--;
-        else if (line[i + 1] == ';' && line[i] != '\\' && q == 0)
+        if (line[i + 1] == ';' && line[i] != '\\' && q == 0)
             sc++;
         i++;
     }
@@ -42,23 +43,26 @@ char **split_semi_colon(char *line)
     int m;
     int q;
     char **tabl;
+
     q = 0;
     i = 0;
     j = 0;
     k = 0;
     l = 0;
     m = 0;
-    tabl = malloc(sizeof(char *) * (count_semi_colon(line) + 2));
+    tabl = calloc((count_semi_colon(line) + 2), sizeof(char *));
+	//printf("%d\n", (count_semi_colon(line) + 2));
     while (line[i])
     {
         if (line[i] == '\"' && q == 0)
             q++;
         else if (line[i] == '\"' && q == 1)
             q--;
-        else if (line[i + 1] == ';' && line[i] != '\\' && q == 0)
+        if (line[i + 1] == ';' && line[i] != '\\' && q == 0)
         {
-            tabl[k] = malloc(sizeof(char) * j + 2);
-            while (l <= i)
+            tabl[k] = calloc((j + 2), sizeof(char));
+            //printf("%d\n", j + 2);
+			while (l <= i)
             {
                 tabl[k][m] = line[l];
                 l++;
@@ -75,7 +79,8 @@ char **split_semi_colon(char *line)
         i++;
     }
     j--;
-    tabl[k] = malloc(sizeof(char) * j + 2);
+    tabl[k] = calloc((j + 2), sizeof(char));
+	//printf("%d\n", j + 2);
     while (l < i)
     {
         tabl[k][m] = line[l];

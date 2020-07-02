@@ -25,6 +25,7 @@ SRC				=	./srcs/builtin.c\
 					./srcs/del_env.c\
 					./srcs/doll.c\
 					./srcs/inter_line.c\
+					./srcs/split_r_in_out.c\
 
 ROAD_S			= $(SRC)
 

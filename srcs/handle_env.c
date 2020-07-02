@@ -10,8 +10,8 @@ void free_env(char **envp)
 		free(envp[i]);
 		++i;
 	}
-	free(envp[i]);
-	free(envp);
+	//free(envp[i]);
+	//free(envp);
 }
 
 int env_len(char **env)
