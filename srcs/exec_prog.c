@@ -46,9 +46,9 @@ int search_and_exec(char **tabl, char **envp, int *lsc, t_r_output redir)
 	{
 		if (stat(tabl[0], &statbuff) == 0) //est ce que le fichier / dossier existe
 		{
-			if (S_ISDIR(statbuff.st_mode) == 1) //check si cest un directory
-				cd(tabl, lsc);
-			else if (S_ISDIR(statbuff.st_mode) == 0) //ou un file
+			// if (S_ISDIR(statbuff.st_mode) == 1) //check si cest un directory // feature naze
+			// 	cd(tabl, lsc);
+			if (S_ISDIR(statbuff.st_mode) == 0) //ou un file
 				*lsc = exec_prog(tabl[0], tabl, envp, redir);
 		}
 		else

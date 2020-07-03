@@ -174,17 +174,17 @@ int main(int argc, char **argv, char **envp)
 	while (1)
     {
 		tcsetattr(0, 0, &s_set);   
-		i = inter_line(&line, &enviro); //le exit(0) dedans ducoup cest full leaks (fin la aussi mdr) mais soef pour le moment
+		i = inter_line(&line, &enviro); //le exit(0) dedans ducoup cest full leaks (fin la aussi mdr) mais soef pour le moment ptet free line aussi mdr
 		tcsetattr(0, 0, &backup);
 
 		write(1, "\n", 1);
 		tabl = split_semi_colon(line);
 		i = 0;
 
-		
+		//printf("              %s\n", line);
 		while (tabl[i] != NULL)
 		{
-
+			//printf("%s\n", tabl[i]);
 			if (split_r_in_out(tabl[i], &redir, &enviro) > 0)
 			{
 				enviro.lsc = 1;
@@ -195,7 +195,6 @@ int main(int argc, char **argv, char **envp)
 				;
 			}
 			close_redirect(&redir);
-			//printf("%s\n", tabl[i]);
 			free(tabl[i]);
 			++i;
 		}

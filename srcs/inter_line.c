@@ -88,6 +88,7 @@ int inter_line(char **line, t_env *enviro)
 	int k;
 	t_key key;
 	int end = 0;
+	char test4[4] = {0, 0, 0, 0};
 
 	fill(&key);
 
@@ -98,7 +99,7 @@ int inter_line(char **line, t_env *enviro)
 		t = 0;
 		read(0, &t, 1);
 		//printf("%d\n", t);
-		if((t >= 32 && t <= 126) || t == 27)
+		if((t >= 32 && t <= 126) && ft_strlen(test4) == 0)
 		{
 			hold = ft_strdup(tst);
 			tmp = tst;
@@ -109,6 +110,10 @@ int inter_line(char **line, t_env *enviro)
 			++end;
 		
 			free(hold);
+		}
+		if (t == 27 || ft_strlen(test4) > 0)
+		{
+			test4[ft_strlen(test4)] = t;
 		}
 		if (t == '\n')
 		{
@@ -122,71 +127,75 @@ int inter_line(char **line, t_env *enviro)
 			;
 		else if (t == 28) //ctrl backslash
 			;
-		else if (ft_strnstr(tst, key.g, ft_strlen(tst)))
+		else if (ft_strncmp(test4, key.g, 4) == 0)
 		{
 			//printf("yo\n");
 			//printf("end = %d\nlen = %zu", end, ft_strlen(tst));
-			if (end - 3 > 0)
+			if (end > 0)
 			{
 				write(1, &key.g, 3);
 				--end;
-				ft_strlcpy(&tst[end - 2], &tst[end + 1], 1024);
+				//ft_strlcpy(&tst[end - 2], &tst[end + 1], 1024);
 			}
 			else
 			{
-				//printf("%d\n", end);
-				ft_strlcpy(tst, &tst[end], 1024);
+				;//printf("%d\n", end);
+				//ft_strlcpy(tst, &tst[end], 1024);
 			}
-			end = end - 3;
+			//end = end - 3;
+			ft_memset(test4, 0 , 4);
 		}
-		else if (ft_strnstr(tst, key.d, ft_strlen(tst)))
+		else if (ft_strncmp(test4, key.d, 4) == 0)
 		{
-			//printf("end = %d\nlen = %zu", end, ft_strlen(tst));
+			//printf("end = %d      len = %zu\n", end, ft_strlen(tst));
 			if (end < ft_strlen(tst))
 			{
 				write(1, &key.d, 3);
 				++end;
-				ft_strlcpy(&tst[end - 4], &tst[end- 1], 1024);
+				//ft_strlcpy(&tst[end - 4], &tst[end- 1], 1024);
 			}
 			else
 			{
-				ft_strlcpy(&tst[end - 3], &tst[end], 1024);
+				;//ft_strlcpy(&tst[end - 3], &tst[end], 1024);
 			}
+			ft_memset(test4, 0 , 4);
 			//printf("%d\n", tst[end - 1]);
-			end = end - 3;
+			//end = end - 3;
 		}
-		else if (ft_strnstr(tst, key.h, ft_strlen(tst)))
+		else if (ft_strncmp(test4, key.h, 4) == 0)
 		{
 			if (enviro->histo[ou] != NULL)
 			{
 				++ou;
-				for (k = 0; k < ft_strlen(tst) - ft_strlen(&tst[end]) - 3; ++k)
+				for (k = 0; k < ft_strlen(tst) - ft_strlen(&tst[end]); ++k)
 					write(1, &key.g, 3);
-				for (k = 0; k < ft_strlen(tst) - 3; ++k)
+				for (k = 0; k < ft_strlen(tst); ++k)
 					write(1, " ", 1);
-				for (k = 0; k < ft_strlen(tst) - 3; ++k)
+				for (k = 0; k < ft_strlen(tst); ++k)
 					write(1, &key.g, 3);
 				free(tst);
 				tst = ft_strdup(enviro->histo[ou - 1]);
 				write(1, tst, ft_strlen(tst));
 				end = ft_strlen(tst);
 			}
-			else
-			{//printf("haut\n");
-				ft_strlcpy(&tst[end - 3], &tst[end], 1024);
-				end = end - 3;
-			}
+			// else
+			// {//printf("haut\n");
+			// 	ft_strlcpy(&tst[end - 3], &tst[end], 1024);
+			// 	end = end - 3;
+			// }
+			ft_memset(test4, 0 , 4);
+			//exit(0);
 		}
-		else if (ft_strnstr(tst, key.b, ft_strlen(tst)))
+		else if (ft_strncmp(test4, key.b, 4) == 0)
 		{
 			if (ou > 2)
 			{
 				--ou;
-				for (k = 0; k < ft_strlen(tst) - ft_strlen(&tst[end]) - 3; ++k)
+				for (k = 0; k < ft_strlen(tst) - ft_strlen(&tst[end]); ++k)
 					write(1, &key.g, 3);
-				for (k = 0; k < ft_strlen(tst) - 3; ++k)
+				for (k = 0; k < ft_strlen(tst); ++k)
 					write(1, " ", 1);
-				for (k = 0; k < ft_strlen(tst) - 3; ++k)
+				for (k = 0; k < ft_strlen(tst); ++k)
 					write(1, &key.g, 3);
 				free(tst);
 				tst = ft_strdup(enviro->histo[ou - 1]);
@@ -197,21 +206,22 @@ int inter_line(char **line, t_env *enviro)
 			{
 				if (ou == 2)
 					--ou;
-				for (k = 0; k < ft_strlen(tst) - ft_strlen(&tst[end]) - 3; ++k)
+				for (k = 0; k < ft_strlen(tst) - ft_strlen(&tst[end]); ++k)
 					write(1, &key.g, 3);
-				for (k = 0; k < ft_strlen(tst) - 3; ++k)
+				for (k = 0; k < ft_strlen(tst); ++k)
 					write(1, " ", 1);
-				for (k = 0; k < ft_strlen(tst) - 3; ++k)
+				for (k = 0; k < ft_strlen(tst); ++k)
 					write(1, &key.g, 3);
 				free(tst);
 				tst = ft_strdup("");
 				end = 0;
 			}
-			else
-			{//printf("haut\n");
-				ft_strlcpy(&tst[end - 3], &tst[end], 1024);
-				end = end - 3;
-			}
+			// else
+			// {//printf("haut\n");
+			// 	ft_strlcpy(&tst[end - 3], &tst[end], 1024);
+			// 	end = end - 3;
+			// }
+			ft_memset(test4, 0 , 4);
 		}
 		else if (t == 127 && end > 0)
 		{
@@ -223,7 +233,7 @@ int inter_line(char **line, t_env *enviro)
 			for (int j = 0; j <= ft_strlen(&tst[end]); ++j)
 				write(1, &key.g, 3);
 		}
-		else if (!(ft_strchr(tst, 27)) && (t >= 32 && t <= 126))
+		else if (ft_strlen(test4) == 0 && (t >= 32 && t <= 126))
 		{
 			write(1, &t, 1);
 			write(1, &tst[end], ft_strlen(&tst[end]));
@@ -232,6 +242,8 @@ int inter_line(char **line, t_env *enviro)
 			//++end;
 			//printf("%d\n", end);
 		}
+		if (ft_strlen(test4) >= 3)
+			ft_memset(test4, 0, 4);
 		//printf("%d\n", t);
 	}
 }

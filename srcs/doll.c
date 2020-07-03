@@ -85,10 +85,11 @@ char *test1212(int *dep, int *i, char *word, const char *str, t_env enviro)
 	char *tmp2;
 	int penv;
 	int len = 0;
+	int lentest = 0; //$W prblm
 	char **envp;
 
 	envp = enviro.envp;
-	len = find_the_end_env(&str[*i + 1]);
+	//len = find_the_end_env(&str[*i + 1]);
 	//printf("%d\n", len);
 	penv = 0;
 	if (ft_strncmp(&str[*i], "$?", 2) == 0)
@@ -107,6 +108,10 @@ char *test1212(int *dep, int *i, char *word, const char *str, t_env enviro)
 	}
 	while (envp[penv] != NULL)
 	{
+		len = search_the_equal(envp[penv]);
+		lentest = find_the_end_env(&str[*i + 1]);
+		if (len < lentest)
+			len = lentest;
 		if (ft_strncmp(&str[*i + 1], envp[penv], len) == 0)
 		{
 			tmp = ft_strjoin(word, &envp[penv][len + 1]);

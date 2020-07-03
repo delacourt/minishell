@@ -134,7 +134,7 @@ char *fill_word(const char *str, t_env *enviro)
 			{
 				if (str[i] == '\\' && str[i + 1] == '\"')
 					++i;
-				else if (str[i] == '$')
+				else if (str[i] == '$' && str[i + 1] != ' ' && str[i + 1] != '\0' && str[i + 1] != '$' && str[i + 1] != '\\')
 				{
 					word = test1212(&dep, &i, word, str, *enviro);
 					++i;
@@ -152,7 +152,7 @@ char *fill_word(const char *str, t_env *enviro)
 			++i;
 			while (str[i] != '\'' && str[i] != '\0')
 			{
-				if (str[i] == '$')
+				if (str[i] == '$' && str[i + 1] != ' ' && str[i + 1] != '\0' && str[i + 1] != '$' && str[i + 1] != '\\')
 				{
 					word = test1212(&dep, &i, word, str, *enviro);
 					++i;
@@ -173,7 +173,7 @@ char *fill_word(const char *str, t_env *enviro)
 		}
 		else
 		{
-			if (str[i] == '$')
+			if (str[i] == '$' && str[i + 1] != ' ' && str[i + 1] != '\0' && str[i + 1] != '$' && str[i + 1] != '\\')
 			{
 				word = test1212(&dep, &i, word, str, *enviro);
 			}
