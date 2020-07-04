@@ -82,7 +82,7 @@ void copy_word(char *src, char *dest)					//ICI LE PRBLM
 			break;
 		i++;
 	}
-	++i;						//possible prblm ici
+	//++i;						//possible prblm ici
 	dest[i] = '\0';
 }
 
@@ -105,8 +105,8 @@ int split_pipe(char *line, char ***attach)
 			*attach = p_tab;
 			return (1);
 		}
-		// printf("%d   %d\n", len_line(&line[j]), j);
-		p_tab[i] = calloc(len_line((&line[j]) + 1), sizeof(char)); 
+		//printf("%d   %d\n", len_line(&line[j]), j);
+		p_tab[i] = calloc(len_line(&line[j]) + 2, sizeof(char)); //GROSSE LIGNE DE MERDE TA GROSSE DARONNE LA
 		copy_word(&line[j], p_tab[i]);	
 		j = j + len_line(&line[j]);
 		++i;

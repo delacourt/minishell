@@ -6,7 +6,7 @@
 /*   By: delacourt <delacourt@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/13 15:09:19 by delacourt         #+#    #+#             */
-/*   Updated: 2020/03/13 17:26:18 by delacourt        ###   ########.fr       */
+/*   Updated: 2020/07/05 01:24:22 by avan-pra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,14 +204,15 @@ int main(int argc, char **argv, char **envp)
 			n_pipe = 0;
 			while (error == 0 && p_tab[n_pipe] != NULL)
 			{
-				// for (int z = 0; p_tab[z] != NULL; ++z)
-				// 	printf("%s\n", p_tab[z]);
+				//  for (int z = 0; p_tab[z] != NULL; ++z)
+				//printf("p_tab: %s\n", p_tab[n_pipe]);
 				if (split_r_in_out(p_tab[n_pipe], &redir, &enviro) > 0) //surement a free la dedans aussi
 				{
 					enviro.lsc = 1;
 					write(1, "mash: syntax error, unexpected token\n", 37);
 					error = 1;
 				}
+				//printf("hey c'est le main\n");
 				if (error == 0 && parse_exec(redir.ret, redir, &enviro, &pip) == 1) //else if ici
 				{
 					;

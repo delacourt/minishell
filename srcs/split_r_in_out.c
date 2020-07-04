@@ -6,7 +6,7 @@
 /*   By: delacourt <delacourt@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 16:35:57 by delacourt         #+#    #+#             */
-/*   Updated: 2020/06/15 14:48:38 by delacourt        ###   ########.fr       */
+/*   Updated: 2020/07/05 01:23:17 by avan-pra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,17 +63,22 @@ int     split_r_in_out(char *line, t_r_output *redir, t_env *enviro)
     int quotes;
 	char *tmp;
 	int lt = 0;
+	unsigned int compteur = 0;
 
+	//printf("%s\n", line);
     i = 0;
     j = 0;
     quotes = 0;
     redir->out = 1;
 	redir->in = 0;
     redir->ret = calloc(ft_strlen(line) + 1, sizeof(char)); //ft_calloc
-    while (line[i])
+	//printf("%zu\n", ft_strlen(line));
+	while (line[i] != '\0')
     {
-        if (lt == 0)
+        //printf("%zu     %d     %d\n", ft_strlen(line), i, line[i]);
+		if (lt == 0)
 			redir->ret[j++] = line[i];
+		//printf("%c\n", redir->ret[j - 1]);
 		lt = 0;
 		if ((line[i] == '\"' || line[i] == '\'') && quotes == 0)
             quotes++;
@@ -122,6 +127,7 @@ int     split_r_in_out(char *line, t_r_output *redir, t_env *enviro)
 			//break;
         }
         i++;
+		++compteur;
     }
 	//printf("in:%d\nout:%d\n%s\n", redir->in, redir->out, redir->ret);
     return (0);
