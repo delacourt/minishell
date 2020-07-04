@@ -1,12 +1,20 @@
 #include "../head/minishell.h"
 
-int exec_prog(char *line, char **argv, char **envp, t_r_output redir)
+int exec_prog(char *line, char **argv, char **envp, t_r_output redir, t_pipe *pip)
 {
 	pid_t pid;
 
-    pid = fork();
+	pid = fork();
     if (pid == 0)
 	{
+		if (pip->total > 1 && pip->nbr != 0)
+		{
+			dup2(pip->pipefd[pip->nbr - 1][0], 0);
+		}
+		if (pip->total > 1 && pip->nbr + 1 < pip->total)
+		{
+			dup2(pip->pipefd[pip->nbr][1], 1);
+		}
 		if (redir.out != 1)
     		dup2(redir.out, 1);
 		if (redir.in != 0)
@@ -15,12 +23,15 @@ int exec_prog(char *line, char **argv, char **envp, t_r_output redir)
 	}
 	else
 	{
-        wait(&pid);
+		wait(&pid);
+		if (pip->total > 1 && pip->nbr + 1 < pip->total)
+			close(pip->pipefd[pip->nbr][1]);
 	}
+	++pip->nbr;
 	return (pid);
 }
 
-int search_and_exec(char **tabl, char **envp, int *lsc, t_r_output redir)
+int search_and_exec(char **tabl, char **envp, int *lsc, t_r_output redir, t_pipe *pip)
 {
 	struct stat statbuff;
 	char *path = NULL;
@@ -49,10 +60,11 @@ int search_and_exec(char **tabl, char **envp, int *lsc, t_r_output redir)
 			// if (S_ISDIR(statbuff.st_mode) == 1) //check si cest un directory // feature naze
 			// 	cd(tabl, lsc);
 			if (S_ISDIR(statbuff.st_mode) == 0) //ou un file
-				*lsc = exec_prog(tabl[0], tabl, envp, redir);
+				*lsc = exec_prog(tabl[0], tabl, envp, redir, pip);
 		}
 		else
 		{
+			*lsc = 1;
 			write(1, "mash: no such file or directory: ", ft_strlen("mash: no such file or directory: "));
 			write(1, tabl[0], ft_strlen(tabl[0]));
 			write(1, "\n", 1);
@@ -90,7 +102,11 @@ int search_and_exec(char **tabl, char **envp, int *lsc, t_r_output redir)
 
 			if (stat(try, &statbuff) == 0) //check si ce dernier existe
 			{
-				*lsc = exec_prog(try, tabl, envp, redir); //virer le null et remplacer par lenv
+				// printf("%s\n", try);
+				// print_env(tabl, 1, lsc);
+				//write(pip->pipefd[0][0], "wesh la\nyo testreen", 19);
+				//printf("%d\n", pip->nbr);
+				*lsc = exec_prog(try, tabl, envp, redir, pip); //virer le null et remplacer par lenv
 				free(try);
 				free_env(pathed);
 				return (0);

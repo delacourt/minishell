@@ -97,7 +97,7 @@ int is_broken_quote(char *line)
 	return (0); // a changer
 }
 
-int parse_exec(char *line, t_r_output redir, t_env *enviro)
+int parse_exec(char *line, t_r_output redir, t_env *enviro, t_pipe *pip)
 {
 	char **tabl;
 	int i;
@@ -114,6 +114,8 @@ int parse_exec(char *line, t_r_output redir, t_env *enviro)
 	|| ft_strncmp(tabl[0], "export", 7) == 0 || ft_strncmp(tabl[0], "unset", 6) == 0 || ft_strncmp(tabl[0], "env", 4) == 0
 	|| ft_strncmp(tabl[0], "exit", 5) == 0 || ft_strncmp(tabl[0], "cd", 3) == 0)
 	{
+		if (pip->total > 1 && pip->nbr + 1 < pip->total && redir.out == 1)
+			redir.out = pip->pipefd[pip->nbr][1];
 		if (ft_strncmp("echo", tabl[0], 5) == 0)
 			echo2(&tabl[1], redir.out, &enviro->lsc);
 		else if (ft_strncmp("pwd", tabl[0], 4) == 0)
@@ -128,10 +130,12 @@ int parse_exec(char *line, t_r_output redir, t_env *enviro)
 			enviro->envp = export_new(&tabl[1], enviro);
 		else if (ft_strncmp("unset", tabl[0], 6) == 0)
 			enviro->envp = unset_new(&tabl[1], enviro);
+		if (pip->total > 1 && pip->nbr + 1 < pip->total)
+			close(pip->pipefd[pip->nbr++][1]);
 	}
 	else if (tabl[0] != NULL)
 	{
-		search_and_exec(tabl, enviro->envp, &enviro->lsc, redir);
+		search_and_exec(tabl, enviro->envp, &enviro->lsc, redir, pip);
 	}
 	free_env(tabl);
 	return (i);
@@ -146,10 +150,14 @@ int ft_putchar(int c)
 int main(int argc, char **argv, char **envp)
 {
 	int i;
+	int error;
+	int n_pipe;
     char *line;
 	char **tabl;
+	char **p_tab;
 	//char **tenv;
 	t_env enviro;
+	t_pipe pip;
 	(void)argc;
 	(void)argv;
 	enviro.lsc = 0;
@@ -171,6 +179,7 @@ int main(int argc, char **argv, char **envp)
 	for (int j = 0; j < NCMD; ++j)
 		enviro.histo[j] = NULL;
 	enviro.h_len = 0;
+	error = 0;
 	while (1)
     {
 		tcsetattr(0, 0, &s_set);   
@@ -185,20 +194,36 @@ int main(int argc, char **argv, char **envp)
 		while (tabl[i] != NULL)
 		{
 			//printf("%s\n", tabl[i]);
-			if (split_r_in_out(tabl[i], &redir, &enviro) > 0)
+			if ((error = split_pipe(tabl[i], &p_tab)) == 1)	//free chaque p_tab
 			{
 				enviro.lsc = 1;
 				write(1, "mash: syntax error, unexpected token\n", 37);
+				error = 1;
 			}
-			else if (parse_exec(redir.ret, redir, &enviro) == 1)
+			fill_t_pipe(&pip, p_tab); //close les FD gerer les malloc qui marchent pas
+			n_pipe = 0;
+			while (error == 0 && p_tab[n_pipe] != NULL)
 			{
-				;
+				// for (int z = 0; p_tab[z] != NULL; ++z)
+				// 	printf("%s\n", p_tab[z]);
+				if (split_r_in_out(p_tab[n_pipe], &redir, &enviro) > 0) //surement a free la dedans aussi
+				{
+					enviro.lsc = 1;
+					write(1, "mash: syntax error, unexpected token\n", 37);
+					error = 1;
+				}
+				if (error == 0 && parse_exec(redir.ret, redir, &enviro, &pip) == 1) //else if ici
+				{
+					;
+				}
+				close_redirect(&redir);
+				++n_pipe;
 			}
-			close_redirect(&redir);
-			free(tabl[i]);
+			free_env(p_tab);
 			++i;
+			error = 0;
 		}
-		free(tabl);
+		free_env(tabl);
 		//print_env(tabl, 1, &enviro.lsc);
 		//free_env(tabl);
 		print_new_line(enviro.lsc);

@@ -31,6 +31,13 @@
 #include <termcap.h>
 #include <termios.h>
 
+typedef struct s_pipe
+{
+	int **pipefd;
+	int nbr;
+	int total;
+}				t_pipe;
+
 typedef struct	s_env
 {
 	char **envp;
@@ -63,8 +70,8 @@ void	*free_arr(char **tabl, int j);
 char	**ft_enhanced_split(char const *str, t_env *enviro);
 void sighandler(int signum);
 void print_new_line();
-int exec_prog(char *line, char **argv, char **envp, t_r_output redir);
-int search_and_exec(char **tabl, char **envp, int *lsc, t_r_output redir);
+int exec_prog(char *line, char **argv, char **envp, t_r_output redir, t_pipe *pip);
+int search_and_exec(char **tabl, char **envp, int *lsc, t_r_output redir, t_pipe *pip);
 char **split_semi_colon(char *line);
 char **new_env(char **envp);
 int env_len(char **env);
@@ -88,5 +95,10 @@ int		split_r_in_out(char *line, t_r_output *redir, t_env *enviro);
 void    close_redirect(t_r_output *redir);
 int     ft_strlen_redirect(char *line, char red);
 char    *get_file_name(char *str, t_env *enviro);
+int 	check_redir_error(char *line);
+
+int split_pipe(char *line, char ***attach);
+
+int fill_t_pipe(t_pipe *pip, char **p_tab);
 
 #endif

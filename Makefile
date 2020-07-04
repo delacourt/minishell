@@ -26,6 +26,7 @@ SRC				=	./srcs/builtin.c\
 					./srcs/doll.c\
 					./srcs/inter_line.c\
 					./srcs/split_r_in_out.c\
+					./srcs/split_pipe.c\
 
 ROAD_S			= $(SRC)
 
@@ -33,7 +34,7 @@ ROAD_O			= $(OBJ)
 
 ROAD_B			= $(SRCB)
 
-FLAGS			= -Wall -Wextra -Werror
+FLAGS			= -Wall -Wextra -Werror #-fsanitize=address -g3
 
 OBJ				= $(SRC:.c=.o)
 

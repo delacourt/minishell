@@ -69,15 +69,15 @@ int     split_r_in_out(char *line, t_r_output *redir, t_env *enviro)
     quotes = 0;
     redir->out = 1;
 	redir->in = 0;
-    redir->ret = calloc(ft_strlen(line), sizeof(char)); //ft_calloc
+    redir->ret = calloc(ft_strlen(line) + 1, sizeof(char)); //ft_calloc
     while (line[i])
     {
         if (lt == 0)
 			redir->ret[j++] = line[i];
 		lt = 0;
-		if (line[i] == '\"' && quotes == 0)
+		if ((line[i] == '\"' || line[i] == '\'') && quotes == 0)
             quotes++;
-        else if (line[i] == '\"' && quotes == 1)
+        else if ((line[i] == '\"' || line[i] == '\'') && quotes == 1)
             quotes--;
         else if (line[i + 1] == '>' && line[i] != '\\' && quotes == 0 && line[i + 2] != '>')
         {
