@@ -82,7 +82,7 @@ void copy_word(char *src, char *dest)					//ICI LE PRBLM
 			break;
 		i++;
 	}
-	//++i;						//possible prblm ici
+	++i;						//possible prblm ici
 	dest[i] = '\0';
 }
 
