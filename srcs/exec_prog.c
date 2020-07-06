@@ -109,6 +109,7 @@ int search_and_exec(char **tabl, char **envp, int *lsc, t_r_output redir, t_pipe
 				*lsc = exec_prog(try, tabl, envp, redir, pip); //virer le null et remplacer par lenv
 				free(try);
 				free_env(pathed);
+				free(pathed);
 				return (0);
 			}
 			else if (pathed[i] == NULL)	//rentre la dedans si jai test tous les path sans trouver lexcecutablle
@@ -119,12 +120,14 @@ int search_and_exec(char **tabl, char **envp, int *lsc, t_r_output redir, t_pipe
 				write(1, "\n", 1);
 				free(try);
 				free_env(pathed);
+				free(pathed);
 				return (1);
 			}
 			free(try);
 		}
 		*lsc = 1;
 		free_env(pathed);
+		free(pathed);
 		write(1, "mash: no such file or directory: ", ft_strlen("mash: no such file or directory: "));
 		write(1, tabl[0], ft_strlen(tabl[0]));
 		write(1, "\n", 1);

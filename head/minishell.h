@@ -65,7 +65,7 @@ typedef struct  s_r_output
 int cd(char **tabl, int *lsc);
 int pwd(int fd, int *lsc);
 int echo2(char **tabl, int fd, int *lsc);
-void end(char **tabl, t_env *enviro);
+int end(char **tabl, t_env *enviro);
 void	*free_arr(char **tabl, int j);
 char	**ft_enhanced_split(char const *str, t_env *enviro);
 void sighandler(int signum);

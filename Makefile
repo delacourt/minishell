@@ -34,7 +34,7 @@ ROAD_O			= $(OBJ)
 
 ROAD_B			= $(SRCB)
 
-FLAGS			= -Wall -Wextra -Werror #-fsanitize=address -g3
+FLAGS			= -Wall -Wextra -Werror -g3 #-fsanitize=address 
 
 OBJ				= $(SRC:.c=.o)
 

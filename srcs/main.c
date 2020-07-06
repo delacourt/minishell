@@ -121,7 +121,11 @@ int parse_exec(char *line, t_r_output redir, t_env *enviro, t_pipe *pip)
 		else if (ft_strncmp("pwd", tabl[0], 4) == 0)
 			pwd(redir.out, &enviro->lsc);
 		else if (ft_strncmp("exit", tabl[0], 5) == 0)
-			end(tabl, enviro);
+		{
+			free_env(tabl);
+			free(tabl);
+			return (3);
+		}
 		else if (ft_strncmp("cd", tabl[0], 3) == 0)
 			cd(&tabl[1], &enviro->lsc);
 		else if (ft_strncmp("env", tabl[0], 4) == 0)
@@ -138,6 +142,7 @@ int parse_exec(char *line, t_r_output redir, t_env *enviro, t_pipe *pip)
 		search_and_exec(tabl, enviro->envp, &enviro->lsc, redir, pip);
 	}
 	free_env(tabl);
+	free(tabl);
 	return (i);
 }
 
@@ -150,6 +155,7 @@ int ft_putchar(int c)
 int main(int argc, char **argv, char **envp)
 {
 	int i;
+	int g;
 	int error;
 	int n_pipe;
     char *line;
@@ -183,18 +189,17 @@ int main(int argc, char **argv, char **envp)
 	while (1)
     {
 		tcsetattr(0, 0, &s_set);   
-		i = inter_line(&line, &enviro); //le exit(0) dedans ducoup cest full leaks (fin la aussi mdr) mais soef pour le moment ptet free line aussi mdr
+		i = inter_line(&line, &enviro); //le exit(0) dedans ducoup cest full leaks (fin la aussi mdr) mais soef pour le moment ptet free line aussi mdr non pas free line utilie pour l'histo
 		tcsetattr(0, 0, &backup);
 
 		write(1, "\n", 1);
 		tabl = split_semi_colon(line);
 		i = 0;
 
-		//printf("              %s\n", line);
 		while (tabl[i] != NULL)
 		{
-			//printf("%s\n", tabl[i]);
-			if ((error = split_pipe(tabl[i], &p_tab)) == 1)	//free chaque p_tab
+			error = split_pipe(tabl[i], &p_tab);
+			if (error == 1)	//free chaque p_tab
 			{
 				enviro.lsc = 1;
 				write(1, "mash: syntax error, unexpected token\n", 37);
@@ -204,29 +209,53 @@ int main(int argc, char **argv, char **envp)
 			n_pipe = 0;
 			while (error == 0 && p_tab[n_pipe] != NULL)
 			{
-				//  for (int z = 0; p_tab[z] != NULL; ++z)
-				//printf("p_tab: %s\n", p_tab[n_pipe]);
-				if (split_r_in_out(p_tab[n_pipe], &redir, &enviro) > 0) //surement a free la dedans aussi
+				error = split_r_in_out(p_tab[n_pipe], &redir, &enviro);
+				if (error > 0) //surement a free la dedans aussi
 				{
 					enviro.lsc = 1;
-					write(1, "mash: syntax error, unexpected token\n", 37);
+					if (error == 1)
+						write(1, "mash: syntax error, unexpected token\n", 37);
 					error = 1;
 				}
-				//printf("hey c'est le main\n");
-				if (error == 0 && parse_exec(redir.ret, redir, &enviro, &pip) == 1) //else if ici
+
+				if (error == 0) //else if ici
 				{
-					;
+					if (parse_exec(redir.ret, redir, &enviro, &pip) == 3) //3 c'est pour le exit
+					{
+						close_redirect(&redir);
+						for (g = 0; pip.pipefd[g] != NULL; ++g)
+						{
+							close(pip.pipefd[g][0]);
+							//close(pip.pipefd[g][1]);
+							free(pip.pipefd[g]);
+						}
+						if (g > 0)
+							close(pip.pipefd[g][1]);
+						free(pip.pipefd);
+						free_env(p_tab);
+						free(p_tab);
+						free_env(tabl);
+						free(tabl);
+						free_env(enviro.envp);
+						free(enviro.envp);
+						free_env(&enviro.histo[1]);
+						return (enviro.lsc);
+					}
 				}
 				close_redirect(&redir);
 				++n_pipe;
 			}
+			for (int g = 0; pip.pipefd[g] != NULL; ++g)
+				free(pip.pipefd[g]);
+			free(pip.pipefd);
 			free_env(p_tab);
+			free(p_tab);
 			++i;
-			error = 0;
+		// 	error = 0;
 		}
 		free_env(tabl);
-		//print_env(tabl, 1, &enviro.lsc);
-		//free_env(tabl);
+		free(tabl);
+
 		print_new_line(enviro.lsc);
 	}
     return (0);

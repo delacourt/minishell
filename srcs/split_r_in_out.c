@@ -61,9 +61,8 @@ int     split_r_in_out(char *line, t_r_output *redir, t_env *enviro)
     int i;
     int j;
     int quotes;
-	char *tmp;
+	char *filename;
 	int lt = 0;
-	unsigned int compteur = 0;
 
 	//printf("%s\n", line);
     i = 0;
@@ -90,7 +89,15 @@ int     split_r_in_out(char *line, t_r_output *redir, t_env *enviro)
 				return (1);
 			if (redir->out != 1)
 				close(redir->out);
-			redir->out = open(get_file_name(&line[i + 2], enviro), O_WRONLY | O_TRUNC | O_CREAT); //faire des checks si -1 et free
+			filename = get_file_name(&line[i + 2], enviro);
+			redir->out = open(filename, O_WRONLY | O_TRUNC | O_CREAT); //faire des checks si -1 et free
+			if (redir->out == -1)
+			{
+				free(filename);
+				write(2, "mash: permission denied\n", 24);
+				return (2);
+			}
+			free(filename);
 			i = i + 2;
 			i = i + advance(&line[i]);
 			if (line[i] == '<' || line[i] == '>')
@@ -104,7 +111,15 @@ int     split_r_in_out(char *line, t_r_output *redir, t_env *enviro)
 				return (1);
 			if (redir->out != 1)
 				close(redir->out);
-            redir->out = open(get_file_name(&line[i + 3], enviro), O_WRONLY | O_APPEND | O_CREAT); //faire des checks si -1 et free
+            filename = get_file_name(&line[i + 3], enviro);
+			redir->out = open(filename, O_WRONLY | O_APPEND | O_CREAT); //faire des checks si -1 et free
+			if (redir->out == -1)
+			{
+				free(filename);
+				write(2, "mash: permission denied\n", 24);
+				return (2);
+			}
+			free(filename);
 			i = i + 3;
 			i = i + advance(&line[i]);
 			--i;
@@ -117,7 +132,15 @@ int     split_r_in_out(char *line, t_r_output *redir, t_env *enviro)
 				return (1);
 			if (redir->in != 0)
 				close(redir->in);
-            redir->in = open(get_file_name(&line[i + 2], enviro), O_RDONLY); //faire des checks si -1 et free
+            filename = get_file_name(&line[i + 2], enviro);
+			redir->in = open(filename, O_RDONLY); //faire des checks si -1 et free
+			if (redir->out == -1)
+			{
+				free(filename);
+				write(2, "mash: permission denied\n", 24);
+				return (2);
+			}
+			free(filename);
 			i = i + 2;
 			i = i + advance(&line[i]);
 			if (line[i] == '<' || line[i] == '>')
@@ -127,7 +150,6 @@ int     split_r_in_out(char *line, t_r_output *redir, t_env *enviro)
 			//break;
         }
         i++;
-		++compteur;
     }
 	//printf("in:%d\nout:%d\n%s\n", redir->in, redir->out, redir->ret);
     return (0);

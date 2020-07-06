@@ -7,9 +7,10 @@ int fill_t_pipe(t_pipe *pip, char **p_tab)
 	pip->nbr = 0;
 	pip->total = env_len(p_tab);
 	n_pipe = 0;
-	if (pip->total >= 2)
-		pip->pipefd = malloc((pip->total - 1) * sizeof(int*));
-	else
+
+	pip->pipefd = malloc((pip->total) * sizeof(int*));
+	pip->pipefd[0] = NULL;
+	if (pip->total < 2)
 		return (0);
 	while (n_pipe + 1 < pip->total)
 	{
@@ -17,6 +18,7 @@ int fill_t_pipe(t_pipe *pip, char **p_tab)
 		pipe(pip->pipefd[n_pipe]);
 		++n_pipe;
 	}
+	pip->pipefd[n_pipe] = NULL;
 	return (0);
 }
 

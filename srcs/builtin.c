@@ -37,15 +37,9 @@ int pwd(int fd, int *lsc)
 	return (1);
 }
 
-void end(char **tabl, t_env *enviro)
+int end(char **tabl, t_env *enviro)
 {
-	int i;
-
-	free_env(enviro->envp);
-	free_env(tabl);
-	if (enviro->lsc == 0)
-		exit(0);
-	exit(1);
+	return (3);
 }
 
 int cd(char **tabl, int *lsc)
