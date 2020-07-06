@@ -6,7 +6,7 @@
 /*   By: delacourt <delacourt@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/09 16:35:57 by delacourt         #+#    #+#             */
-/*   Updated: 2020/07/05 01:23:17 by avan-pra         ###   ########.fr       */
+/*   Updated: 2020/07/06 17:19:32 by avan-pra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ int     split_r_in_out(char *line, t_r_output *redir, t_env *enviro)
 				close(redir->in);
             filename = get_file_name(&line[i + 2], enviro);
 			redir->in = open(filename, O_RDONLY); //faire des checks si -1 et free
-			if (redir->out == -1)
+			if (redir->in == -1)
 			{
 				free(filename);
 				write(2, "mash: permission denied\n", 24);
