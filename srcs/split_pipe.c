@@ -101,7 +101,7 @@ int split_pipe(char *line, char ***attach)
 	j = 0;
 	while (i + 1 < n_pipe)
 	{
-		if (check_redir_error(&line[j]) == 1)
+		if (check_redir_error(&line[j], '|') == 1)
 		{
 			p_tab[i] = NULL;
 			*attach = p_tab;

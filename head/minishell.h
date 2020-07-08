@@ -69,7 +69,7 @@ int end(char **tabl, t_env *enviro);
 void	*free_arr(char **tabl, int j);
 char	**ft_enhanced_split(char const *str, t_env *enviro);
 void sighandler(int signum);
-void print_new_line();
+void print_new_line(int lsc);
 int exec_prog(char *line, char **argv, char **envp, t_r_output redir, t_pipe *pip);
 int search_and_exec(char **tabl, char **envp, int *lsc, t_r_output redir, t_pipe *pip);
 char **split_semi_colon(char *line);
@@ -95,7 +95,7 @@ int		split_r_in_out(char *line, t_r_output *redir, t_env *enviro);
 void    close_redirect(t_r_output *redir);
 int     ft_strlen_redirect(char *line, char red);
 char    *get_file_name(char *str, t_env *enviro);
-int 	check_redir_error(char *line);
+int 	check_redir_error(char *line, char c);
 
 int split_pipe(char *line, char ***attach);
 

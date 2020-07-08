@@ -124,7 +124,13 @@ int inter_line(char **line, t_env *enviro)
 		else if (t == 4 && ft_strlen(tst) == 0) //ctrl D
 			exit(0);
 		else if (t == 3) //ctrl C
-			;
+		{
+			write(1, "^C\n", 3);
+			ft_memset(tst, 0, ft_strlen(tst));
+			end = 0;
+			enviro->lsc = 1;
+			print_new_line(enviro->lsc);
+		}
 		else if (t == 28) //ctrl backslash
 			;
 		else if (ft_strncmp(test4, key.g, 4) == 0)
