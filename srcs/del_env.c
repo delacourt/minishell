@@ -15,12 +15,13 @@ char **del_env_variable(int len, char **envp)
 		{
 			newenvp[j] = malloc((ft_strlen(envp[i]) + 1) * sizeof(char));
 			ft_strlcpy(newenvp[j], envp[i], ft_strlen(envp[i]) + 1);
+			free(envp[i]);
 			++j;
 		}
 		++i;
 	}
 	newenvp[j] = NULL;
-	free_env(envp);
+	free(envp);
 	return(newenvp);
 }
 
@@ -45,7 +46,9 @@ char **unset_new(char **arg, t_env *enviro)
 			++j;
 		}
 		if (len != env_len(enviro->envp))
+		{
 			enviro->envp = del_env_variable(len, enviro->envp);
+		}
 		++i;
 	}
 	return (enviro->envp);

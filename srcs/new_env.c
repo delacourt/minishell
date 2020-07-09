@@ -27,13 +27,14 @@ char **new_env_variable(char *str, char **envp)
 	{
 		newenvp[i] = malloc((ft_strlen(envp[i]) + 1) * sizeof(char));
 		ft_strlcpy(newenvp[i], envp[i], ft_strlen(envp[i]) + 1);
+		free(envp[i]);
 		++i;
 	}
 	newenvp[i] = malloc((ft_strlen(str) + 1) * sizeof(char));
 	ft_strlcpy(newenvp[i], str, ft_strlen(str) + 1);
 	++i;
 	newenvp[i] = NULL;
-	free_env(envp);
+	free(envp);
 	return (newenvp);
 }
 
@@ -50,7 +51,8 @@ char **export_new(char **arg, t_env *enviro)
 		s = search_the_equal(arg[i]);
 		if (s == -1)
 		{
-			printf("problem\n");
+			write(1, "mash: bad assignment\n", 21);
+			enviro->lsc = 1;
 			break;
 		}
 		j = 0;

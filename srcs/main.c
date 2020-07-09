@@ -220,7 +220,7 @@ int main(int argc, char **argv, char **envp)
 
 				if (error == 0) //else if ici
 				{
-					if (parse_exec(redir.ret, redir, &enviro, &pip) == 3) //3 c'est pour le exit
+					if (parse_exec(redir.ret, redir, &enviro, &pip) == 3) /* 3 c'est pour le exit */
 					{
 						close_redirect(&redir);
 						for (g = 0; pip.pipefd[g] != NULL; ++g)
