@@ -225,7 +225,7 @@ int main(int argc, char **argv, char **envp)
 						close_redirect(&redir);
 						for (g = 0; pip.pipefd[g] != NULL; ++g)
 						{
-							close(pip.pipefd[g][0]);
+							//close(pip.pipefd[g][0]);
 							//close(pip.pipefd[g][1]);
 							free(pip.pipefd[g]);
 						}

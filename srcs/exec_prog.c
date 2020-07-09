@@ -26,6 +26,8 @@ int exec_prog(char *line, char **argv, char **envp, t_r_output redir, t_pipe *pi
 		wait(&pid);
 		if (pip->total > 1 && pip->nbr + 1 < pip->total)
 			close(pip->pipefd[pip->nbr][1]);
+		if (pip->total > 1 && pip->nbr != 0)
+			close(pip->pipefd[pip->nbr - 1][0]);
 	}
 	++pip->nbr;
 	return (pid);
