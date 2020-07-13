@@ -245,6 +245,14 @@ int main(int argc, char **argv, char **envp)
 				close_redirect(&redir);
 				++n_pipe;
 			}
+			for (int p = pip.total - 2; p >= 0; --p)
+			{
+				close(pip.pipefd[p][0]);
+				close(pip.pipefd[p][1]);
+			}
+			//printf("yoooo\n");
+			for (int v = pip.total; v > 0; --v)
+				wait(&enviro.lsc);					//waitpid ici
 			for (int g = 0; pip.pipefd[g] != NULL; ++g)
 				free(pip.pipefd[g]);
 			free(pip.pipefd);

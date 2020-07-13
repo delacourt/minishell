@@ -16,18 +16,33 @@ int exec_prog(char *line, char **argv, char **envp, t_r_output redir, t_pipe *pi
 			dup2(pip->pipefd[pip->nbr][1], 1);
 		}
 		if (redir.out != 1)
-    		dup2(redir.out, 1);
+    	{
+			dup2(redir.out, 1);
+		}
 		if (redir.in != 0)
+		{
 			dup2(redir.in, 0);
+		}
+		for (int i = pip->total - 2; i >= 0; --i)
+		{
+			close(pip->pipefd[i][0]);
+			close(pip->pipefd[i][1]);
+		}
 		execve(line, argv, envp);
 	}
 	else
 	{
-		wait(&pid);
-		if (pip->total > 1 && pip->nbr + 1 < pip->total)
-			close(pip->pipefd[pip->nbr][1]);
-		if (pip->total > 1 && pip->nbr != 0)
-			close(pip->pipefd[pip->nbr - 1][0]);
+		// wait(&pid);
+		// if (pip->total > 1 && pip->nbr + 1 < pip->total)
+		// {
+		// 	printf("first ?: %d\n", pip->nbr);
+		// 	close(pip->pipefd[pip->nbr][1]);
+		// }
+		// if (pip->total > 1 && pip->nbr != 0)
+		// {
+		// 	printf("deux ?: %d\n", pip->nbr);
+		// 	close(pip->pipefd[pip->nbr - 1][0]);
+		// }
 	}
 	++pip->nbr;
 	return (pid);
