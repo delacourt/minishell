@@ -109,10 +109,13 @@ int main(int argc, char **argv, char **envp)
 		while (tabl[i] != NULL)
 		{
 			error = split_pipe(tabl[i], &p_tab);
-			if (error == 1)	//free chaque p_tab
+			if (error > 0)	//free chaque p_tab
 			{
 				enviro.lsc = 1;
-				write(1, "mash: syntax error, unexpected token\n", 37);
+				if (error == 1)
+					write(2, "mash: syntax error, unexpected token\n", 37);
+				else if (error == 2)
+					write(2, "mash: 511 pipes+ aren't allowed\n", 32);
 				error = 1;
 			}
 			fill_t_pipe(&pip, p_tab); //close les FD gerer les malloc qui marchent pas
@@ -125,7 +128,7 @@ int main(int argc, char **argv, char **envp)
 				{
 					enviro.lsc = 1;
 					if (error == 1)
-						write(1, "mash: syntax error, unexpected token\n", 37);
+						write(2, "mash: syntax error, unexpected token\n", 37);
 					error = 1;
 				}
 				if (error == 0) //else if ici

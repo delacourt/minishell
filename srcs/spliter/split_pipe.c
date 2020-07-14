@@ -106,6 +106,13 @@ int		split_pipe(char *line, char ***attach)
 	int		i;
 	int		j;
 
+	if (count_pipe(line) > 511)
+	{
+		p_tab = malloc(1 * sizeof(char*));
+		p_tab[0] = NULL;
+		*attach = p_tab;
+		return (2);
+	}
 	n_pipe = count_pipe(line) + 2;
 	p_tab = malloc(n_pipe * sizeof(char*));
 	i = 0;
