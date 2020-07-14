@@ -36,6 +36,7 @@ typedef struct s_pipe
 	int **pipefd;
 	int nbr;
 	int total;
+	int *pid;
 }				t_pipe;
 
 typedef struct	s_env

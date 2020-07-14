@@ -8,21 +8,13 @@ int exec_prog(char *line, char **argv, char **envp, t_r_output redir, t_pipe *pi
     if (pid == 0)
 	{
 		if (pip->total > 1 && pip->nbr != 0)
-		{
 			dup2(pip->pipefd[pip->nbr - 1][0], 0);
-		}
 		if (pip->total > 1 && pip->nbr + 1 < pip->total)
-		{
 			dup2(pip->pipefd[pip->nbr][1], 1);
-		}
 		if (redir.out != 1)
-    	{
 			dup2(redir.out, 1);
-		}
 		if (redir.in != 0)
-		{
 			dup2(redir.in, 0);
-		}
 		for (int i = pip->total - 2; i >= 0; --i)
 		{
 			close(pip->pipefd[i][0]);
@@ -32,6 +24,7 @@ int exec_prog(char *line, char **argv, char **envp, t_r_output redir, t_pipe *pi
 	}
 	else
 	{
+		pip->pid[pip->nbr] = pid;
 		// wait(&pid);
 		// if (pip->total > 1 && pip->nbr + 1 < pip->total)
 		// {

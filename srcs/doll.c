@@ -1,71 +1,45 @@
 #include "../head/minishell.h"
 
-int n_len(int nbr)
+static size_t		ft_itoa_len(int n)
 {
-	int ct;
-    unsigned int t_nb;
+	size_t	r;
 
-    ct = 1;
-    t_nb = nbr;
-    if (nbr < 0)
-    {
-        ct = 2;
-        t_nb = t_nb * -1;
-    }
-    while (t_nb >= 10)
-    {
-        ++ct;
-        t_nb = t_nb / 10;
-    }
-    return (ct);
-}
-
-int		i_len(long nb)
-{
-	int		len;
-
-	len = 0;
-	if (nb < 0)
-	{
-		nb = nb * -1;
-		len++;
-	}
-	while (nb > 0)
-	{
-		nb = nb / 10;
-		len++;
-	}
-	return (len);
-}
-
-char	*ft_itoa(int nb)
-{
-	char *str;
-	long	n;
-	int		i;
-
-	n = nb;
-	i = i_len(n);
-	if (!(str = (char*)malloc(sizeof(char) * (i + 1))))
-		return (NULL);
-	str[i--] = '\0';
 	if (n == 0)
+		return (1);
+	r = 0;
+	if (n < 0)
+		r++;
+	while (n)
 	{
-		str[0] = 48;
-		return (str);
+		n /= 10;
+		r++;
 	}
+	return (r);
+}
+
+char				*ft_itoa(int n)
+{
+	size_t	l;
+	size_t	e;
+	char	*r;
+
+	l = ft_itoa_len(n);
+	if (!(r = (char *)malloc(l + 1)))
+		return (NULL);
+	r[l] = '\0';
 	if (n < 0)
 	{
-		str[0] = '-';
-		n = n * -1;
+		r[0] = '-';
+		e = 1;
 	}
-	while (n > 0)
+	else
+		e = 0;
+	while (l-- > e)
 	{
-		str[i] = 48 + (n % 10);
-		n = n / 10;
-		i--;
+		r[l] = '0' + n % 10 * (n < 0 ? -1 : 1);
+		n /= 10;
 	}
-	return (str);
+	return (r);
 }
 
 int find_the_end_env(const char *str)

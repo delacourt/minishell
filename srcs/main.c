@@ -101,6 +101,7 @@ int parse_exec(char *line, t_r_output redir, t_env *enviro, t_pipe *pip)
 {
 	char **tabl;
 	int i;
+	int ret = 0;
 
 	i = is_broken_quote(line);
 	if (i != 0)
@@ -139,11 +140,11 @@ int parse_exec(char *line, t_r_output redir, t_env *enviro, t_pipe *pip)
 	}
 	else if (tabl[0] != NULL)
 	{
-		search_and_exec(tabl, enviro->envp, &enviro->lsc, redir, pip);
+		ret = search_and_exec(tabl, enviro->envp, &enviro->lsc, redir, pip);
 	}
 	free_env(tabl);
 	free(tabl);
-	return (i);
+	return (ret);
 }
 
 int ft_putchar(int c)
@@ -206,6 +207,7 @@ int main(int argc, char **argv, char **envp)
 				error = 1;
 			}
 			fill_t_pipe(&pip, p_tab); //close les FD gerer les malloc qui marchent pas
+			pip.pid = calloc(pip.total, sizeof(int));
 			n_pipe = 0;
 			while (error == 0 && p_tab[n_pipe] != NULL)
 			{
@@ -217,10 +219,10 @@ int main(int argc, char **argv, char **envp)
 						write(1, "mash: syntax error, unexpected token\n", 37);
 					error = 1;
 				}
-
 				if (error == 0) //else if ici
 				{
-					if (parse_exec(redir.ret, redir, &enviro, &pip) == 3) /* 3 c'est pour le exit */
+					error = parse_exec(redir.ret, redir, &enviro, &pip);
+					if (error == 3) /* 3 c'est pour le exit */
 					{
 						close_redirect(&redir);
 						for (g = 0; pip.pipefd[g] != NULL; ++g)
@@ -239,7 +241,14 @@ int main(int argc, char **argv, char **envp)
 						free_env(enviro.envp);
 						free(enviro.envp);
 						free_env(&enviro.histo[1]);
+						free(pip.pid);
 						return (enviro.lsc);
+					}
+					else if (error == 1) //prog pas trouvé
+					{
+						//printf("yo\n");
+						pip.pid[pip.nbr++] = -1;
+						error = 0;	
 					}
 				}
 				close_redirect(&redir);
@@ -251,13 +260,16 @@ int main(int argc, char **argv, char **envp)
 				close(pip.pipefd[p][1]);
 			}
 			//printf("yoooo\n");
-			for (int v = pip.total; v > 0; --v)
-				wait(&enviro.lsc);					//waitpid ici
+			for (int v = 0; v < pip.total; ++v)
+			{
+				waitpid(pip.pid[v], &enviro.lsc, 0);					//waitpid ici
+			}
 			for (int g = 0; pip.pipefd[g] != NULL; ++g)
 				free(pip.pipefd[g]);
 			free(pip.pipefd);
 			free_env(p_tab);
 			free(p_tab);
+			free(pip.pid);
 			++i;
 		// 	error = 0;
 		}
