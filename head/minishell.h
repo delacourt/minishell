@@ -15,7 +15,6 @@
 
 # define BUFFER_SIZE 32
 # define NCMD 11
-#include "get_next_line.h"
 #include "../libft/libft.h"
 #include <unistd.h>
 #include <stdlib.h>
@@ -62,6 +61,13 @@ typedef struct  s_r_output
 	char *ret;
 }           t_r_output;
 
+typedef struct  s_etup_i_o
+{
+	int		*i;
+	int		*quotes;
+	int		ret;
+}           t_etup_i_o;
+
 
 int cd(char **tabl, int *lsc);
 int pwd(int fd, int *lsc);
@@ -92,6 +98,8 @@ char **unset_new(char **arg, t_env *enviro);
 
 int inter_line(char **line, t_env *enviro);
 
+int		fd_checker(char *line, t_etup_i_o *pass, t_r_output *redir, t_env *enviro);
+
 int		split_r_in_out(char *line, t_r_output *redir, t_env *enviro);
 void    close_redirect(t_r_output *redir);
 int     ft_strlen_redirect(char *line, char red);
@@ -101,5 +109,7 @@ int 	check_redir_error(char *line, char c);
 int split_pipe(char *line, char ***attach);
 
 int fill_t_pipe(t_pipe *pip, char **p_tab);
+
+int is_broken_quote(char *line);
 
 #endif

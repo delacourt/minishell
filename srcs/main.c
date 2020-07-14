@@ -12,91 +12,6 @@
 
 #include "../head/minishell.h"
 
-void print_new_line(int lsc)
-{
-	char c[] = "&> ";
-	char *str;
-	int i;
-	int j;
-
-	if (lsc == 0)
-	{
-		ft_putstr_fd("\033[0;32m", 1);
-		write(1, c, 3);
-		ft_putstr_fd("\033[0m", 1);
-	}
-	else
-	{
-		ft_putstr_fd("\033[0;31m", 1);
-		write(1, c, 3);
-		ft_putstr_fd("\033[0m", 1);
-	}
-	str = getcwd(NULL, 0);
-	i = 0;
-	j = 0;
-	while (str[i] != '\0')
-	{
-		if (str[i] == '/')
-			++j;
-		++i;
-	}
-	if (j > 1)
-	{
-		while (str[i] != '/' && i >= 0)
-			--i;
-		++i;
-		ft_putstr_fd("\033[1;36m", 1);
-		write(1, &str[i], ft_strlen(&str[i]));
-		ft_putstr_fd("\033[0m", 1);
-		write(1, ": ", 2);
-	}
-	else
-	{
-		ft_putstr_fd("\033[1;31m", 1);
-		write(1, str, ft_strlen(str));
-		ft_putstr_fd("\033[0m", 1);
-		write(1, ": ", 2);
-	}
-	free(str);
-}
-
-int is_broken_quote(char *line)
-{
-	int i;
-
-	i = 0;
-	while (line[i] != '\0')
-	{
-		if (line[i] == '\"')
-		{
-			++i;
-			while (line[i] != '\"' && line[i] != '\0')
-			{
-				if (line[i] == '\\')
-					++i;
-				++i;
-			}
-		}
-		else if (line[i] == '\'')
-		{
-			++i;
-			while (line[i] != '\'' && line[i] != '\0')
-			{
-				
-				if (line[i] == '\\' && line[i + 1] != '\'')
-					++i;
-				++i;
-			}
-		}
-		else if (line[i] == '\\')
-			++i;
-		if (line[i] == '\0')
-			return (1);
-		++i;
-	}
-	return (0); // a changer
-}
-
 int parse_exec(char *line, t_r_output redir, t_env *enviro, t_pipe *pip)
 {
 	char **tabl;
@@ -145,12 +60,6 @@ int parse_exec(char *line, t_r_output redir, t_env *enviro, t_pipe *pip)
 	free_env(tabl);
 	free(tabl);
 	return (ret);
-}
-
-int ft_putchar(int c)
-{
-	write(1, &c, 1);
-	return (0);
 }
 
 int main(int argc, char **argv, char **envp)
@@ -225,14 +134,12 @@ int main(int argc, char **argv, char **envp)
 					if (error == 3) /* 3 c'est pour le exit */
 					{
 						close_redirect(&redir);
-						for (g = 0; pip.pipefd[g] != NULL; ++g)
+						for (int p = pip.total - 2; p >= 0; --p)
 						{
-							//close(pip.pipefd[g][0]);
-							//close(pip.pipefd[g][1]);
-							free(pip.pipefd[g]);
+							close(pip.pipefd[p][0]);
+							close(pip.pipefd[p][1]);
+							free(pip.pipefd[p]);
 						}
-						if (g > 0)
-							close(pip.pipefd[g][1]);
 						free(pip.pipefd);
 						free_env(p_tab);
 						free(p_tab);
@@ -258,14 +165,10 @@ int main(int argc, char **argv, char **envp)
 			{
 				close(pip.pipefd[p][0]);
 				close(pip.pipefd[p][1]);
+				free(pip.pipefd[p]);
 			}
-			//printf("yoooo\n");
 			for (int v = 0; v < pip.total; ++v)
-			{
 				waitpid(pip.pid[v], &enviro.lsc, 0);					//waitpid ici
-			}
-			for (int g = 0; pip.pipefd[g] != NULL; ++g)
-				free(pip.pipefd[g]);
 			free(pip.pipefd);
 			free_env(p_tab);
 			free(p_tab);

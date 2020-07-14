@@ -17,16 +17,18 @@ SRC				=	./srcs/builtin.c\
 					./srcs/exec_prog.c\
 					./srcs/main.c\
 					./srcs/sign_handle.c\
-					./srcs/split_semi_colon.c\
 					./srcs/handle_env.c\
-					./srcs/get_next_line.c\
-					./srcs/get_next_line_utils.c\
 					./srcs/new_env.c\
 					./srcs/del_env.c\
 					./srcs/doll.c\
-					./srcs/inter_line.c\
-					./srcs/split_r_in_out.c\
-					./srcs/split_pipe.c\
+					./srcs/prompt.c\
+					./srcs/check_quote.c\
+					./srcs/reader/inter_line.c\
+					./srcs/spliter/split_r_in_out1_part1.c\
+					./srcs/spliter/split_r_in_out1_part2.c\
+					./srcs/spliter/split_r_in_out2.c\
+					./srcs/spliter/split_pipe.c\
+					./srcs/spliter/split_semi_colon.c\
 
 ROAD_S			= $(SRC)
 

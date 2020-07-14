@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../head/minishell.h"
+#include "../../head/minishell.h"
 
 int count_semi_colon(char *line)
 {
