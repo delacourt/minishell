@@ -24,6 +24,8 @@ SRC				=	./srcs/builtin.c\
 					./srcs/prompt.c\
 					./srcs/check_quote.c\
 					./srcs/reader/inter_line.c\
+					./srcs/reader/read_utils.c\
+					./srcs/reader/special_event1.c\
 					./srcs/spliter/split_r_in_out1_part1.c\
 					./srcs/spliter/split_r_in_out1_part2.c\
 					./srcs/spliter/split_r_in_out2.c\
@@ -36,7 +38,7 @@ ROAD_O			= $(OBJ)
 
 ROAD_B			= $(SRCB)
 
-FLAGS			= -Wall -Wextra -Werror #-g3 -fsanitize=address 
+FLAGS			= -Wall -Wextra -Werror #-g3 -fsanitize=address
 
 OBJ				= $(SRC:.c=.o)
 

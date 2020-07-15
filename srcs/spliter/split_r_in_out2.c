@@ -40,8 +40,10 @@ void	close_redirect(t_r_output *redir)
 char	*get_file_name(char *str, t_env *enviro)
 {
 	char *tst;
+	int	j;
 
-	tst = fill_word(str, enviro);
+	j = 0;
+	tst = fill_word(str, enviro, &j);
 	return (tst);
 }
 

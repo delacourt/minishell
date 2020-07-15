@@ -31,7 +31,8 @@ char **unset_new(char **arg, t_env *enviro)
 	int j;
 	int len;
 
-	i = 0;	
+	i = 0;
+	enviro->lsc = 0;
 	while (arg[i] != NULL)
 	{
 		j = 0;

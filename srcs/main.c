@@ -21,7 +21,8 @@ int parse_exec(char *line, t_r_output redir, t_env *enviro, t_pipe *pip)
 	i = is_broken_quote(line);
 	if (i != 0)
 	{
-		printf("broken pipe\n");
+		write(2, "mash: syntax error, unexpected token\n", 37);
+		enviro->lsc = 1;
 		return (i);
 	}
 	tabl = ft_enhanced_split(line, enviro);
@@ -53,10 +54,8 @@ int parse_exec(char *line, t_r_output redir, t_env *enviro, t_pipe *pip)
 		if (pip->total > 1 && pip->nbr + 1 < pip->total)
 			close(pip->pipefd[pip->nbr++][1]);
 	}
-	else if (tabl[0] != NULL)
-	{
+	else if (tabl[0] != NULL && ft_strlen(tabl[0]) != 0)
 		ret = search_and_exec(tabl, enviro->envp, &enviro->lsc, redir, pip);
-	}
 	free_env(tabl);
 	free(tabl);
 	return (ret);

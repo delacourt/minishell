@@ -68,6 +68,16 @@ typedef struct  s_etup_i_o
 	int		ret;
 }           t_etup_i_o;
 
+typedef struct  s_read
+{
+	char	t;
+	char	*tst;
+	char	*tmp;
+	char	*hold;
+	int		ou;
+	char	*c_key;
+}           t_read;
+
 
 int cd(char **tabl, int *lsc);
 int pwd(int fd, int *lsc);
@@ -86,17 +96,14 @@ void print_env(char **envp, int fd, int *lsc);
 void free_env(char **envp);
 int search_the_equal(char *str);
 int	count_words(const char *str);
-int search_the_equal(char *str);
 
-char	*fill_word(const char *str, t_env *enviro);
+char	*fill_word(const char *str, t_env *enviro, int *j); //mettre le j en struct et tt
 int		advance(const char *str);
 
-char *test1212(int *dep, int *i, char *word, const char *str, t_env enviro);
+char *test1212(int *dep, int *i, char *word, const char *str, t_env enviro, int *j);
 
 char **export_new(char **arg, t_env *enviro);
 char **unset_new(char **arg, t_env *enviro);
-
-int inter_line(char **line, t_env *enviro);
 
 int		fd_checker(char *line, t_etup_i_o *pass, t_r_output *redir, t_env *enviro);
 
@@ -111,5 +118,16 @@ int split_pipe(char *line, char ***attach);
 int fill_t_pipe(t_pipe *pip, char **p_tab);
 
 int is_broken_quote(char *line);
+
+int inter_line(char **line, t_env *enviro);
+void put_in_histo(t_env *enviro, char *tst);
+void fill(t_key *key);
+void test1213(char *tst, int len, char c);
+
+void	k_left(t_key key, int *end, t_read *t_r);
+void	k_right(t_key key, int *end, t_read *t_r);
+void	k_up(t_env *enviro, t_read *t_r, t_key key, int *end);
+void	k_down(t_env *enviro, t_read *t_r, t_key key, int *end);
+void	k_down_next(t_env *enviro, t_read *t_r, t_key key, int *end);
 
 #endif

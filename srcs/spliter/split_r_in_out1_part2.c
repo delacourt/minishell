@@ -14,8 +14,10 @@
 
 static int		set_output(char *line, int *i, t_r_output *redir, t_env *enviro)
 {
-	char *filename;
+	char	*filename;
+	int		ret;
 
+	ret = 0;
 	if (check_redir_error(&line[*i + 1], '>') == 1)
 		return (1);
 	if (redir->out != 1)
@@ -24,23 +26,25 @@ static int		set_output(char *line, int *i, t_r_output *redir, t_env *enviro)
 	redir->out = open(filename, O_WRONLY | O_TRUNC | O_CREAT);
 	if (redir->out == -1)
 	{
-		free(filename);
-		write(2, "mash: permission denied\n", 24);
-		return (2);
+		ft_putendl_fd("mash: permission denied or operation not permitted", 1);
+		ret = 2;
 	}
-	free(filename);
+	if (filename != NULL)
+		free(filename);
 	*i = *i + 1;
 	*i = *i + advance(&line[*i]);
 	if (line[*i] == '<' || line[*i] == '>')
 		--*i;
-	return (0);
+	return (ret);
 }
 
 static int		set_double_output(char *line, int *i,
 	t_r_output *redir, t_env *enviro)
 {
-	char *filename;
+	char	*filename;
+	int		ret;
 
+	ret = 0;
 	if (check_redir_error(&line[*i + 2], '>') == 1)
 		return (1);
 	if (redir->out != 1)
@@ -49,20 +53,22 @@ static int		set_double_output(char *line, int *i,
 	redir->out = open(filename, O_WRONLY | O_APPEND | O_CREAT);
 	if (redir->out == -1)
 	{
-		free(filename);
-		write(2, "mash: permission denied\n", 24);
-		return (2);
+		ft_putendl_fd("mash: permission denied or operation not permitted", 1);
+		ret = 2;
 	}
-	free(filename);
+	if (filename != NULL)
+		free(filename);
 	*i = *i + 2;
 	*i = *i + advance(&line[*i]);
-	return (0);
+	return (ret);
 }
 
 static int		set_input(char *line, int *i, t_r_output *redir, t_env *enviro)
 {
-	char *filename;
+	char	*filename;
+	int		ret;
 
+	ret = 0;
 	if (check_redir_error(&line[*i + 1], '>') == 1)
 		return (1);
 	if (redir->in != 0)
@@ -71,16 +77,16 @@ static int		set_input(char *line, int *i, t_r_output *redir, t_env *enviro)
 	redir->in = open(filename, O_RDONLY);
 	if (redir->in == -1)
 	{
-		free(filename);
-		write(2, "mash: permission denied\n", 24);
-		return (2);
+		ft_putendl_fd("mash: permission denied or no such file exist", 1);
+		ret = 2;
 	}
-	free(filename);
+	if (filename != NULL)
+		free(filename);
 	*i = *i + 1;
 	*i = *i + advance(&line[*i]);
 	if (line[*i] == '<' || line[*i] == '>')
 		--*i;
-	return (0);
+	return (ret);
 }
 
 int				fd_checker_next(char *line,
@@ -115,12 +121,14 @@ int				fd_checker_next(char *line,
 int				fd_checker(char *line,
 	t_etup_i_o *giv, t_r_output *redir, t_env *enviro)
 {
-	if ((line[*giv->i] == '\"' || line[*giv->i] == '\'') && giv->quotes == 0)
+	int ret;
+
+	if ((line[*giv->i] == '\"' || line[*giv->i] == '\'') && *giv->quotes == 0)
 		++*giv->quotes;
 	else if ((line[*giv->i] == '\"'
 		|| line[*giv->i] == '\'') && *giv->quotes == 1)
 		--*giv->quotes;
 	else
-		fd_checker_next(line, giv, redir, enviro);
-	return (0);
+		ret = fd_checker_next(line, giv, redir, enviro);
+	return (ret);
 }

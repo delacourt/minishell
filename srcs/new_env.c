@@ -5,6 +5,8 @@ int search_the_equal(char *str)
 	int i;
 
 	i = 0;
+	if (str[i] == '=')
+		return (-1);
 	while (str[i] != '\0')
 	{
 		if (str[i] == '=')
@@ -46,9 +48,10 @@ char **export_new(char **arg, t_env *enviro)
 	int found;
 
 	i = 0;
+	enviro->lsc = 0;
 	while (arg[i] != NULL)
 	{
-		s = search_the_equal(arg[i]);
+		s = search_the_equal(arg[i]);					//eh meilleur verif d'erreur ici (ex: `export =awdwad`)
 		if (s == -1)
 		{
 			write(1, "mash: bad assignment\n", 21);

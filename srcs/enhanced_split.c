@@ -112,7 +112,7 @@ int	count_words(const char *str)
 	return (ret);
 }
 
-char *fill_word(const char *str, t_env *enviro)
+char *fill_word(const char *str, t_env *enviro, int *j)
 {
 	int i;
 	char *word;
@@ -136,8 +136,8 @@ char *fill_word(const char *str, t_env *enviro)
 					++i;
 				else if (str[i] == '$' && str[i + 1] != ' ' && str[i + 1] != '\0' && str[i + 1] != '$' && str[i + 1] != '\\')
 				{
-					word = test1212(&dep, &i, word, str, *enviro);
-					++i;
+					if ((word = test1212(&dep, &i, word, str, *enviro, j)) == NULL)
+						return (NULL);
 				}
 				else
 				{
@@ -154,8 +154,8 @@ char *fill_word(const char *str, t_env *enviro)
 			{
 				if (str[i] == '$' && str[i + 1] != ' ' && str[i + 1] != '\0' && str[i + 1] != '$' && str[i + 1] != '\\')
 				{
-					word = test1212(&dep, &i, word, str, *enviro);
-					++i;
+					if ((word = test1212(&dep, &i, word, str, *enviro, j)) == NULL)
+						return (NULL);
 				}
 				else
 				{
@@ -175,7 +175,8 @@ char *fill_word(const char *str, t_env *enviro)
 		{
 			if (str[i] == '$' && str[i + 1] != ' ' && str[i + 1] != '\0' && str[i + 1] != '$' && str[i + 1] != '\\')
 			{
-				word = test1212(&dep, &i, word, str, *enviro);
+				if ((word = test1212(&dep, &i, word, str, *enviro, j)) == NULL)
+					return (NULL);
 			}
 			else
 			{
@@ -224,26 +225,34 @@ int advance(const char *str)
 char		**ft_enhanced_split(char const *str, t_env *enviro)
 {
 	char	**tabl;
+	char	*tmp;
 	int		i;
 	int		j;
+	int		o;
 
 	i = 0;
+	o = 0;
 	// printf("str init = %s\n", str);
-	//printf("split nbr = %d\n", count_split(str));
-	if (!(tabl = malloc((count_split(str) + 1) * sizeof(char*))))
+	if (!(tabl = malloc((count_split(str) + 1) * sizeof(char*))))		//ne pas compter de split si je connais pas le $
 		return (NULL);
 	i = 0;
 	j = 0;
-	while (j < count_split(str))
+	while (o < count_split(str))
 	{
 		// printf("count = %d\n", count_words(&str[i]));
-	 	tabl[j] = fill_word(&str[i], enviro);
+		tmp = fill_word(&str[i], enviro, &j);
+		if (tmp == NULL)
+			tabl[j + 1] = tmp;
+		else
+		{
+			tabl[j] = tmp;
+		}
 		j++;
 		i = i + advance(&str[i]);
-		//rajouter des trucs ici pour passer au prochain mots (sarreter au prochain espace pas dans des quotes)
+		++o;
 	}
 	tabl[j] = NULL;
-	// i = 0;
+	i = 0;
 	// while(tabl[i] != NULL)
 	//   	printf("%s\n", tabl[i++]);
 	// free_arr(tabl, j);

@@ -1,255 +1,92 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   inter_line.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: velovo <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/07/15 18:41:48 by velovo            #+#    #+#             */
+/*   Updated: 2020/07/15 18:42:34 by velovo           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../head/minishell.h"
 
-void fill(t_key *key)
+int		inter_line(char **line, t_env *enviro)
 {
-	key->g[0] = 27;
-	key->g[1] = 91;
-	key->g[2] = 68;
-	key->g[3] = 0;
-	key->d[0] = 27;
-	key->d[1] = 91;
-	key->d[2] = 67;
-	key->d[3] = 0;
-	key->h[0] = 27;
-	key->h[1] = 91;
-	key->h[2] = 65;
-	key->h[3] = 0;
-	key->b[0] = 27;
-	key->b[1] = 91;
-	key->b[2] = 66;
-	key->b[3] = 0;
-}
+	int		k;
+	t_read	t_r;
+	t_key	key;
+	int		end = 0;
+	char	c_key[4] = {0, 0, 0, 0};
 
-void put_in_histo(t_env *enviro, char *tst)
-{
-	char *tmp;
-	char *tmp2;
-	int i = 9;
-
-	enviro->histo[0] = tst;
-	while (i >= 0)
-	{
-		enviro->histo[i + 1] = enviro->histo[i];
-		--i;
-	}
-	if (enviro->histo[10] != NULL)
-	{
-		free(enviro->histo[10]);
-		enviro->histo[10] = NULL;
-	}
-	// tmp = enviro->histo[1];
-	// enviro->histo[1] = enviro->histo[0];
-	// tmp2 = enviro->histo[2];
-	// enviro->histo[2] = tmp;
-	// tmp = enviro->histo[3];
-	// enviro->histo[3] = tmp2;
-	// tmp2 = enviro->histo[4];
-	// enviro->histo[4] = tmp;
-	// tmp = enviro->histo[5];
-	// enviro->histo[5] = tmp2;
-	// tmp2 = enviro->histo[6];
-	// enviro->histo[6] = tmp;
-	// tmp = enviro->histo[7];
-	// enviro->histo[7] = tmp2;
-	// tmp2 = enviro->histo[8];
-	// enviro->histo[8] = tmp;
-	// tmp = enviro->histo[9];
-	// enviro->histo[9] = tmp2;
-	// tmp2 = enviro->histo[10];
-	// enviro->histo[10] = tmp;
-	
-	// free(enviro->histo[10]);
-	// free(tmp2);
-	// enviro->histo[10] = NULL;
-	
-	// for (i = 0; enviro->histo[i] != NULL; ++i)
-	// 	printf("%d  %s\n", i, enviro->histo[i]);
-}
-
-void test1213(char *tst, int len, char c)
-{
-	char *tmp;
-
-	tmp = ft_strdup(&tst[len]);
-
-	//printf("%s\n", tmp);
-	tst[len] = c;
-	ft_strlcpy(&tst[len + 1], tmp, ft_strlen(tmp) + 1);
-	free(tmp);	
-}
-
-int inter_line(char **line, t_env *enviro)
-{
-	char t;
-	char *tst;
-	char *tmp;
-	char *hold;
-	int ou = 1;
-	int k;
-	t_key key;
-	int end = 0;
-	char test4[4] = {0, 0, 0, 0};
-
+	t_r.ou = 1;
 	fill(&key);
-
-	//ft_memset(tst, 0, 1024);
-	tst = ft_calloc(2, sizeof(char));
+	t_r.c_key = c_key;
+	t_r.tst = ft_calloc(2, sizeof(char));
 	while (1)
 	{
-		t = 0;
-		read(0, &t, 1);
-		//printf("%d\n", t);
-		if((t >= 32 && t <= 126) && ft_strlen(test4) == 0)
+		t_r.t = 0;
+		read(0, &t_r.t, 1);
+		if((t_r.t >= 32 && t_r.t <= 126) && ft_strlen(c_key) == 0)
 		{
-			hold = ft_strdup(tst);
-			tmp = tst;
-			tst = ft_calloc(ft_strlen(hold) + 2, sizeof(char));
-			free(tmp);
-			ft_strlcpy(tst, hold, ft_strlen(hold) + 1);
-			test1213(tst, end, t);
+			t_r.hold = ft_strdup(t_r.tst);
+			t_r.tmp = t_r.tst;
+			t_r.tst = ft_calloc(ft_strlen(t_r.hold) + 2, sizeof(char));
+			free(t_r.tmp);
+			ft_strlcpy(t_r.tst, t_r.hold, ft_strlen(t_r.hold) + 1);
+			test1213(t_r.tst, end, t_r.t);
 			++end;
-		
-			free(hold);
+			free(t_r.hold);
 		}
-		if (t == 27 || ft_strlen(test4) > 0)
+		if (t_r.t == 27 || ft_strlen(c_key) > 0)
 		{
-			test4[ft_strlen(test4)] = t;
+			c_key[ft_strlen(c_key)] = t_r.t;
 		}
-		if (t == '\n')
+		if (t_r.t == '\n')
 		{
-			put_in_histo(enviro, tst);
-			*line = tst;
+			put_in_histo(enviro, t_r.tst);
+			*line = t_r.tst;
 			return (1);
 		}
-		else if (t == 4 && ft_strlen(tst) == 0) //ctrl D
+		else if (t_r.t == 4 && ft_strlen(t_r.tst) == 0) //ctrl D
 			exit(0);
-		else if (t == 3) //ctrl C
+		else if (t_r.t == 3) //ctrl C
 		{
 			write(1, "^C\n", 3);
-			ft_memset(tst, 0, ft_strlen(tst));
+			ft_memset(t_r.tst, 0, ft_strlen(t_r.tst));
 			end = 0;
 			enviro->lsc = 1;
 			print_new_line(enviro->lsc);
 		}
-		else if (t == 28) //ctrl backslash
+		else if (t_r.t == 28) //ctrl backslash
 			;
-		else if (ft_strncmp(test4, key.g, 4) == 0)
+		else if (ft_strncmp(c_key, key.g, 4) == 0)
+			k_left(key, &end, &t_r);
+		else if (ft_strncmp(c_key, key.d, 4) == 0)
+			k_right(key, &end, &t_r);
+		else if (ft_strncmp(c_key, key.h, 4) == 0)
+			k_up(enviro, &t_r, key, &end);
+		else if (ft_strncmp(c_key, key.b, 4) == 0)
+			k_down(enviro, &t_r, key, &end);
+		else if (t_r.t == 127 && end > 0)
 		{
-			//printf("yo\n");
-			//printf("end = %d\nlen = %zu", end, ft_strlen(tst));
-			if (end > 0)
-			{
-				write(1, &key.g, 3);
-				--end;
-				//ft_strlcpy(&tst[end - 2], &tst[end + 1], 1024);
-			}
-			else
-			{
-				;//printf("%d\n", end);
-				//ft_strlcpy(tst, &tst[end], 1024);
-			}
-			//end = end - 3;
-			ft_memset(test4, 0 , 4);
-		}
-		else if (ft_strncmp(test4, key.d, 4) == 0)
-		{
-			//printf("end = %d      len = %zu\n", end, ft_strlen(tst));
-			if (end < ft_strlen(tst))
-			{
-				write(1, &key.d, 3);
-				++end;
-				//ft_strlcpy(&tst[end - 4], &tst[end- 1], 1024);
-			}
-			else
-			{
-				;//ft_strlcpy(&tst[end - 3], &tst[end], 1024);
-			}
-			ft_memset(test4, 0 , 4);
-			//printf("%d\n", tst[end - 1]);
-			//end = end - 3;
-		}
-		else if (ft_strncmp(test4, key.h, 4) == 0)
-		{
-			if (enviro->histo[ou] != NULL)
-			{
-				++ou;
-				for (k = 0; k < ft_strlen(tst) - ft_strlen(&tst[end]); ++k)
-					write(1, &key.g, 3);
-				for (k = 0; k < ft_strlen(tst); ++k)
-					write(1, " ", 1);
-				for (k = 0; k < ft_strlen(tst); ++k)
-					write(1, &key.g, 3);
-				free(tst);
-				tst = ft_strdup(enviro->histo[ou - 1]);
-				write(1, tst, ft_strlen(tst));
-				end = ft_strlen(tst);
-			}
-			// else
-			// {//printf("haut\n");
-			// 	ft_strlcpy(&tst[end - 3], &tst[end], 1024);
-			// 	end = end - 3;
-			// }
-			ft_memset(test4, 0 , 4);
-			//exit(0);
-		}
-		else if (ft_strncmp(test4, key.b, 4) == 0)
-		{
-			if (ou > 2)
-			{
-				--ou;
-				for (k = 0; k < ft_strlen(tst) - ft_strlen(&tst[end]); ++k)
-					write(1, &key.g, 3);
-				for (k = 0; k < ft_strlen(tst); ++k)
-					write(1, " ", 1);
-				for (k = 0; k < ft_strlen(tst); ++k)
-					write(1, &key.g, 3);
-				free(tst);
-				tst = ft_strdup(enviro->histo[ou - 1]);
-				write(1, tst, ft_strlen(tst));
-				end = ft_strlen(tst);
-			}
-			else if (ou <= 2)
-			{
-				if (ou == 2)
-					--ou;
-				for (k = 0; k < ft_strlen(tst) - ft_strlen(&tst[end]); ++k)
-					write(1, &key.g, 3);
-				for (k = 0; k < ft_strlen(tst); ++k)
-					write(1, " ", 1);
-				for (k = 0; k < ft_strlen(tst); ++k)
-					write(1, &key.g, 3);
-				free(tst);
-				tst = ft_strdup("");
-				end = 0;
-			}
-			// else
-			// {//printf("haut\n");
-			// 	ft_strlcpy(&tst[end - 3], &tst[end], 1024);
-			// 	end = end - 3;
-			// }
-			ft_memset(test4, 0 , 4);
-		}
-		else if (t == 127 && end > 0)
-		{
-			ft_strlcpy(&tst[end - 1], &tst[end], 1024);
+			ft_strlcpy(&t_r.tst[end - 1], &t_r.tst[end], ft_strlen(&t_r.tst[end]) + 1);
 			end = end - 1;
 			write(1, &key.g, 3);
-			write(1, &tst[end], ft_strlen(&tst[end]));
+			write(1, &t_r.tst[end], ft_strlen(&t_r.tst[end]));
 			write(1, " ", 1);
-			for (int j = 0; j <= ft_strlen(&tst[end]); ++j)
+			for (int j = 0; j <= ft_strlen(&t_r.tst[end]); ++j)
 				write(1, &key.g, 3);
 		}
-		else if (ft_strlen(test4) == 0 && (t >= 32 && t <= 126))
+		else if (ft_strlen(c_key) == 0 && (t_r.t >= 32 && t_r.t <= 126))
 		{
-			write(1, &t, 1);
-			write(1, &tst[end], ft_strlen(&tst[end]));
-			for (int i = 0; i < ft_strlen(&tst[end]); ++i)
+			write(1, &t_r.t, 1);
+			write(1, &t_r.tst[end], ft_strlen(&t_r.tst[end]));
+			for (int i = 0; i < ft_strlen(&t_r.tst[end]); ++i)
 				write(1, &key.g, 3);
-			//++end;
-			//printf("%d\n", end);
 		}
-		if (ft_strlen(test4) >= 3)
-			ft_memset(test4, 0, 4);
-		//printf("%d\n", t);
+		if (ft_strlen(c_key) >= 3)
+			ft_memset(c_key, 0, 4);
 	}
 }

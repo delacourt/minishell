@@ -52,7 +52,20 @@ int find_the_end_env(const char *str)
 	return (i);
 }
 
-char *test1212(int *dep, int *i, char *word, const char *str, t_env enviro)
+int is_only_doll(char *word, const char *str, int i)
+{
+	int j;
+	int end;
+
+	j = 0;
+	end = find_the_end_env(&str[i + 1]);
+	
+	if (ft_strlen(word) == 0 && (str[i + end + 1] == 0 || str[i + end + 1] == ' '))
+		return (0);
+	return (1);
+}
+
+char *test1212(int *dep, int *i, char *word, const char *str, t_env enviro, int *j)
 {
 	char *tmp;
 	char *ret;
@@ -61,7 +74,9 @@ char *test1212(int *dep, int *i, char *word, const char *str, t_env enviro)
 	int len = 0;
 	int lentest = 0; //$W prblm
 	char **envp;
+	int solo;
 
+	solo = is_only_doll(word, str, *i);
 	envp = enviro.envp;
 	//len = find_the_end_env(&str[*i + 1]);
 	//printf("%d\n", len);
@@ -100,6 +115,13 @@ char *test1212(int *dep, int *i, char *word, const char *str, t_env enviro)
 		}
 		++penv;
 	}
-	*i = *i + len;
+	if (solo == 0)
+	{
+		//printf("j = %d\n", *j);
+		free(word);
+		word = NULL;
+		--*j;
+	}
+	*i = *i + find_the_end_env(&str[*i + 1]);												//prblm ici i avance trop en theorie c'est good
 	return (word);
 }
