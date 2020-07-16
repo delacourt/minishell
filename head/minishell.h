@@ -130,4 +130,12 @@ void	k_up(t_env *enviro, t_read *t_r, t_key key, int *end);
 void	k_down(t_env *enviro, t_read *t_r, t_key key, int *end);
 void	k_down_next(t_env *enviro, t_read *t_r, t_key key, int *end);
 
+int		k_enter(t_env *enviro, char **line, t_read *t_r);
+void	k_ctrl_c(t_env *enviro, t_read *t_r, int *end);
+void	k_normal(t_read *t_r, int *end);
+void	k_del(t_read *t_r, int *end, t_key key);
+void	write_char(t_read *t_r, int *end, t_key key);
+
+void	check_key(t_env *enviro, t_read *t_r, int *end, t_key key);
+
 #endif
