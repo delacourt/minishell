@@ -35,6 +35,7 @@ typedef struct s_pipe
 	int **pipefd;
 	int nbr;
 	int total;
+	int	founded;
 	int *pid;
 }				t_pipe;
 
@@ -78,6 +79,26 @@ typedef struct  s_read
 	char	*c_key;
 }           t_read;
 
+typedef struct	s_word
+{
+	int		*i;
+	int		*dep;
+	int		*c_split;
+	char	*word;
+}          		t_word;
+
+typedef struct	s_doll
+{
+	char	*tmp;
+	char	*ret;
+	char	*tmp2;
+	int		penv;
+	int		len;
+	int		lentest;
+	char	**envp;
+	int		solo;
+}				t_doll;
+
 
 int cd(char **tabl, int *lsc);
 int pwd(int fd, int *lsc);
@@ -95,12 +116,8 @@ int env_len(char **env);
 void print_env(char **envp, int fd, int *lsc);
 void free_env(char **envp);
 int search_the_equal(char *str);
-int	count_words(const char *str);
 
-char	*fill_word(const char *str, t_env *enviro, int *j); //mettre le j en struct et tt
-int		advance(const char *str);
-
-char *test1212(int *dep, int *i, char *word, const char *str, t_env enviro, int *j);
+char *fill_with_enviro(const char *str, t_env enviro, t_word *giv);
 
 char **export_new(char **arg, t_env *enviro);
 char **unset_new(char **arg, t_env *enviro);
@@ -119,10 +136,9 @@ int fill_t_pipe(t_pipe *pip, char **p_tab);
 
 int is_broken_quote(char *line);
 
-int inter_line(char **line, t_env *enviro);
-void put_in_histo(t_env *enviro, char *tst);
-void fill(t_key *key);
-void test1213(char *tst, int len, char c);
+void	put_in_histo(t_env *enviro, char *tst);
+void	fill_key(t_key *key);
+void	put_char_in_str(char *tst, int len, char c);
 
 void	k_left(t_key key, int *end, t_read *t_r);
 void	k_right(t_key key, int *end, t_read *t_r);
@@ -137,5 +153,19 @@ void	k_del(t_read *t_r, int *end, t_key key);
 void	write_char(t_read *t_r, int *end, t_key key);
 
 void	check_key(t_env *enviro, t_read *t_r, int *end, t_key key);
+void	setup_read(t_key *key, t_read *t_r, char c_key[4], int *end);
+int		inter_line(char **line, t_env *enviro);
+
+int		count_split(const char *str);
+int		count_words(const char *str);
+char	*fill_word(const char *str, t_env *enviro, int *j); //mettre le j en struct et tt
+int		advance(const char *str);
+
+void	skip_space(const char *str, int *i);
+void	*word_setup(const char *str, t_word *giv);
+
+char			*ft_itoa(int n);
+int				find_the_end_env(const char *str);
+int				is_only_doll(char *word, const char *str, int i);
 
 #endif

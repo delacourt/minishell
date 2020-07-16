@@ -75,6 +75,7 @@ int search_and_exec(char **tabl, char **envp, int *lsc, t_r_output redir, t_pipe
 		else
 		{
 			*lsc = 1;
+			--pip->founded;
 			write(1, "mash: no such file or directory: ", ft_strlen("mash: no such file or directory: "));
 			write(1, tabl[0], ft_strlen(tabl[0]));
 			write(1, "\n", 1);
@@ -125,6 +126,7 @@ int search_and_exec(char **tabl, char **envp, int *lsc, t_r_output redir, t_pipe
 			else if (pathed[i] == NULL)	//rentre la dedans si jai test tous les path sans trouver lexcecutablle
 			{
 				*lsc = 1;
+				--pip->founded;
 				write(1, "mash: command not found: ", ft_strlen("mash: command not found: "));
 				write(1, tabl[0], ft_strlen(tabl[0]));
 				write(1, "\n", 1);
@@ -136,6 +138,7 @@ int search_and_exec(char **tabl, char **envp, int *lsc, t_r_output redir, t_pipe
 			free(try);
 		}
 		*lsc = 1;
+		--pip->founded;
 		free_env(pathed);
 		free(pathed);
 		write(1, "mash: no such file or directory: ", ft_strlen("mash: no such file or directory: "));

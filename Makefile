@@ -12,15 +12,9 @@
 
 NAME			= minishell
 
-SRC				=	./srcs/builtin.c\
-					./srcs/enhanced_split.c\
-					./srcs/exec_prog.c\
+SRC				=	./srcs/exec_prog.c\
 					./srcs/main.c\
 					./srcs/sign_handle.c\
-					./srcs/handle_env.c\
-					./srcs/new_env.c\
-					./srcs/del_env.c\
-					./srcs/doll.c\
 					./srcs/prompt.c\
 					./srcs/check_quote.c\
 					./srcs/reader/inter_line.c\
@@ -32,6 +26,17 @@ SRC				=	./srcs/builtin.c\
 					./srcs/spliter/split_r_in_out2.c\
 					./srcs/spliter/split_pipe.c\
 					./srcs/spliter/split_semi_colon.c\
+					./srcs/builtin/builtin.c\
+					./srcs/environement/handle_env.c\
+					./srcs/environement/new_env.c\
+					./srcs/environement/del_env.c\
+					./srcs/spliter2/doll.c\
+					./srcs/spliter2/doll_utils.c\
+					./srcs/spliter2/enhanced_split.c\
+					./srcs/spliter2/advance.c\
+					./srcs/spliter2/count_split.c\
+					./srcs/spliter2/count_words.c\
+					./srcs/spliter2/fill_word.c\
 
 ROAD_S			= $(SRC)
 

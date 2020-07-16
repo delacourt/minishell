@@ -16,7 +16,7 @@
 **	setup the arrow key
 */
 
-void	fill(t_key *key)
+void	fill_key(t_key *key)
 {
 	key->g[0] = 27;
 	key->g[1] = 91;
@@ -64,7 +64,7 @@ void	put_in_histo(t_env *enviro, char *tst)
 **	put the given caracter at the right place in the string
 */
 
-void	test1213(char *tst, int len, char c)
+void	put_char_in_str(char *tst, int len, char c)
 {
 	char	*tmp;
 

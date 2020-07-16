@@ -53,6 +53,7 @@ int parse_exec(char *line, t_r_output redir, t_env *enviro, t_pipe *pip)
 			enviro->envp = unset_new(&tabl[1], enviro);
 		if (pip->total > 1 && pip->nbr + 1 < pip->total)
 			close(pip->pipefd[pip->nbr++][1]);
+		--pip->founded;
 	}
 	else if (tabl[0] != NULL && ft_strlen(tabl[0]) != 0)
 		ret = search_and_exec(tabl, enviro->envp, &enviro->lsc, redir, pip);
@@ -118,6 +119,7 @@ int main(int argc, char **argv, char **envp)
 				error = 1;
 			}
 			fill_t_pipe(&pip, p_tab); //close les FD gerer les malloc qui marchent pas
+			pip.founded = pip.total;
 			pip.pid = calloc(pip.total, sizeof(int));
 			n_pipe = 0;
 			while (error == 0 && p_tab[n_pipe] != NULL)
@@ -169,8 +171,11 @@ int main(int argc, char **argv, char **envp)
 				close(pip.pipefd[p][1]);
 				free(pip.pipefd[p]);
 			}
-			for (int v = 0; v < pip.total; ++v)
+			for (int v = 0; v < pip.founded; ++v)
+			{
 				waitpid(pip.pid[v], &enviro.lsc, 0);					//waitpid ici
+				enviro.lsc = enviro.lsc / 256;
+			}
 			free(pip.pipefd);
 			free_env(p_tab);
 			free(p_tab);

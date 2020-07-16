@@ -35,7 +35,7 @@ void	k_normal(t_read *t_r, int *end)
 	t_r->tst = ft_calloc(ft_strlen(t_r->hold) + 2, sizeof(char));
 	free(t_r->tmp);
 	ft_strlcpy(t_r->tst, t_r->hold, ft_strlen(t_r->hold) + 1);
-	test1213(t_r->tst, *end, t_r->t);
+	put_char_in_str(t_r->tst, *end, t_r->t);
 	++*end;
 	free(t_r->hold);
 }

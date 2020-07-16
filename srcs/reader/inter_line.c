@@ -58,7 +58,7 @@ void	setup_read(t_key *key, t_read *t_r, char c_key[4], int *end)
 	t_r->c_key = c_key;
 	ft_memset(t_r->c_key, 0, 4);
 	t_r->ou = 1;
-	fill(key);
+	fill_key(key);
 	t_r->tst = ft_calloc(2, sizeof(char));
 }
 
