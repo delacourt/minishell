@@ -12,6 +12,10 @@
 
 #include "../../head/minishell.h"
 
+/*
+**	quite basic ft_split but will split ' " and escape the \ etc
+*/
+
 void		*free_arr(char **tabl, int j)
 {
 	while (j >= 0)

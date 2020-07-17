@@ -12,6 +12,10 @@
 
 #include "../../head/minishell.h"
 
+/*
+**	function used to replace the given environement variable for its value
+*/
+
 static void		*status_code
 	(t_doll *dol, const char *str, t_env enviro, t_word *giv)
 {

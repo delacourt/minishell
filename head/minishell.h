@@ -99,6 +99,14 @@ typedef struct	s_doll
 	int		solo;
 }				t_doll;
 
+typedef struct	s_exec
+{
+	char	*path;
+	char	**argv;
+	char	**envp;
+	char	*c_path;
+}          		t_exec;
+
 
 int cd(char **tabl, int *lsc);
 int pwd(int fd, int *lsc);
@@ -108,8 +116,7 @@ void	*free_arr(char **tabl, int j);
 char	**ft_enhanced_split(char const *str, t_env *enviro);
 void sighandler(int signum);
 void print_new_line(int lsc);
-int exec_prog(char *line, char **argv, char **envp, t_r_output redir, t_pipe *pip);
-int search_and_exec(char **tabl, char **envp, int *lsc, t_r_output redir, t_pipe *pip);
+int exec_prog(t_exec *ex, t_r_output redir, t_pipe *pip, int i);
 char **split_semi_colon(char *line);
 char **new_env(char **envp);
 int env_len(char **env);
@@ -167,5 +174,14 @@ void	*word_setup(const char *str, t_word *giv);
 char			*ft_itoa(int n);
 int				find_the_end_env(const char *str);
 int				is_only_doll(char *word, const char *str, int i);
+
+void	copy_word(char *src, char *dest);
+int		len_line(char *line);
+int		count_pipe(char *line);
+int		fill_t_pipe(t_pipe *pip, char **p_tab);
+
+int		search_and_exec(char **tabl, t_env *enviro, t_r_output redir, t_pipe *pip);
+int		setup_search(t_exec *ex, t_env *enviro, char **tabl);
+char	*ft_str_slash_join(char **tabl, char *pathed);
 
 #endif

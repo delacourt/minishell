@@ -57,6 +57,10 @@ static void	go_next_split(int *ret, int *i, const char *str)
 	--*i;
 }
 
+/*
+**	return the total number of split needed (arguments)
+*/
+
 int			count_split(const char *str)
 {
 	int	i;

@@ -10,7 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../head/minishell.h"
+#include "../../head/minishell.h"
+
+/*
+**	return 0 or -1 if the string is not properly quoted
+*/
 
 static int	next_quote(char quote, int i, char *line)
 {

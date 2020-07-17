@@ -12,6 +12,11 @@
 
 #include "../../head/minishell.h"
 
+/*
+**	main function for the < > >> spliter will remove the character
+**	and fill a structure with a fd refering to the i/o file
+*/
+
 int				split_r_in_out(char *line, t_r_output *redir, t_env *enviro)
 {
 	int			i;

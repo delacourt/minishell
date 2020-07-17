@@ -12,6 +12,10 @@
 
 #include "../../head/minishell.h"
 
+/*
+**	called when > is found, remove it and his filename attached
+*/
+
 static int		set_output(char *line, int *i, t_r_output *redir, t_env *enviro)
 {
 	char	*filename;
@@ -26,7 +30,7 @@ static int		set_output(char *line, int *i, t_r_output *redir, t_env *enviro)
 	redir->out = open(filename, O_WRONLY | O_TRUNC | O_CREAT);
 	if (redir->out == -1)
 	{
-		ft_putendl_fd("mash: permission denied or operation not permitted", 1);
+		ft_putendl_fd("mash: permission denied or operation not permitted", 2);
 		ret = 2;
 	}
 	if (filename != NULL)
@@ -37,6 +41,10 @@ static int		set_output(char *line, int *i, t_r_output *redir, t_env *enviro)
 		--*i;
 	return (ret);
 }
+
+/*
+**	called when >> is found, remove it and his filename attached
+*/
 
 static int		set_double_output(char *line, int *i,
 	t_r_output *redir, t_env *enviro)
@@ -53,7 +61,7 @@ static int		set_double_output(char *line, int *i,
 	redir->out = open(filename, O_WRONLY | O_APPEND | O_CREAT);
 	if (redir->out == -1)
 	{
-		ft_putendl_fd("mash: permission denied or operation not permitted", 1);
+		ft_putendl_fd("mash: permission denied or operation not permitted", 2);
 		ret = 2;
 	}
 	if (filename != NULL)
@@ -62,6 +70,10 @@ static int		set_double_output(char *line, int *i,
 	*i = *i + advance(&line[*i]);
 	return (ret);
 }
+
+/*
+**	called when < is found, remove it and his filename attached
+*/
 
 static int		set_input(char *line, int *i, t_r_output *redir, t_env *enviro)
 {
@@ -77,7 +89,7 @@ static int		set_input(char *line, int *i, t_r_output *redir, t_env *enviro)
 	redir->in = open(filename, O_RDONLY);
 	if (redir->in == -1)
 	{
-		ft_putendl_fd("mash: permission denied or no such file exist", 1);
+		ft_putendl_fd("mash: permission denied or no such file exist", 2);
 		ret = 2;
 	}
 	if (filename != NULL)
@@ -88,6 +100,10 @@ static int		set_input(char *line, int *i, t_r_output *redir, t_env *enviro)
 		--*i;
 	return (ret);
 }
+
+/*
+**	check for > >> <
+*/
 
 int				fd_checker_next(char *line,
 	t_etup_i_o *giv, t_r_output *redir, t_env *enviro)
@@ -117,6 +133,10 @@ int				fd_checker_next(char *line,
 	}
 	return (0);
 }
+
+/*
+**	skip the quote and called the > >> < checker
+*/
 
 int				fd_checker(char *line,
 	t_etup_i_o *giv, t_r_output *redir, t_env *enviro)

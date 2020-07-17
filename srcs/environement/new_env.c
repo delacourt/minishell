@@ -12,6 +12,10 @@
 
 #include "../../head/minishell.h"
 
+/*
+**	add a new environement variable or modify an existing one
+*/
+
 char	**new_env_variable(char *str, char **envp)
 {
 	char	**newenvp;
@@ -66,7 +70,7 @@ char	**export_new(char **arg, t_env *enviro)
 		s = search_the_equal(arg[i]);
 		if (s == -1)
 		{
-			write(1, "mash: bad assignment\n", 21);
+			write(2, "mash: bad assignment\n", 21);
 			enviro->lsc = 1;
 			break ;
 		}

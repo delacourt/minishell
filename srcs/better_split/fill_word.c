@@ -12,6 +12,10 @@
 
 #include "../../head/minishell.h"
 
+/*
+**	copy part of the string typed by the user to the given split
+*/
+
 static void	*fill_double_quote(t_word *giv, const char *str, t_env *enviro)
 {
 	++*giv->i;

@@ -12,6 +12,10 @@
 
 #include "../../head/minishell.h"
 
+/*
+**	locate and delete the give environement variable
+*/
+
 char	**del_env_variable(int len, char **envp)
 {
 	char	**newenvp;

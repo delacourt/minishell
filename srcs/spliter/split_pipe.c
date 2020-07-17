@@ -12,110 +12,34 @@
 
 #include "../../head/minishell.h"
 
-int		fill_t_pipe(t_pipe *pip, char **p_tab)
-{
-	int n_pipe;
+/*
+**	will split all pipe in a tab
+*/
 
-	pip->nbr = 0;
-	pip->total = env_len(p_tab);
-	n_pipe = 0;
-	pip->pipefd = malloc((pip->total) * sizeof(int*));
-	pip->pipefd[0] = NULL;
-	if (pip->total < 2)
-		return (0);
-	while (n_pipe + 1 < pip->total)
+static int		valid_pipeline
+	(char *line, char ***p_tab, int *n_pipe, char ***attach)
+{
+	if (count_pipe(line) > 511)
 	{
-		pip->pipefd[n_pipe] = calloc(2, sizeof(int));
-		pipe(pip->pipefd[n_pipe]);
-		++n_pipe;
+		*p_tab = malloc(1 * sizeof(char*));
+		*p_tab[0] = NULL;
+		*attach = *p_tab;
+		return (2);
 	}
-	pip->pipefd[n_pipe] = NULL;
+	*n_pipe = count_pipe(line) + 2;
+	*p_tab = malloc(*n_pipe * sizeof(char*));
 	return (0);
 }
 
-int		count_pipe(char *line)
-{
-	int i;
-	int n_pipe;
-	int quotes;
-
-	i = 0;
-	quotes = 0;
-	n_pipe = 0;
-	while (line[i] != '\0')
-	{
-		if ((line[i] == '\"' || line[i] == '\'') && quotes == 0)
-			quotes++;
-		else if ((line[i] == '\"' || line[i] == '\'') && quotes == 1)
-			quotes--;
-		else if (line[i + 1] == '|' && line[i] != '\\' && quotes == 0)
-			++n_pipe;
-		i++;
-	}
-	return (n_pipe);
-}
-
-int		len_line(char *line)
-{
-	int i;
-	int l_line;
-	int quotes;
-
-	i = 0;
-	quotes = 0;
-	l_line = 0;
-	while (line[i] != '\0')
-	{
-		if ((line[i] == '\"' || line[i] == '\'') && quotes == 0)
-			quotes++;
-		else if ((line[i] == '\"' || line[i] == '\'') && quotes == 1)
-			quotes--;
-		else if (line[i + 1] == '|' && line[i] != '\\' && quotes == 0)
-			return (i + 2);
-		i++;
-	}
-	return (i + 1);
-}
-
-void	copy_word(char *src, char *dest)
-{
-	int i;
-	int quotes;
-
-	i = 0;
-	quotes = 0;
-	while (src[i] != '\0')
-	{
-		dest[i] = src[i];
-		if ((src[i] == '\"' || src[i] == '\'') && quotes == 0)
-			quotes++;
-		else if ((src[i] == '\"' || src[i] == '\'') && quotes == 1)
-			quotes--;
-		else if (src[i + 1] == '|' && src[i] != '\\' && quotes == 0)
-			break ;
-		i++;
-	}
-	++i;
-	dest[i] = '\0';
-}
-
-int		split_pipe(char *line, char ***attach)
+int				split_pipe(char *line, char ***attach)
 {
 	char	**p_tab;
 	int		n_pipe;
 	int		i;
 	int		j;
 
-	if (count_pipe(line) > 511)
-	{
-		p_tab = malloc(1 * sizeof(char*));
-		p_tab[0] = NULL;
-		*attach = p_tab;
+	if ((i = valid_pipeline(line, &p_tab, &n_pipe, attach)) == 2)
 		return (2);
-	}
-	n_pipe = count_pipe(line) + 2;
-	p_tab = malloc(n_pipe * sizeof(char*));
-	i = 0;
 	j = 0;
 	while (i + 1 < n_pipe)
 	{

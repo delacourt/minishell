@@ -12,6 +12,10 @@
 
 #include "../../head/minishell.h"
 
+/*
+**	echo pwd exit cd env
+*/
+
 int		echo2(char **tabl, int fd, int *lsc)
 {
 	int i;

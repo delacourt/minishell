@@ -56,7 +56,7 @@ int parse_exec(char *line, t_r_output redir, t_env *enviro, t_pipe *pip)
 		--pip->founded;
 	}
 	else if (tabl[0] != NULL && ft_strlen(tabl[0]) != 0)
-		ret = search_and_exec(tabl, enviro->envp, &enviro->lsc, redir, pip);
+		ret = search_and_exec(tabl, enviro, redir, pip);
 	free_env(tabl);
 	free(tabl);
 	return (ret);
@@ -122,12 +122,13 @@ int main(int argc, char **argv, char **envp)
 			pip.founded = pip.total;
 			pip.pid = calloc(pip.total, sizeof(int));
 			n_pipe = 0;
-			while (error == 0 && p_tab[n_pipe] != NULL)
+			while (error <= 1 && p_tab[n_pipe] != NULL)
 			{
 				error = split_r_in_out(p_tab[n_pipe], &redir, &enviro);
 				if (error > 0) //surement a free la dedans aussi
 				{
 					enviro.lsc = 1;
+					--pip.founded;
 					if (error == 1)
 						write(2, "mash: syntax error, unexpected token\n", 37);
 					error = 1;
@@ -159,7 +160,6 @@ int main(int argc, char **argv, char **envp)
 					{
 						//printf("yo\n");
 						pip.pid[pip.nbr++] = -1;
-						error = 0;	
 					}
 				}
 				close_redirect(&redir);
@@ -173,8 +173,9 @@ int main(int argc, char **argv, char **envp)
 			}
 			for (int v = 0; v < pip.founded; ++v)
 			{
-				waitpid(pip.pid[v], &enviro.lsc, 0);					//waitpid ici
-				enviro.lsc = enviro.lsc / 256;
+				waitpid(pip.pid[v], &enviro.lsc, 0);
+				if (error == 0)
+					enviro.lsc = enviro.lsc / 256;
 			}
 			free(pip.pipefd);
 			free_env(p_tab);

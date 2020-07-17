@@ -12,11 +12,10 @@
 
 NAME			= minishell
 
-SRC				=	./srcs/exec_prog.c\
-					./srcs/main.c\
+SRC				=	./srcs/main.c\
 					./srcs/sign_handle.c\
 					./srcs/prompt.c\
-					./srcs/check_quote.c\
+					./srcs/spliter/check_quote.c\
 					./srcs/reader/inter_line.c\
 					./srcs/reader/read_utils.c\
 					./srcs/reader/special_event1.c\
@@ -25,18 +24,21 @@ SRC				=	./srcs/exec_prog.c\
 					./srcs/spliter/split_r_in_out1_part2.c\
 					./srcs/spliter/split_r_in_out2.c\
 					./srcs/spliter/split_pipe.c\
+					./srcs/spliter/split_pipe_utils.c\
 					./srcs/spliter/split_semi_colon.c\
 					./srcs/builtin/builtin.c\
 					./srcs/environement/handle_env.c\
 					./srcs/environement/new_env.c\
 					./srcs/environement/del_env.c\
-					./srcs/spliter2/doll.c\
-					./srcs/spliter2/doll_utils.c\
-					./srcs/spliter2/enhanced_split.c\
-					./srcs/spliter2/advance.c\
-					./srcs/spliter2/count_split.c\
-					./srcs/spliter2/count_words.c\
-					./srcs/spliter2/fill_word.c\
+					./srcs/better_split/doll.c\
+					./srcs/better_split/doll_utils.c\
+					./srcs/better_split/enhanced_split.c\
+					./srcs/better_split/advance.c\
+					./srcs/better_split/count_split.c\
+					./srcs/better_split/count_words.c\
+					./srcs/better_split/fill_word.c\
+					./srcs/executor/exec_prog.c\
+					./srcs/executor/exec_prog_utils.c\
 
 ROAD_S			= $(SRC)
 

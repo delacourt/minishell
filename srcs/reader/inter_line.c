@@ -15,7 +15,7 @@
 /*
 **	check all special keyin order, this function will check:
 **
-**		ctrl D
+**		ctrl D		exit() tention
 **		ctrl C
 **		ctrl backslash (ne fait rien actuellement)
 **		fleche gauche

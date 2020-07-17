@@ -12,6 +12,11 @@
 
 #include "../../head/minishell.h"
 
+/*
+**	will copy the given environement into a new one to be able to modify it
+**	+ some utils function
+*/
+
 int		search_the_equal(char *str)
 {
 	int i;

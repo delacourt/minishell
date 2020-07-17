@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   count_words.c                                      :+:      :+:    :+:   */
+/*   advance.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: velovo <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/16 17:54:14 by velovo            #+#    #+#             */
-/*   Updated: 2020/07/16 17:54:25 by velovo           ###   ########.fr       */
+/*   Created: 2020/07/16 17:29:48 by velovo            #+#    #+#             */
+/*   Updated: 2020/07/16 17:31:09 by velovo           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../head/minishell.h"
 
-static void	go_next_double_colon(int *ret, int *i, const char *str)
+void		advance_skip_colon(int *i, const char *str)
 {
 	++*i;
 	while (str[*i] != '\"' && str[*i] != '\0')
@@ -20,42 +20,33 @@ static void	go_next_double_colon(int *ret, int *i, const char *str)
 		if (str[*i] == '\\' && str[*i + 1] == '\"')
 			++*i;
 		++*i;
-		++*ret;
 	}
 }
 
-static void	go_next_single_colon(int *ret, int *i, const char *str)
-{
-	++*i;
-	while (str[*i] != '\'' && str[*i] != '\0')
-	{
-		++*i;
-		++*ret;
-	}
-}
+/*
+**	used to reach the next word
+*/
 
-int			count_words(const char *str)
+int			advance(const char *str)
 {
 	int i;
-	int ret;
 
 	i = 0;
-	ret = 0;
-	skip_space(str, &i);
+	while (str[i] == ' ')
+		++i;
 	while (str[i] != '\0' && str[i] != ' ' && str[i] != '<' && str[i] != '>')
 	{
 		if (str[i] == '\"')
-			go_next_double_colon(&ret, &i, str);
+			advance_skip_colon(&i, str);
 		else if (str[i] == '\'')
-			go_next_single_colon(&ret, &i, str);
-		else if (str[i] == '\\')
 		{
 			++i;
-			++ret;
+			while (str[i] != '\'' && str[i] != '\0')
+				++i;
 		}
-		else
-			++ret;
+		else if (str[i] == '\\')
+			++i;
 		++i;
 	}
-	return (ret);
+	return (i);
 }

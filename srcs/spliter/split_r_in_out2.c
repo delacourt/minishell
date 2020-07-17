@@ -12,6 +12,10 @@
 
 #include "../../head/minishell.h"
 
+/*
+**	utils function for the redirection > >> <
+*/
+
 int		ft_strlen_redirect(char *line, char red)
 {
 	int i;
@@ -39,8 +43,8 @@ void	close_redirect(t_r_output *redir)
 
 char	*get_file_name(char *str, t_env *enviro)
 {
-	char *tst;
-	int	j;
+	char	*tst;
+	int		j;
 
 	j = 0;
 	tst = fill_word(str, enviro, &j);
