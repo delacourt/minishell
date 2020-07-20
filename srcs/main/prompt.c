@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../head/minishell.h"
+#include "../../head/minishell.h"
 
 static void	set_color(int color, char *prompt)
 {

@@ -79,6 +79,12 @@ typedef struct  s_read
 	char	*c_key;
 }           t_read;
 
+typedef struct	s_inter_read
+{
+	struct termios s_set;
+	struct termios backup;
+}				t_inter_read;
+
 typedef struct	s_word
 {
 	int		*i;
@@ -107,6 +113,16 @@ typedef struct	s_exec
 	char	*c_path;
 }          		t_exec;
 
+typedef struct	s_main
+{
+	int		i;
+	int		g;
+	int		error;
+	int		n_pipe;
+    char	*line;
+	char	**tabl;
+	char	**p_tab;
+}          		t_main;
 
 int cd(char **tabl, int *lsc);
 int pwd(int fd, int *lsc);
@@ -143,6 +159,7 @@ int fill_t_pipe(t_pipe *pip, char **p_tab);
 
 int is_broken_quote(char *line);
 
+void	setup_intera_mode(t_inter_read *term);
 void	put_in_histo(t_env *enviro, char *tst);
 void	fill_key(t_key *key);
 void	put_char_in_str(char *tst, int len, char c);
@@ -183,5 +200,20 @@ int		fill_t_pipe(t_pipe *pip, char **p_tab);
 int		search_and_exec(char **tabl, t_env *enviro, t_r_output redir, t_pipe *pip);
 int		setup_search(t_exec *ex, t_env *enviro, char **tabl);
 char	*ft_str_slash_join(char **tabl, char *pathed);
+
+int		parse_exec(char *line, t_r_output redir, t_env *enviro, t_pipe *pip);
+int		builtin_caller(t_pipe *pip, char **tabl, t_env *enviro, t_r_output redir);
+int		hub_broken_quote(char *line, t_env *enviro);
+int		is_builtin(char *str);
+
+int		perfect_exit(t_r_output *redir, t_pipe *pip, t_env *enviro, t_main *hub);
+void	close_and_wait(t_pipe *pip, t_env *enviro, t_main *hub);
+void	setup_new_input(t_main *hub, t_env *enviro);
+void	get_line_split_semi_colon(t_inter_read *term, t_main *hub, t_env *enviro);
+void	setup_pipe_split(t_main *hub, t_env *enviro, t_pipe *pip);
+
+int		get_the_line(t_inter_read *term, char **line, t_env *enviro);
+void	split_pipe_error(int *error, t_env *enviro, t_pipe *pip, char **p_tab);
+void	split_r_in_out_error(int *error, t_env *enviro, t_pipe *pip);
 
 #endif

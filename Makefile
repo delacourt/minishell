@@ -12,14 +12,12 @@
 
 NAME			= minishell
 
-SRC				=	./srcs/main.c\
-					./srcs/sign_handle.c\
-					./srcs/prompt.c\
-					./srcs/spliter/check_quote.c\
-					./srcs/reader/inter_line.c\
+SRC				=	./srcs/reader/inter_line.c\
 					./srcs/reader/read_utils.c\
 					./srcs/reader/special_event1.c\
 					./srcs/reader/special_event2.c\
+					./srcs/reader/interactive_read.c\
+					./srcs/spliter/check_quote.c\
 					./srcs/spliter/split_r_in_out1_part1.c\
 					./srcs/spliter/split_r_in_out1_part2.c\
 					./srcs/spliter/split_r_in_out2.c\
@@ -39,6 +37,12 @@ SRC				=	./srcs/main.c\
 					./srcs/better_split/fill_word.c\
 					./srcs/executor/exec_prog.c\
 					./srcs/executor/exec_prog_utils.c\
+					./srcs/executor/setup_exec.c\
+					./srcs/main/main.c\
+					./srcs/main/sign_handle.c\
+					./srcs/main/prompt.c\
+					./srcs/main/main_utils1.c\
+					./srcs/main/main_utils2.c\
 
 ROAD_S			= $(SRC)
 
