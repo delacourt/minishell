@@ -53,11 +53,6 @@ int		pwd(int fd, int *lsc)
 	return (1);
 }
 
-int		end(char **tabl, t_env *enviro)
-{
-	return (3);
-}
-
 int		cd(char **tabl, int *lsc)
 {
 	int i;

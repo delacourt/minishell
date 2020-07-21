@@ -26,7 +26,7 @@
 **		marquer le caractere si il est ok
 */
 
-void	check_key(t_env *enviro, t_read *t_r, int *end, t_key key)
+static void	check_key(t_env *enviro, t_read *t_r, int *end, t_key key)
 {
 	if (t_r->t == 4 && ft_strlen(t_r->tst) == 0)
 		exit(0);
@@ -52,7 +52,7 @@ void	check_key(t_env *enviro, t_read *t_r, int *end, t_key key)
 **	setup function for the read
 */
 
-void	setup_read(t_key *key, t_read *t_r, char c_key[4], int *end)
+static void	setup_read(t_key *key, t_read *t_r, char c_key[4], int *end)
 {
 	*end = 0;
 	t_r->c_key = c_key;
@@ -71,7 +71,7 @@ void	setup_read(t_key *key, t_read *t_r, char c_key[4], int *end)
 **	reset special key (to not segfault (shift + directionnal key))
 */
 
-int		inter_line(char **line, t_env *enviro)
+int			inter_line(char **line, t_env *enviro)
 {
 	int		k;
 	t_read	t_r;

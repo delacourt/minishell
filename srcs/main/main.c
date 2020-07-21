@@ -61,18 +61,20 @@ int			main(int argc, char **argv, char **envp)
 	t_r_output		redir;
 	t_inter_read	term;
 
-	(void)argc;
-	(void)argv;
 	setup_shell(&enviro, envp, &term, &hub.error);
 	while (1)
 	{
 		get_line_split_semi_colon(&term, &hub, &enviro);
 		while (hub.tabl[hub.i] != NULL)
 		{
-			setup_pipe_split(&hub, &enviro, &pip);
-			if ((hub.error = get_trough_pipe(&hub, &pip, &enviro, &redir)) != 0)
-				return (enviro.lsc);
-			close_and_wait(&pip, &enviro, &hub);
+			if (is_empty_line(hub.tabl[hub.i]) == 1)
+			{
+				setup_pipe_split(&hub, &enviro, &pip);
+				if ((hub.error =
+				get_trough_pipe(&hub, &pip, &enviro, &redir)) != 0)
+					return (enviro.lsc);
+				close_and_wait(&pip, &enviro, &hub);
+			}
 			++hub.i;
 		}
 		setup_new_input(&hub, &enviro);

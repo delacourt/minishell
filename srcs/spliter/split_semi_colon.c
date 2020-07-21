@@ -12,83 +12,83 @@
 
 #include "../../head/minishell.h"
 
-int count_semi_colon(char *line)
+static int		count_semi_colon(char *line)
 {
-    int sc;
-    int i;
-    int q;
+	int	sc;
+	int	i;
+	int	q;
 
-    i = 0;
-    q = 0;
-    sc = 0;
-    while (line[i])
-    {
-        if (line[i] == '\"' && q == 0)
-            q++;
-        else if (line[i] == '\"' && q == 1)
-            q--;
-        if (line[i + 1] == ';' && line[i] != '\\' && q == 0)
-            sc++;
-        i++;
-    }
-    return (sc);
+	i = 0;
+	q = 0;
+	sc = 0;
+	while (line[i])
+	{
+		if (line[i] == '\"' && q == 0)
+			q++;
+		else if (line[i] == '\"' && q == 1)
+			q--;
+		if (line[i + 1] == ';' && line[i] != '\\' && q == 0)
+			sc++;
+		i++;
+	}
+	return (sc);
 }
 
-char **split_semi_colon(char *line)
+char			**split_semi_colon(char *line)
 {
-    int i;
-    int j;
-    int k;
-    int l;
-    int m;
-    int q;
-    char **tabl;
+	int		i;
+	int		j;
+	int		k;
+	int		l;
+	int		m;
+	int		q;
+	char	**tabl;
 
-    q = 0;
-    i = 0;
-    j = 0;
-    k = 0;
-    l = 0;
-    m = 0;
-    tabl = calloc((count_semi_colon(line) + 2), sizeof(char *));
+	q = 0;
+	i = 0;
+	j = 0;
+	k = 0;
+	l = 0;
+	m = 0;
+	tabl = calloc((count_semi_colon(line) + 2), sizeof(char *));
 	//printf("%d\n", (count_semi_colon(line) + 2));
-    while (line[i])
-    {
-        if (line[i] == '\"' && q == 0)
-            q++;
-        else if (line[i] == '\"' && q == 1)
-            q--;
-        if (line[i + 1] == ';' && line[i] != '\\' && q == 0)
-        {
-            tabl[k] = calloc((j + 2), sizeof(char));
-            //printf("%d\n", j + 2);
+	while (line[i])
+	{
+		if (line[i] == '\"' && q == 0)
+			q++;
+		else if (line[i] == '\"' && q == 1)
+			q--;
+		if (line[i + 1] == ';' && line[i] != '\\' && q == 0)
+		{
+			tabl[k] = calloc((j + 2), sizeof(char));
+			//printf("%d\n", j + 2);
 			while (l <= i)
-            {
-                tabl[k][m] = line[l];
-                l++;
-                m++;
-            }
-            tabl[k][m] = '\0';
-            m = 0;
-            j = -1;
-            k++;
-            l++;
-            i++;
-        }
-        j++;
-        i++;
-    }
-    j--;
-    tabl[k] = calloc((j + 2), sizeof(char));
+			{
+				tabl[k][m] = line[l];
+				l++;
+				m++;
+			}
+			tabl[k][m] = '\0';
+			m = 0;
+			j = -1;
+			k++;
+			l++;
+			i++;
+		}
+		j++;
+		i++;
+	}
+	j--;
+	tabl[k] = calloc((j + 2), sizeof(char));
 	//printf("%d\n", j + 2);
-    while (l < i)
-    {
-        tabl[k][m] = line[l];
-        l++;
-        m++;
-    }
-    tabl[k][m] = '\0';
-    k++;
-    tabl[k] = NULL;
-    return (tabl);
+	while (l < i)
+	{
+		tabl[k][m] = line[l];
+		l++;
+		m++;
+	}
+	tabl[k][m] = '\0';
+	k++;
+	tabl[k] = NULL;
+	return (tabl);
 }

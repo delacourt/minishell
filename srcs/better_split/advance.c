@@ -12,7 +12,7 @@
 
 #include "../../head/minishell.h"
 
-void		advance_skip_colon(int *i, const char *str)
+static void		advance_skip_colon(int *i, const char *str)
 {
 	++*i;
 	while (str[*i] != '\"' && str[*i] != '\0')
@@ -27,7 +27,7 @@ void		advance_skip_colon(int *i, const char *str)
 **	used to reach the next word
 */
 
-int			advance(const char *str)
+int				advance(const char *str)
 {
 	int i;
 

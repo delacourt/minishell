@@ -12,7 +12,7 @@
 
 #include "../../head/minishell.h"
 
-int			exec_prog(t_exec *ex, t_r_output redir, t_pipe *pip, int i)
+static int			exec_prog(t_exec *ex, t_r_output redir, t_pipe *pip, int i)
 {
 	pid_t pid;
 
@@ -41,7 +41,7 @@ int			exec_prog(t_exec *ex, t_r_output redir, t_pipe *pip, int i)
 	return (pid);
 }
 
-int			absolute_path
+static int			absolute_path
 	(t_exec *ex, t_env *enviro, t_pipe *pip, t_r_output redir)
 {
 	struct stat	statbuff;
@@ -68,7 +68,7 @@ int			absolute_path
 **	ca leak ici avec pathed (peut etre)
 */
 
-int			relative_path
+static int			relative_path
 	(t_exec *ex, t_env *enviro, t_r_output redir, t_pipe *pip)
 {
 	struct stat	statbuff;
@@ -84,7 +84,7 @@ int			relative_path
 	return (1);
 }
 
-int			relative_notfound(t_env *enviro, t_pipe *pip, t_exec *ex)
+static int			relative_notfound(t_env *enviro, t_pipe *pip, t_exec *ex)
 {
 	enviro->lsc = 1;
 	--pip->founded;
@@ -94,7 +94,7 @@ int			relative_notfound(t_env *enviro, t_pipe *pip, t_exec *ex)
 	return (1);
 }
 
-int			search_and_exec
+int					search_and_exec
 	(char **tabl, t_env *enviro, t_r_output redir, t_pipe *pip)
 {
 	struct stat	statbuff;

@@ -73,6 +73,7 @@ static int		set_double_output(char *line, int *i,
 
 /*
 **	called when < is found, remove it and his filename attached
+**	(oui c'est bien chevron comme ca '>')
 */
 
 static int		set_input(char *line, int *i, t_r_output *redir, t_env *enviro)
@@ -105,7 +106,7 @@ static int		set_input(char *line, int *i, t_r_output *redir, t_env *enviro)
 **	check for > >> <
 */
 
-int				fd_checker_next(char *line,
+static int		fd_checker_next(char *line,
 	t_etup_i_o *giv, t_r_output *redir, t_env *enviro)
 {
 	if ((*giv->i == 0 && line[*giv->i] == '>' && line[*giv->i + 1] != '>')

@@ -16,7 +16,7 @@
 **	locate and delete the give environement variable
 */
 
-char	**del_env_variable(int len, char **envp)
+static char	**del_env_variable(int len, char **envp)
 {
 	char	**newenvp;
 	int		i;
@@ -41,7 +41,7 @@ char	**del_env_variable(int len, char **envp)
 	return (newenvp);
 }
 
-char	**unset_new(char **arg, t_env *enviro)
+char		**unset_new(char **arg, t_env *enviro)
 {
 	int		i;
 	int		j;

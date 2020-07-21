@@ -12,7 +12,7 @@
 
 #include "../../head/minishell.h"
 
-int		is_builtin(char *str)
+static int		is_builtin(char *str)
 {
 	if (ft_strncmp(str, "echo", 5) == 0
 		|| ft_strncmp(str, "cd", 3) == 0
@@ -26,7 +26,7 @@ int		is_builtin(char *str)
 	return (1);
 }
 
-int		hub_broken_quote(char *line, t_env *enviro)
+static int		hub_broken_quote(char *line, t_env *enviro)
 {
 	int ret;
 
@@ -40,7 +40,7 @@ int		hub_broken_quote(char *line, t_env *enviro)
 	return (0);
 }
 
-int		builtin_caller
+static int		builtin_caller
 	(t_pipe *pip, char **tabl, t_env *enviro, t_r_output redir)
 {
 	if (pip->total > 1 && pip->nbr + 1 < pip->total && redir.out == 1)
@@ -69,7 +69,8 @@ int		builtin_caller
 	return (0);
 }
 
-int		parse_exec(char *line, t_r_output redir, t_env *enviro, t_pipe *pip)
+int				parse_exec
+	(char *line, t_r_output redir, t_env *enviro, t_pipe *pip)
 {
 	char	**tabl;
 	int		ret;

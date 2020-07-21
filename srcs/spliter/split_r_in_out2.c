@@ -59,7 +59,7 @@ int		check_redir_error(char *line, char c)
 	while (line[i] == ' ')
 		++i;
 	if ((c == '|' && line[i] == '|') || (c == '>' && (line[i] == '<'
-	|| line[i] == '>' || line[i] == ';' || line[i] == '|')))
+	|| line[i] == '>' || line[i] == ';' || line[i] == '|' || line[i] == 0)))
 		return (1);
 	return (0);
 }

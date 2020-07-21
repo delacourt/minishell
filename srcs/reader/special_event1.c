@@ -12,7 +12,7 @@
 
 #include "../../head/minishell.h"
 
-void	k_left(t_key key, int *end, t_read *t_r)
+void		k_left(t_key key, int *end, t_read *t_r)
 {
 	if (*end > 0)
 	{
@@ -22,7 +22,7 @@ void	k_left(t_key key, int *end, t_read *t_r)
 	ft_memset(t_r->c_key, 0, 4);
 }
 
-void	k_right(t_key key, int *end, t_read *t_r)
+void		k_right(t_key key, int *end, t_read *t_r)
 {
 	if (*end < ft_strlen(t_r->tst))
 	{
@@ -32,7 +32,7 @@ void	k_right(t_key key, int *end, t_read *t_r)
 	ft_memset(t_r->c_key, 0, 4);
 }
 
-void	k_up(t_env *enviro, t_read *t_r, t_key key, int *end)
+void		k_up(t_env *enviro, t_read *t_r, t_key key, int *end)
 {
 	unsigned int k;
 
@@ -56,7 +56,28 @@ void	k_up(t_env *enviro, t_read *t_r, t_key key, int *end)
 	ft_memset(t_r->c_key, 0, 4);
 }
 
-void	k_down(t_env *enviro, t_read *t_r, t_key key, int *end)
+static void	k_down_next(t_env *enviro, t_read *t_r, t_key key, int *end)
+{
+	unsigned int k;
+
+	k = 0;
+	if (t_r->ou == 2)
+		--t_r->ou;
+	k = 0;
+	while (++k <= ft_strlen(t_r->tst) - ft_strlen(&t_r->tst[*end]))
+		write(1, &key.g, 3);
+	k = 0;
+	while (++k <= ft_strlen(t_r->tst))
+		write(1, " ", 1);
+	k = 0;
+	while (++k <= ft_strlen(t_r->tst))
+		write(1, &key.g, 3);
+	free(t_r->tst);
+	t_r->tst = ft_strdup("");
+	*end = 0;
+}
+
+void		k_down(t_env *enviro, t_read *t_r, t_key key, int *end)
 {
 	unsigned int k;
 
@@ -81,25 +102,4 @@ void	k_down(t_env *enviro, t_read *t_r, t_key key, int *end)
 	else if (t_r->ou <= 2)
 		k_down_next(enviro, t_r, key, end);
 	ft_memset(t_r->c_key, 0, 4);
-}
-
-void	k_down_next(t_env *enviro, t_read *t_r, t_key key, int *end)
-{
-	unsigned int k;
-
-	k = 0;
-	if (t_r->ou == 2)
-		--t_r->ou;
-	k = 0;
-	while (++k <= ft_strlen(t_r->tst) - ft_strlen(&t_r->tst[*end]))
-		write(1, &key.g, 3);
-	k = 0;
-	while (++k <= ft_strlen(t_r->tst))
-		write(1, " ", 1);
-	k = 0;
-	while (++k <= ft_strlen(t_r->tst))
-		write(1, &key.g, 3);
-	free(t_r->tst);
-	t_r->tst = ft_strdup("");
-	*end = 0;
 }

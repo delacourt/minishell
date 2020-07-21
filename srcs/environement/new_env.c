@@ -16,7 +16,7 @@
 **	add a new environement variable or modify an existing one
 */
 
-char	**new_env_variable(char *str, char **envp)
+static char	**new_env_variable(char *str, char **envp)
 {
 	char	**newenvp;
 	int		i;
@@ -38,7 +38,7 @@ char	**new_env_variable(char *str, char **envp)
 	return (newenvp);
 }
 
-void	exisiting_env_variable(t_env *enviro, int *found, char *arg, int s)
+static void	exisiting_env_variable(t_env *enviro, int *found, char *arg, int s)
 {
 	int j;
 
@@ -57,7 +57,7 @@ void	exisiting_env_variable(t_env *enviro, int *found, char *arg, int s)
 	}
 }
 
-char	**export_new(char **arg, t_env *enviro)
+char		**export_new(char **arg, t_env *enviro)
 {
 	int i;
 	int s;
