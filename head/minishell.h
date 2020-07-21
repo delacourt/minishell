@@ -76,6 +76,9 @@ typedef struct	s_read
 	char	*hold;
 	int		ou;
 	char	*c_key;
+	int		multi;
+	int		old_multi;
+	int		multi_pipe;
 }				t_read;
 
 typedef struct	s_inter_read
@@ -215,6 +218,7 @@ void			write_char(t_read *t_r, int *end, t_key key);
 **	spliter
 */
 
+int				is_broken_pipe(char *str);
 int				is_broken_quote(char *line);
 int				split_pipe(char *line, char ***attach);
 int				fill_t_pipe(t_pipe *pip, char **p_tab);

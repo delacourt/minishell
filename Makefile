@@ -17,6 +17,7 @@ SRC				=	./srcs/reader/inter_line.c\
 					./srcs/reader/special_event1.c\
 					./srcs/reader/special_event2.c\
 					./srcs/reader/interactive_read.c\
+					./srcs/spliter/check_pipe.c\
 					./srcs/spliter/check_quote.c\
 					./srcs/spliter/split_r_in_out1_part1.c\
 					./srcs/spliter/split_r_in_out1_part2.c\
