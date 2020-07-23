@@ -31,7 +31,7 @@ void	k_ctrl_c(t_env *enviro, t_read *t_r, int *end)
 	t_r->old_multi = 0;
 	t_r->multi_pipe = 0;
 	*end = 0;
-	enviro->lsc = 1;
+	enviro->lsc = 130;
 	print_new_line(enviro->lsc);
 }
 

@@ -57,6 +57,28 @@ int		env_len(char **env)
 	return (i);
 }
 
+static void		inc_shlvl(char **envp)
+{
+	int		lvl;
+	char	*tmp;
+	int		i;
+
+	i = 0;
+	while (envp[i] != NULL)
+	{
+		if (ft_strncmp("SHLVL=", envp[i], 6) == 0)
+		{
+			lvl = ft_atoi((envp[i]) + 6);
+			lvl++;
+			free(envp[i]);
+			tmp = ft_itoa(lvl);
+			envp[i] = ft_strjoin("SHLVL=", tmp);
+			free(tmp);
+		}
+		++i;
+	}
+}
+
 char	**new_env(char **envp)
 {
 	char	**tenv;
@@ -70,6 +92,7 @@ char	**new_env(char **envp)
 		ft_strlcpy(tenv[i], envp[i], ft_strlen(envp[i]) + 1);
 		++i;
 	}
+	inc_shlvl(tenv);
 	tenv[i] = NULL;
 	return (tenv);
 }

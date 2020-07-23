@@ -97,7 +97,7 @@ int			inter_line(char **line, t_env *enviro)
 			t_r.multi = t_r.multi + k_enter(enviro, line, &t_r);
 			if (t_r.old_multi == t_r.multi && is_broken_pipe(t_r.tst) == 0) //return
 				return (1);
-			if (t_r.old_multi == t_r.multi && is_broken_pipe(t_r.tst) == 1) //broken pipe
+			if ((t_r.old_multi == t_r.multi && is_broken_pipe(t_r.tst) == 1) || t_r.tst[ft_strlen(t_r.tst) - 1] == '\\') //broken pipe ou backslash
 			{
 				t_r.old_multi = t_r.multi;
 				end = ft_strlen(t_r.tst);
@@ -105,8 +105,8 @@ int			inter_line(char **line, t_env *enviro)
 			}
 			else
 			{
-				t_r.old_multi = t_r.multi;
 				end = ft_strlen(t_r.tst);
+				t_r.old_multi = t_r.multi;
 				t_r.t = '\n';
 				k_normal(&t_r, &end);
 				write(1, "\n> ", 3);

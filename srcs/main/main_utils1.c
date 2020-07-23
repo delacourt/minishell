@@ -41,6 +41,7 @@ void	close_and_wait(t_pipe *pip, t_env *enviro, t_main *hub)
 {
 	int		p;
 	int		v;
+	int		tmp;
 
 	p = pip->total - 2;
 	while (p >= 0)
@@ -53,8 +54,11 @@ void	close_and_wait(t_pipe *pip, t_env *enviro, t_main *hub)
 	v = 0;
 	while (v < pip->founded)
 	{
+		tmp = enviro->lsc;
 		waitpid(pip->pid[v], &enviro->lsc, 0);
-		if (hub->error == 0)
+		if (WTERMSIG(enviro->lsc) == 2)
+			enviro->lsc = 130;
+		else if (hub->error == 0)
 			enviro->lsc = enviro->lsc / 256;
 		++v;
 	}
