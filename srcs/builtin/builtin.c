@@ -82,3 +82,40 @@ void	print_env(char **envp, int fd, int *lsc)
 	}
 	*lsc = 0;
 }
+
+int is_atoiable(char *str)
+{
+	int i;
+
+	i = 0;
+	while (str[i] != '\0' && ft_isdigit(str[i]) == 1)
+		++i;
+	if (str[i] == '\0')
+		return (0);
+	return (1);
+}
+
+int		end(char **tabl, t_env *enviro)//3 cas de figure
+{
+	int i;
+
+	if (enviro->ctrld == 0)
+		write(2, "exit\n", 5);
+	if (env_len(tabl) == 2 && ft_strlen(tabl[1]) > 0 && is_atoiable(tabl[1]) == 0)
+		enviro->lsc = ft_atoi(tabl[1]);
+	else if (ft_strlen(tabl[1]) > 0 && is_atoiable(tabl[1]) == 0)
+	{
+		write(2, "mash: exit: too many arguments\n", 31);
+		if (enviro->lsc == 0)
+			enviro->lsc = 1;
+		return (0);
+	}
+	else if (env_len(tabl) > 1 && is_atoiable(tabl[1]) == 1)
+	{
+		write(2, "mash: exit: ", 12);
+		write(2, tabl[1], ft_strlen(tabl[1]));
+		write(2, ": numeric argument required\n", 28);
+		enviro->lsc = 2;
+	}
+	return (3);
+}

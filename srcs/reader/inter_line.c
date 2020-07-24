@@ -12,6 +12,16 @@
 
 #include "../../head/minishell.h"
 
+static int	fake_exit(t_read *t_r, t_env *enviro)
+{
+	enviro->ctrld = 1;
+	write(1, "exit", 4);
+	free(t_r->tst);
+	t_r->tst = malloc(5 * sizeof(char));
+	ft_strlcpy(t_r->tst, "exit", 5);
+	return (3);
+}
+
 /*
 **	check all special keyin order, this function will check:
 **
@@ -26,10 +36,10 @@
 **		marquer le caractere si il est ok
 */
 
-static void	check_key(t_env *enviro, t_read *t_r, int *end, t_key key)
+static int		check_key(t_env *enviro, t_read *t_r, int *end, t_key key)
 {
 	if (t_r->t == 4 && ft_strlen(t_r->tst) == 0)
-		exit(0);
+		return (fake_exit(t_r, enviro));
 	else if (t_r->t == 3)
 		k_ctrl_c(enviro, t_r, end);
 	else if (t_r->t == 28)
@@ -46,6 +56,7 @@ static void	check_key(t_env *enviro, t_read *t_r, int *end, t_key key)
 		k_del(t_r, end, key);
 	else if (ft_strlen(t_r->c_key) == 0 && (t_r->t >= 32 && t_r->t <= 126))
 		write_char(t_r, end, key);
+	return (0);
 }
 
 /*
@@ -113,7 +124,10 @@ int			inter_line(char **line, t_env *enviro)
 			}
 		}
 		else
-			check_key(enviro, &t_r, &end, key);
+		{
+			if (check_key(enviro, &t_r, &end, key) == 3)
+				return (k_enter(enviro, line, &t_r));
+		}
 		if (ft_strlen(c_key) >= 3)
 			ft_memset(c_key, 0, 4);
 	}

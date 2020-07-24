@@ -43,6 +43,7 @@ static int		hub_broken_quote(char *line, t_env *enviro)
 static int		builtin_caller
 	(t_pipe *pip, char **tabl, t_env *enviro, t_r_output redir)
 {
+	--pip->founded;
 	if (pip->total > 1 && pip->nbr + 1 < pip->total && redir.out == 1)
 		redir.out = pip->pipefd[pip->nbr][1];
 	if (ft_strncmp("echo", tabl[0], 5) == 0)
@@ -50,11 +51,7 @@ static int		builtin_caller
 	else if (ft_strncmp("pwd", tabl[0], 4) == 0)
 		pwd(redir.out, &enviro->lsc);
 	else if (ft_strncmp("exit", tabl[0], 5) == 0)
-	{
-		free_env(tabl);
-		free(tabl);
-		return (3);
-	}
+		return (end(tabl, enviro));
 	else if (ft_strncmp("cd", tabl[0], 3) == 0)
 		cd(&tabl[1], &enviro->lsc);
 	else if (ft_strncmp("env", tabl[0], 4) == 0)
@@ -65,7 +62,6 @@ static int		builtin_caller
 		enviro->envp = unset_new(&tabl[1], enviro);
 	if (pip->total > 1 && pip->nbr + 1 < pip->total)
 		close(pip->pipefd[pip->nbr++][1]);
-	--pip->founded;
 	return (0);
 }
 
@@ -79,10 +75,7 @@ int				parse_exec
 		return (ret);
 	tabl = ft_enhanced_split(line, enviro);
 	if (is_builtin(tabl[0]) == 0)
-	{
-		if ((ret = builtin_caller(pip, tabl, enviro, redir)) != 0)
-			return (ret);
-	}
+		ret = builtin_caller(pip, tabl, enviro, redir);
 	else if (tabl[0] != NULL && ft_strlen(tabl[0]) != 0)
 		ret = search_and_exec(tabl, enviro, redir, pip);
 	free_env(tabl);

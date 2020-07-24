@@ -46,6 +46,8 @@ static int			absolute_path
 {
 	struct stat	statbuff;
 
+	if (ex->path_exist == 0)
+		free(ex->path);
 	ex->path = ex->argv[0];
 	if (stat(ex->argv[0], &statbuff) == 0)
 	{
@@ -54,7 +56,7 @@ static int			absolute_path
 	}
 	else
 	{
-		enviro->lsc = 1;
+		enviro->lsc = 127;
 		--pip->founded;
 		write(2, "mash: no such file or directory: ", 33);
 		write(2, ex->argv[0], ft_strlen(ex->argv[0]));
@@ -78,15 +80,15 @@ static int			relative_path
 	{
 		enviro->lsc = exec_prog(ex, redir, pip, 0);
 		free(ex->path);
-		free(ex->c_path);
 		return (0);
 	}
+	free(ex->path);
 	return (1);
 }
 
 static int			relative_notfound(t_env *enviro, t_pipe *pip, t_exec *ex)
 {
-	enviro->lsc = 1;
+	enviro->lsc = 127;
 	--pip->founded;
 	write(2, "mash: command not found: ", 25);
 	write(2, ex->argv[0], ft_strlen(ex->argv[0]));
@@ -115,10 +117,18 @@ int					search_and_exec
 			ex.c_path = pathed[i];
 			ret = relative_path(&ex, enviro, redir, pip);
 			if (ret == 0)
+			{
+				free_env(pathed);
+				free(pathed);
 				return (ret);
+			}
 			++i;
 		}
 	}
+	if (ex.path_exist == 0)
+		free(ex.path);
+	free_env(pathed);
+	free(pathed);
 	relative_notfound(enviro, pip, &ex);
 	return (1);
 }

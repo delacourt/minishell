@@ -92,7 +92,7 @@ char	**new_env(char **envp)
 		ft_strlcpy(tenv[i], envp[i], ft_strlen(envp[i]) + 1);
 		++i;
 	}
-	inc_shlvl(tenv);
 	tenv[i] = NULL;
+	inc_shlvl(tenv);
 	return (tenv);
 }

@@ -23,14 +23,19 @@ int			setup_search(t_exec *ex, t_env *enviro, char **tabl)
 	i = 0;
 	ex->envp = enviro->envp;
 	ex->argv = tabl;
+	ex->path_exist = 1;
 	while (enviro->envp[i] != NULL)
 	{
 		if (ft_strncmp(enviro->envp[i], "PATH=", 5) == 0)
+		{
 			ex->path = &enviro->envp[i][5];
+			return (0);
+		}
 		++i;
 	}
-	if (ex->path == NULL)
+	if (enviro->envp[i] == NULL)
 	{
+		ex->path_exist = 0;
 		ex->path = malloc(1 * sizeof(char));
 		ex->path[0] = '\0';
 	}

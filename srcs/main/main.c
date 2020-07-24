@@ -17,6 +17,7 @@ static void	setup_shell
 {
 	int j;
 
+	enviro->ctrld = 0;
 	enviro->lsc = 0;
 	enviro->envp = new_env(envp);
 	signal(SIGINT, sighandler);

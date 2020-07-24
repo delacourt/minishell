@@ -42,6 +42,7 @@ typedef struct	s_env
 {
 	char	**envp;
 	int		lsc;
+	int		ctrld;
 	char	*histo[NCMD];
 	int		h_len;
 }				t_env;
@@ -113,6 +114,7 @@ typedef struct	s_exec
 	char	**argv;
 	char	**envp;
 	char	*c_path;
+	int		path_exist;
 }				t_exec;
 
 typedef struct	s_main
@@ -151,6 +153,7 @@ int				echo2(char **tabl, int fd, int *lsc);
 int				pwd(int fd, int *lsc);
 int				cd(char **tabl, int *lsc);
 void			print_env(char **envp, int fd, int *lsc);
+int				end(char **tabl, t_env *enviro);
 
 /*
 **	environement
