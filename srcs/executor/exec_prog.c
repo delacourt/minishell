@@ -52,7 +52,28 @@ static int			absolute_path
 	if (stat(ex->argv[0], &statbuff) == 0)
 	{
 		if (S_ISDIR(statbuff.st_mode) == 0)
-			enviro->lsc = exec_prog(ex, redir, pip, 0);
+		{
+			if (statbuff.st_mode & S_IXUSR)
+				enviro->lsc = exec_prog(ex, redir, pip, 0);
+			else
+			{
+				enviro->lsc = 127;
+				--pip->founded;
+				write(2, "mash: permission denied: ", 25);
+				write(2, ex->argv[0], ft_strlen(ex->argv[0]));
+				write(2, "\n", 1);
+				return (1);
+			}
+		}
+		else
+		{
+			enviro->lsc = 126;
+			--pip->founded;
+			write(2, "mash: ", 6);
+			write(2, ex->argv[0], ft_strlen(ex->argv[0]));
+			write(2, ": Is a directory\n", 17);
+			return (1);
+		}
 	}
 	else
 	{
@@ -76,9 +97,19 @@ static int			relative_path
 	struct stat	statbuff;
 
 	ex->path = ft_str_slash_join(ex->argv, ex->c_path);
-	if (stat(ex->path, &statbuff) == 0)
+	if (stat(ex->path, &statbuff) == 0 && S_ISDIR(statbuff.st_mode) == 0)
 	{
-		enviro->lsc = exec_prog(ex, redir, pip, 0);
+		if (statbuff.st_mode & S_IXUSR)
+			enviro->lsc = exec_prog(ex, redir, pip, 0);
+		else
+		{
+			enviro->lsc = 126;
+			--pip->founded;
+			write(2, "mash: permission denied: ", 25);
+			write(2, ex->argv[0], ft_strlen(ex->argv[0]));
+			write(2, "\n", 1);
+			return (0);
+		}
 		free(ex->path);
 		return (0);
 	}
