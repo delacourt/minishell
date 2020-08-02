@@ -27,6 +27,7 @@ SRC				=	./srcs/reader/inter_line.c\
 					./srcs/spliter/split_semi_colon.c\
 					./srcs/builtin/builtin.c\
 					./srcs/environement/handle_env.c\
+					./srcs/environement/env_utils.c\
 					./srcs/environement/new_env.c\
 					./srcs/environement/del_env.c\
 					./srcs/better_split/doll.c\
@@ -51,7 +52,7 @@ ROAD_O			= $(OBJ)
 
 ROAD_B			= $(SRCB)
 
-FLAGS			= -Wall -Wextra -Werror #-g3 #-fsanitize=address
+FLAGS			= -Wall -Wextra -Werror -g3 #-fsanitize=address
 
 OBJ				= $(SRC:.c=.o)
 

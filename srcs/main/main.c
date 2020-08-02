@@ -29,14 +29,13 @@ static void	setup_shell
 		enviro->histo[j] = NULL;
 		++j;
 	}
-	enviro->h_len = 0;
-	error = 0;
+	*error = 0;
 }
 
 static int	get_trough_pipe
 	(t_main *hub, t_pipe *pip, t_env *enviro, t_r_output *redir)
 {
-	while (hub->error == 0 && hub->p_tab[hub->n_pipe] != NULL)
+	while (hub->error < 3 && hub->p_tab[hub->n_pipe] != NULL)
 	{
 		hub->error = split_r_in_out(hub->p_tab[hub->n_pipe], redir, enviro);
 		split_r_in_out_error(&hub->error, enviro, pip);
@@ -68,7 +67,7 @@ int			main(int argc, char **argv, char **envp)
 		get_line_split_semi_colon(&term, &hub, &enviro);
 		while (hub.tabl[hub.i] != NULL)
 		{
-			if (is_empty_line(hub.tabl[hub.i]) == 1)
+			if (is_empty_line(hub.tabl[hub.i], ' ') == 1)
 			{
 				setup_pipe_split(&hub, &enviro, &pip);
 				if ((hub.error =

@@ -60,7 +60,7 @@ int				find_the_end_env(const char *str)	//WARNING
 
 	i = 0;
 	while (str[i] != '\0' && str[i] != '\\' && str[i] != ' '
-		&& str[i] != '$' && str[i] != '\'' && str[i] != '\"' && str[i] != ':')
+		&& str[i] != '$' && str[i] != '\'' && str[i] != '\"' && str[i] != ':' && str[i] != '=')
 		++i;
 	return (i);
 }

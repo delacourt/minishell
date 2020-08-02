@@ -51,12 +51,12 @@ void	split_r_in_out_error(int *error, t_env *enviro, t_pipe *pip)
 	}
 }
 
-int		is_empty_line(char *str)
+int		is_empty_line(char *str, char c)
 {
 	int i;
 
 	i = 0;
-	while (str[i] != '\0' && str[i] == ' ')
+	while (str[i] != '\0' && str[i] == c)
 		++i;
 	if (str[i] == '\0')
 		return (0);

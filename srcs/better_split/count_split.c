@@ -14,7 +14,7 @@
 
 void		skip_space(const char *str, int *i)
 {
-	while (str[*i] == ' ')
+	while (str[*i] != '\0' && str[*i] == ' ')
 		++*i;
 }
 
@@ -51,7 +51,11 @@ static void	go_next_split(int *ret, int *i, const char *str)
 	++*ret;
 	while (str[*i] != ' ' && str[*i] != '\"'
 		&& str[*i] != '\'' && str[*i] != '\0')
+	{
+		if (str[*i] == '\\')
+			++*i;
 		++*i;
+	}
 	if (str[*i] == '\"' || str[*i] == '\'')
 		--*ret;
 	--*i;

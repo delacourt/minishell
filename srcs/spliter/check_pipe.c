@@ -27,7 +27,7 @@ int		is_broken_pipe(char *str)
 			++quote;
 		else if ((str[i] == '\"' || str[i] == '\'') && quote == 1)
 			--quote;
-		else if (str[i] == '|' && quote == 0 && is_empty_line(&str[i + 1]) == 0)
+		else if (str[i] == '|' && quote == 0 && is_empty_line(&str[i + 1], ' ') == 0)
 			return (1);
 		++i;
 	}

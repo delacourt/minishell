@@ -54,10 +54,10 @@ static int			absolute_path
 		if (S_ISDIR(statbuff.st_mode) == 0)
 		{
 			if (statbuff.st_mode & S_IXUSR)
-				enviro->lsc = exec_prog(ex, redir, pip, 0);
+				exec_prog(ex, redir, pip, 0);
 			else
 			{
-				enviro->lsc = 127;
+				enviro->lsc = 126;
 				--pip->founded;
 				write(2, "mash: permission denied: ", 25);
 				write(2, ex->argv[0], ft_strlen(ex->argv[0]));
@@ -100,7 +100,7 @@ static int			relative_path
 	if (stat(ex->path, &statbuff) == 0 && S_ISDIR(statbuff.st_mode) == 0)
 	{
 		if (statbuff.st_mode & S_IXUSR)
-			enviro->lsc = exec_prog(ex, redir, pip, 0);
+			exec_prog(ex, redir, pip, 0);
 		else
 		{
 			enviro->lsc = 126;
@@ -136,6 +136,7 @@ int					search_and_exec
 	int			i;
 	int			ret;
 
+	enviro->lsc = 0;
 	i = setup_search(&ex, enviro, tabl);
 	if (ft_strchr(tabl[0], '/'))
 		return (absolute_path(&ex, enviro, pip, redir));

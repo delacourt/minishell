@@ -24,7 +24,7 @@ static int		set_output(char *line, int *i, t_r_output *redir, t_env *enviro)
 	ret = 0;
 	if (check_redir_error(&line[*i + 1], '>') == 1)
 		return (1);
-	if (redir->out != 1)
+	if (redir->out != 1 && redir->out != -1)
 		close(redir->out);
 	filename = get_file_name(&line[*i + 1], enviro);
 	redir->out = open(filename, O_WRONLY | O_TRUNC | O_CREAT);
@@ -55,7 +55,7 @@ static int		set_double_output(char *line, int *i,
 	ret = 0;
 	if (check_redir_error(&line[*i + 2], '>') == 1)
 		return (1);
-	if (redir->out != 1)
+	if (redir->out != 1 && redir->out != -1)
 		close(redir->out);
 	filename = get_file_name(&line[*i + 2], enviro);
 	redir->out = open(filename, O_WRONLY | O_APPEND | O_CREAT);
@@ -84,7 +84,7 @@ static int		set_input(char *line, int *i, t_r_output *redir, t_env *enviro)
 	ret = 0;
 	if (check_redir_error(&line[*i + 1], '>') == 1)
 		return (1);
-	if (redir->in != 0)
+	if (redir->in != 0 && redir->in != -1)
 		close(redir->in);
 	filename = get_file_name(&line[*i + 1], enviro);
 	redir->in = open(filename, O_RDONLY);
@@ -144,6 +144,7 @@ int				fd_checker(char *line,
 {
 	int ret;
 
+	ret = 0;
 	if ((line[*giv->i] == '\"' || line[*giv->i] == '\'') && *giv->quotes == 0)
 		++*giv->quotes;
 	else if ((line[*giv->i] == '\"'

@@ -54,10 +54,10 @@ int			is_broken_quote(char *line)
 			i = next_quote('\"', i, line);
 		else if (line[i] == '\'')
 			i = next_quote('\'', i, line);
-		else if (line[i] == '\\')
-			++i;
 		if (line[i] == '\0')
 			return (1);
+		if (line[i] == '\\')
+			++i;
 		++i;
 	}
 	return (0);

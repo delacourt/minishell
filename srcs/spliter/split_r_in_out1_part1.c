@@ -25,14 +25,15 @@ int				split_r_in_out(char *line, t_r_output *redir, t_env *enviro)
 	char		*filename;
 	t_etup_i_o	giv;
 
-	giv.i = &i;
-	giv.quotes = &quotes;
+	giv.ret = 0;
 	i = 0;
-	j = 0;
+	giv.i = &i;
 	quotes = 0;
+	giv.quotes = &quotes;
+	j = 0;
 	redir->out = 1;
 	redir->in = 0;
-	redir->ret = ft_calloc(ft_strlen(line) + 1, sizeof(char));
+	redir->ret = ft_calloc(ft_strlen(line) + 3, sizeof(char));
 	while (line[i] != '\0')
 	{
 		giv.ret = fd_checker(line, &giv, redir, enviro);

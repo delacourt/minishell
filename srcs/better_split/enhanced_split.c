@@ -54,7 +54,7 @@ char		**ft_enhanced_split(char const *str, t_env *enviro)
 	c_split = 0;
 	while (o < count_split(str))
 	{
-		tmp = fill_word(&str[i], enviro, &c_split);
+		tmp = fill_word(&str[i], enviro, &c_split, 0);
 		if (tmp == NULL)
 			tabl[c_split + 1] = tmp;
 		else

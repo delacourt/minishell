@@ -23,7 +23,7 @@ int		echo2(char **tabl, int fd, int *lsc)
 
 	i = 0;
 	is_n = 0;
-	if (ft_strncmp(tabl[0], "-n", 2) == 0)
+	if (tabl[0] != NULL && tabl[0][0] == '-' && is_empty_line(&tabl[0][1], 'n') == 0)
 	{
 		is_n = 1;
 		i = 1;
@@ -53,9 +53,12 @@ int		pwd(int fd, int *lsc)
 	return (1);
 }
 
-int		cd(char **tabl, int *lsc)
+int		cd(char **tabl, int *lsc, char **envp)
 {
 	int i;
+	char **c_pwd;
+	char **o_pwd;
+	char *gc_pwd;
 
 	i = chdir(tabl[0]);
 	*lsc = 0;
@@ -65,6 +68,16 @@ int		cd(char **tabl, int *lsc)
 		write(1, "mash: cd: ", 10);
 		write(1, tabl[0], ft_strlen(tabl[0]));
 		write(1, ": No such file or directory\n", 28);
+		return (1);
+	}
+	if ((c_pwd = get_env_variable(envp, "PWD")) != NULL && (o_pwd = get_env_variable(envp, "OLDPWD")) != NULL)
+	{
+		free(*o_pwd);
+		*o_pwd = ft_strjoin("OLDPWD", &c_pwd[0][3]);
+		free(*c_pwd);
+		gc_pwd = getcwd(NULL, 0);
+		*c_pwd = ft_strjoin("PWD=", gc_pwd);
+		free(gc_pwd);
 	}
 	return (1);
 }

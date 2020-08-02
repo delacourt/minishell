@@ -18,22 +18,36 @@
 
 void	fill_key(t_key *key)
 {
+	
 	key->g[0] = 27;
 	key->g[1] = 91;
 	key->g[2] = 68;
 	key->g[3] = 0;
+
 	key->d[0] = 27;
 	key->d[1] = 91;
 	key->d[2] = 67;
 	key->d[3] = 0;
+
 	key->h[0] = 27;
 	key->h[1] = 91;
 	key->h[2] = 65;
 	key->h[3] = 0;
+	
 	key->b[0] = 27;
 	key->b[1] = 91;
 	key->b[2] = 66;
 	key->b[3] = 0;
+
+	key->home[0] = 27;
+	key->home[1] = 91;
+	key->home[2] = 72;
+	key->home[3] = 0;
+
+	key->end[0] = 27;
+	key->end[1] = 91;
+	key->end[2] = 70;
+	key->end[3] = 0;
 }
 
 /*
@@ -46,17 +60,17 @@ void	put_in_histo(t_env *enviro, char *tst)
 	char	*tmp2;
 	int		i;
 
-	i = 9;
+	i = NCMD - 2;
 	enviro->histo[0] = tst;
 	while (i >= 0)
 	{
 		enviro->histo[i + 1] = enviro->histo[i];
 		--i;
 	}
-	if (enviro->histo[10] != NULL)
+	if (enviro->histo[NCMD - 1] != NULL)
 	{
-		free(enviro->histo[10]);
-		enviro->histo[10] = NULL;
+		free(enviro->histo[NCMD - 1]);
+		enviro->histo[NCMD - 1] = NULL;
 	}
 }
 

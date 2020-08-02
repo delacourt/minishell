@@ -13,8 +13,8 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# define BUFFER_SIZE 32
-# define NCMD 11
+# define NCMD 20
+
 # include "../libft/libft.h"
 # include <unistd.h>
 # include <stdlib.h>
@@ -44,7 +44,6 @@ typedef struct	s_env
 	int		lsc;
 	int		ctrld;
 	char	*histo[NCMD];
-	int		h_len;
 }				t_env;
 
 typedef struct	s_key
@@ -53,6 +52,8 @@ typedef struct	s_key
 	char	d[4];
 	char	h[4];
 	char	b[4];
+	char	home[4];
+	char	end[4];
 }				t_key;
 
 typedef struct	s_r_output
@@ -78,8 +79,7 @@ typedef struct	s_read
 	int		ou;
 	char	*c_key;
 	int		multi;
-	int		old_multi;
-	int		multi_pipe;
+	int		brok;
 }				t_read;
 
 typedef struct	s_inter_read
@@ -143,7 +143,7 @@ int				is_only_doll(char *word, const char *str, int i);
 void			*free_arr(char **tabl, int j);
 void			*word_setup(const char *str, t_word *giv);
 char			**ft_enhanced_split(char const *str, t_env *enviro);
-char			*fill_word(const char *str, t_env *enviro, int *c_split);
+char			*fill_word(const char *str, t_env *enviro, int *c_split, int c_doll);
 
 /*
 **	builtin
@@ -151,7 +151,7 @@ char			*fill_word(const char *str, t_env *enviro, int *c_split);
 
 int				echo2(char **tabl, int fd, int *lsc);
 int				pwd(int fd, int *lsc);
-int				cd(char **tabl, int *lsc);
+int				cd(char **tabl, int *lsc, char **envp);
 void			print_env(char **envp, int fd, int *lsc);
 int				end(char **tabl, t_env *enviro);
 
@@ -165,6 +165,8 @@ void			free_env(char **envp);
 int				env_len(char **env);
 char			**new_env(char **envp);
 char			**export_new(char **arg, t_env *enviro);
+
+char			**get_env_variable(char **envp, char *str);
 
 /*
 **	executor
@@ -192,7 +194,7 @@ int				get_the_line(t_inter_read *term, char **line, t_env *enviro);
 void			split_pipe_error
 				(int *error, t_env *enviro, t_pipe *pip, char **p_tab);
 void			split_r_in_out_error(int *error, t_env *enviro, t_pipe *pip);
-int				is_empty_line(char *str);
+int				is_empty_line(char *str, char c);
 void			print_new_line(int lsc);
 void			sighandler(int signum);
 

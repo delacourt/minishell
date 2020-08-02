@@ -28,12 +28,12 @@ int		ft_strlen_redirect(char *line, char red)
 
 void	close_redirect(t_r_output *redir)
 {
-	if (redir->out != 1)
+	if (redir->out != 1 && redir->out != -1)
 	{
 		close(redir->out);
 		redir->out = 1;
 	}
-	if (redir->in != 0)
+	if (redir->in != 0 && redir->in != -1)
 	{
 		close(redir->in);
 		redir->out = 0;
@@ -47,7 +47,7 @@ char	*get_file_name(char *str, t_env *enviro)
 	int		j;
 
 	j = 0;
-	tst = fill_word(str, enviro, &j);
+	tst = fill_word(str, enviro, &j, '$');
 	return (tst);
 }
 
