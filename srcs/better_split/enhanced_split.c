@@ -29,7 +29,7 @@ void		*free_arr(char **tabl, int j)
 
 void		*word_setup(const char *str, t_word *giv)
 {
-	if (!(giv->word = malloc(((count_words(str) + 1) * sizeof(char)))))
+	if (!(giv->word = malloc(((count_words(str) + 2) * sizeof(char)))))
 		return (NULL);
 	ft_memset(giv->word, 0, count_words(str) + 1);
 	*giv->i = 0;

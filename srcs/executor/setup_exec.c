@@ -73,7 +73,7 @@ char *test1212(char *str, int pos, char *line)
 	i = pos;
 	while (str[i] != '\0')
 	{
-		if (str[i] == '\'' || str[i] == '\"')
+		if (str[i] == '\'' || str[i] == '\"' || str[i] == '>' || str[i] == '<' || str[i] == '|')
 		{
 			tmp = str;
 			str = ft_calloc(ft_strlen(str) + ft_strlen(line) + 2, sizeof(char));
@@ -98,15 +98,32 @@ static void			set_len(t_doll *dol, char *envp, char *line)
 		dol->len = dol->lentest;
 }
 
-static char			*re_back(int o, char *str, int *i, char *line)
+static char			*re_back(int o, char *str, int *i, char *line, int *quote)
 {
-	while (o < ft_strlen(str))
+	int len; 
+
+	//printf("%s\n", str);
+	len = ft_strlen(str);
+	//printf("%d\n", len);
+	while (o < len)
 	{
-		if (str[*i] == '\\')
-			++i;
-		else if (str[*i] == '\'')
+		if (str[o] == '\\')
+			++o;
+		else if (str[o] == '\'')
+		{
 			str = test1212(str, o++, line);
-		else if (str[*i] == '\"')
+		}
+		else if (str[o] == '\"')
+		{
+			str = test1212(str, o++, line);
+		}
+		else if (str[o] == '>' && *quote == 0)					//pas obligé
+		{
+			str = test1212(str, o++, line);
+		}
+		else if (str[o] == '<')
+			str = test1212(str, o++, line);
+		else if (str[o] == '|')
 			str = test1212(str, o++, line);
 		++o;
 	}
@@ -133,13 +150,17 @@ char			*preliminar_replacement(char *line, t_env enviro)
 	char *tmp;
 	char *tmp2;
 	t_doll dol;
+	int quote;
 
 	i = 0;
 	k = 0;
+	quote = 0;
 	str = ft_calloc(ft_strlen(line) + 1, sizeof(char));
 	while (line[i] != '\0')
 	{
-		if (line[i] == '$')
+		if (line[i] == '\\' && (line[i + 1] == '$'))	//ptet des trucs en plus a mettre ici
+			++i;
+		if ((i > 0 && line[i] == '$' && line [i - 1] != '\\' && line[i + 1] != ' ') || (i == 0 && line[i] == '$' && line[i + 1] != ' '))
 		{
 			j = 0;
 			while (enviro.envp[j] != NULL)
@@ -154,15 +175,15 @@ char			*preliminar_replacement(char *line, t_env enviro)
 					str = ft_calloc(ft_strlen(tmp) + ft_strlen(line), sizeof(char));
 					ft_strlcpy(str, tmp, ft_strlen(tmp) + 1);
 					free(tmp);
-					str = re_back(k, str, &i, line);
+					str = re_back(k, str, &i, line, &quote);
 					k = ft_strlen(str);
-					i = i + dol.len + 1;
+					i = i + dol.len;//probleme la nan ?
 				}
 				else if (enviro.envp[++j] == NULL && line[i + 1] == '?')
 				{
 					tmp2 = ft_itoa(enviro.lsc);
 					tmp = str;
-					str = ft_calloc(ft_strlen(tmp) + ft_strlen(tmp2) + 3, sizeof(char));
+					str = ft_calloc(ft_strlen(tmp) + ft_strlen(line), sizeof(char));
 					ft_strlcpy(str, tmp, ft_strlen(tmp) + 1);
 					free(tmp);
 					ft_strlcpy(&str[k], tmp2, ft_strlen(tmp2) + 1);
@@ -174,9 +195,16 @@ char			*preliminar_replacement(char *line, t_env enviro)
 					i = i + find_the_end_env(&line[i + 1]) + 1;
 			}
 		}
-		str[k] = line[i];
-		++i;
-		++k;
+		else
+		{
+			if ((line[i] == '\"' || line [i] == '\'') && quote == 0)
+				++quote;
+			else if ((line[i] == '\"' || line [i] == '\'') && quote == 1)
+				--quote;
+			str[k] = line[i];
+			++i;
+			++k;
+		}
 	}
 	return (prel_ending(str));
 }
@@ -192,6 +220,7 @@ int				parse_exec
 		return (ret);
 	nl = preliminar_replacement(line, *enviro);
 	tabl = ft_enhanced_split(nl, enviro);
+	//print_env(tabl, 1, &ret);
 	free(nl);
 	if (is_builtin(tabl[0]) == 0)
 		ret = builtin_caller(pip, tabl, enviro, redir);

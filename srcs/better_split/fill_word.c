@@ -22,7 +22,12 @@ static void	*fill_double_quote(t_word *giv, const char *str, t_env *enviro, int 
 	while (str[*giv->i] != '\"' && str[*giv->i] != '\0')
 	{
 		if (str[*giv->i] == '\\' && str[*giv->i + 1] == '\"')
+		{
 			++*giv->i;
+			giv->word[*giv->dep] = str[*giv->i];
+			++*giv->dep;
+			++*giv->i;															//bof qwa
+		}
 		else if (str[*giv->i] == '$' && c_doll == '$' && str[*giv->i + 1] != ' '
 			&& str[*giv->i + 1] != '\0' && str[*giv->i + 1] != '$'
 			&& str[*giv->i + 1] != '\\' && str[*giv->i + 1] != '\"' && str[*giv->i + 1] != '\'')
