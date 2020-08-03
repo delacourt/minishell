@@ -36,6 +36,7 @@ static int			exec_prog(t_exec *ex, t_r_output redir, t_pipe *pip, int i)
 		}
 		execve(ex->path, ex->argv, ex->envp);
 	}
+	//printf("%d    %d\n", pid, pip->nbr);
 	pip->pid[pip->nbr] = pid;
 	++pip->nbr;
 	return (pid);
@@ -59,6 +60,8 @@ static int			absolute_path
 			{
 				enviro->lsc = 126;
 				--pip->founded;
+				pip->pid[pip->nbr] = -1;
+				++pip->nbr;
 				write(2, "mash: permission denied: ", 25);
 				write(2, ex->argv[0], ft_strlen(ex->argv[0]));
 				write(2, "\n", 1);
@@ -69,6 +72,8 @@ static int			absolute_path
 		{
 			enviro->lsc = 126;
 			--pip->founded;
+			pip->pid[pip->nbr] = -1;
+			++pip->nbr;
 			write(2, "mash: ", 6);
 			write(2, ex->argv[0], ft_strlen(ex->argv[0]));
 			write(2, ": Is a directory\n", 17);
@@ -79,6 +84,8 @@ static int			absolute_path
 	{
 		enviro->lsc = 127;
 		--pip->founded;
+		pip->pid[pip->nbr] = -1;
+		++pip->nbr;
 		write(2, "mash: no such file or directory: ", 33);
 		write(2, ex->argv[0], ft_strlen(ex->argv[0]));
 		write(2, "\n", 1);
@@ -105,6 +112,8 @@ static int			relative_path
 		{
 			enviro->lsc = 126;
 			--pip->founded;
+			pip->pid[pip->nbr] = -1;
+			++pip->nbr;
 			write(2, "mash: permission denied: ", 25);
 			write(2, ex->argv[0], ft_strlen(ex->argv[0]));
 			write(2, "\n", 1);
@@ -121,6 +130,8 @@ static int			relative_notfound(t_env *enviro, t_pipe *pip, t_exec *ex)
 {
 	enviro->lsc = 127;
 	--pip->founded;
+	pip->pid[pip->nbr] = -1;
+	++pip->nbr;
 	write(2, "mash: command not found: ", 25);
 	write(2, ex->argv[0], ft_strlen(ex->argv[0]));
 	write(2, "\n", 1);

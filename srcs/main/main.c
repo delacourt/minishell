@@ -65,7 +65,7 @@ int			main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		get_line_split_semi_colon(&term, &hub, &enviro);
-		while (hub.tabl[hub.i] != NULL)
+		while (hub.tabl[hub.i] != NULL && hub.error != 5)
 		{
 			if (is_empty_line(hub.tabl[hub.i], ' ') == 1)
 			{

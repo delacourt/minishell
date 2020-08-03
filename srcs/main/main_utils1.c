@@ -59,8 +59,11 @@ void	close_and_wait(t_pipe *pip, t_env *enviro, t_main *hub)
 		waitpid(pip->pid[v], &pid, 0);
 		if (enviro->lsc == 0)
 		{
-			if (WTERMSIG(enviro->lsc) == 2)
+			if (WTERMSIG(pid) == 2)			//la ici il faut kill tt les programmes
+			{
 				enviro->lsc = 130;
+				hub->error = 5;
+			}
 			else if (hub->error == 0)
 				enviro->lsc = pid / 256;
 		}
@@ -77,6 +80,7 @@ void	setup_new_input(t_main *hub, t_env *enviro)
 	free_env(hub->tabl);
 	free(hub->tabl);
 	print_new_line(enviro->lsc);
+	hub->error = 0;
 }
 
 void	get_line_split_semi_colon

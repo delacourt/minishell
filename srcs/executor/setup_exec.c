@@ -223,9 +223,13 @@ int				parse_exec
 	//print_env(tabl, 1, &ret);
 	free(nl);
 	if (is_builtin(tabl[0]) == 0)
+	{
 		ret = builtin_caller(pip, tabl, enviro, redir);
+	}
 	else if (tabl[0] != NULL && ft_strlen(tabl[0]) != 0)
+	{
 		ret = search_and_exec(tabl, enviro, redir, pip);
+	}
 	free_env(tabl);
 	free(tabl);
 	return (ret);
