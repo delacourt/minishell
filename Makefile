@@ -16,6 +16,8 @@ SRC				=	./srcs/reader/inter_line.c\
 					./srcs/reader/read_utils.c\
 					./srcs/reader/special_event1.c\
 					./srcs/reader/special_event2.c\
+					./srcs/reader/special_event3.c\
+					./srcs/reader/multiline.c\
 					./srcs/reader/interactive_read.c\
 					./srcs/spliter/check_pipe.c\
 					./srcs/spliter/check_quote.c\

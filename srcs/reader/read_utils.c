@@ -6,32 +6,26 @@
 
 void	fill_key(t_key *key)
 {
-	
 	key->g[0] = 27;
 	key->g[1] = 91;
 	key->g[2] = 68;
 	key->g[3] = 0;
-
 	key->d[0] = 27;
 	key->d[1] = 91;
 	key->d[2] = 67;
 	key->d[3] = 0;
-
 	key->h[0] = 27;
 	key->h[1] = 91;
 	key->h[2] = 65;
 	key->h[3] = 0;
-	
 	key->b[0] = 27;
 	key->b[1] = 91;
 	key->b[2] = 66;
 	key->b[3] = 0;
-
 	key->home[0] = 27;
 	key->home[1] = 91;
 	key->home[2] = 72;
 	key->home[3] = 0;
-
 	key->end[0] = 27;
 	key->end[1] = 91;
 	key->end[2] = 70;

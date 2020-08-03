@@ -45,8 +45,6 @@ static int	get_trough_pipe
 			hub->error = parse_exec(redir->ret, *redir, enviro, pip);
 			if (hub->error == 3)
 				return (perfect_exit(redir, pip, enviro, hub) + 1);
-			else if (hub->error == 1)
-				pip->pid[pip->nbr++] = -1;
 		}
 		close_redirect(redir);
 		++hub->n_pipe;
