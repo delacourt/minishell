@@ -65,9 +65,9 @@ int		cd(char **tabl, int *lsc, char **envp)
 	if (i == -1)
 	{
 		*lsc = 1;
-		write(1, "mash: cd: ", 10);
-		write(1, tabl[0], ft_strlen(tabl[0]));
-		write(1, ": No such file or directory\n", 28);
+		write(2, "mash: cd: ", 10);
+		write(2, tabl[0], ft_strlen(tabl[0]));
+		write(2, ": No such file or directory\n", 28);
 		return (1);
 	}
 	if ((c_pwd = get_env_variable(envp, "PWD")) != NULL && (o_pwd = get_env_variable(envp, "OLDPWD")) != NULL)
@@ -101,6 +101,8 @@ int is_atoiable(char *str)
 	int i;
 
 	i = 0;
+	if (str[i] == '-' || ft_isdigit(str[i]) == 1)
+		++i;
 	while (str[i] != '\0' && ft_isdigit(str[i]) == 1)
 		++i;
 	if (str[i] == '\0')
@@ -130,5 +132,7 @@ int		end(char **tabl, t_env *enviro)//3 cas de figure
 		write(2, ": numeric argument required\n", 28);
 		enviro->lsc = 2;
 	}
+	if (enviro->lsc < 0)
+		enviro->lsc = (enviro->lsc%256);
 	return (3);
 }
