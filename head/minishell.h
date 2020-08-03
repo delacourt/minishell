@@ -117,6 +117,17 @@ typedef struct	s_exec
 	int		path_exist;
 }				t_exec;
 
+typedef struct	s_split_sc
+{
+	int		line_i;
+	int		line_j;
+	int		tabl_i;
+	int		tabl_j;
+	int		line_const;
+	int		quote;
+	char	**tabl;
+}				t_split_sc;
+
 typedef struct	s_main
 {
 	int		i;
@@ -143,7 +154,8 @@ int				is_only_doll(char *word, const char *str, int i);
 void			*free_arr(char **tabl, int j);
 void			*word_setup(const char *str, t_word *giv);
 char			**ft_enhanced_split(char const *str, t_env *enviro);
-char			*fill_word(const char *str, t_env *enviro, int *c_split, int c_doll);
+char			*fill_word
+				(const char *str, t_env *enviro, int *c_split, int c_doll);
 
 /*
 **	builtin

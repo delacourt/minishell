@@ -34,61 +34,70 @@ static int		count_semi_colon(char *line)
 	return (sc);
 }
 
+void			setup_t_split_sc(t_split_sc *split)
+{
+	split->line_i = 0;
+	split->line_j = 0;
+	split->line_const = 0;
+	split->tabl_i = 0;
+	split->tabl_j = 0;
+	split->quote = 0;
+}
+
+void			reset_values_loop(t_split_sc *split)
+{
+	split->tabl[split->tabl_i][split->tabl_j] = '\0';
+	split->tabl_j = 0;
+	split->line_j = -1;
+	split->tabl_i++;
+	split->line_const++;
+	split->line_i++;
+}
+
+void			split_line_loop(char *line, t_split_sc *split)
+{
+	while (line[split->line_i])
+	{
+		if (line[split->line_i] == '\"' && split->quote == 0)
+			split->quote++;
+		else if (line[split->line_i] == '\"' && split->quote == 1)
+			split->quote--;
+		if (line[split->line_i + 1] == ';'
+			&& line[split->line_i] != '\\' && split->quote == 0)
+		{
+			split->tabl[split->tabl_i] = calloc((split->line_j + 2),
+										sizeof(char));
+			while (split->line_const <= split->line_i)
+			{
+				split->tabl[split->tabl_i]
+							[split->tabl_j] = line[split->line_const];
+				split->line_const++;
+				split->tabl_j++;
+			}
+			reset_values_loop(split);
+		}
+		split->line_j++;
+		split->line_i++;
+	}
+}
+
 char			**split_semi_colon(char *line)
 {
-	int		i;
-	int		j;
-	int		k;
-	int		l;
-	int		m;
-	int		q;
-	char	**tabl;
+	t_split_sc split;
 
-	q = 0;
-	i = 0;
-	j = 0;
-	k = 0;
-	l = 0;
-	m = 0;
-	tabl = calloc((count_semi_colon(line) + 2), sizeof(char *));
-	//printf("%d\n", (count_semi_colon(line) + 2));
-	while (line[i])
+	setup_t_split_sc(&split);
+	split.tabl = calloc((count_semi_colon(line) + 2), sizeof(char *));
+	split_line_loop(line, &split);
+	split.line_j--;
+	split.tabl[split.tabl_i] = calloc((split.line_j + 2), sizeof(char));
+	while (split.line_const < split.line_i)
 	{
-		if (line[i] == '\"' && q == 0)
-			q++;
-		else if (line[i] == '\"' && q == 1)
-			q--;
-		if (line[i + 1] == ';' && line[i] != '\\' && q == 0)
-		{
-			tabl[k] = calloc((j + 2), sizeof(char));
-			//printf("%d\n", j + 2);
-			while (l <= i)
-			{
-				tabl[k][m] = line[l];
-				l++;
-				m++;
-			}
-			tabl[k][m] = '\0';
-			m = 0;
-			j = -1;
-			k++;
-			l++;
-			i++;
-		}
-		j++;
-		i++;
+		split.tabl[split.tabl_i][split.tabl_j] = line[split.line_const];
+		split.line_const++;
+		split.tabl_j++;
 	}
-	j--;
-	tabl[k] = calloc((j + 2), sizeof(char));
-	//printf("%d\n", j + 2);
-	while (l < i)
-	{
-		tabl[k][m] = line[l];
-		l++;
-		m++;
-	}
-	tabl[k][m] = '\0';
-	k++;
-	tabl[k] = NULL;
-	return (tabl);
+	split.tabl[split.tabl_i][split.tabl_j] = '\0';
+	split.tabl_i++;
+	split.tabl[split.tabl_i] = NULL;
+	return (split.tabl);
 }
