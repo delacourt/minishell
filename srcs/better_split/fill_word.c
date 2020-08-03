@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fill_word.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: velovo <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/16 18:01:39 by velovo            #+#    #+#             */
-/*   Updated: 2020/07/16 18:01:53 by velovo           ###   ########.fr       */
+/*   Created: 2020/08/03 17:11:19 by avan-pra          #+#    #+#             */
+/*   Updated: 2020/08/03 17:11:20 by avan-pra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 **	copy part of the string typed by the user to the given split
 */
 
-static void	*fill_double_quote(t_word *giv, const char *str, t_env *enviro, int c_doll)
+static void	*fill_double_quote
+	(t_word *giv, const char *str, t_env *enviro, int c_doll)
 {
 	++*giv->i;
 	while (str[*giv->i] != '\"' && str[*giv->i] != '\0')
@@ -26,34 +27,33 @@ static void	*fill_double_quote(t_word *giv, const char *str, t_env *enviro, int 
 			++*giv->i;
 			giv->word[*giv->dep] = str[*giv->i];
 			++*giv->dep;
-			++*giv->i;															//bof qwa
+			++*giv->i;
 		}
 		else if (str[*giv->i] == '$' && c_doll == '$' && str[*giv->i + 1] != ' '
 			&& str[*giv->i + 1] != '\0' && str[*giv->i + 1] != '$'
-			&& str[*giv->i + 1] != '\\' && str[*giv->i + 1] != '\"' && str[*giv->i + 1] != '\'')
+			&& str[*giv->i + 1] != '\\' && str[*giv->i + 1] != '\"'
+			&& str[*giv->i + 1] != '\'')
 		{
 			if ((giv->word = fill_with_enviro(str, *enviro, giv)) == NULL)
 				return (NULL);
 			++*giv->i;
 		}
 		else
-		{
-			giv->word[*giv->dep] = str[*giv->i];
-			++*giv->dep;
-			++*giv->i;
-		}
+			d_quote_normal_case(giv, str);
 	}
 	return (giv->word);
 }
 
-static void	*fill_single_quote(t_word *giv, const char *str, t_env *enviro, int c_doll)
+static void	*fill_single_quote
+	(t_word *giv, const char *str, t_env *enviro, int c_doll)
 {
 	++*giv->i;
 	while (str[*giv->i] != '\'' && str[*giv->i] != '\0')
 	{
 		if (str[*giv->i] == '$' && c_doll == '$' && str[*giv->i + 1] != ' '
 			&& str[*giv->i + 1] != '\0' && str[*giv->i + 1] != '$'
-			&& str[*giv->i + 1] != '\\' && str[*giv->i + 1] != '\'' && str[*giv->i + 1] != '\"')
+			&& str[*giv->i + 1] != '\\' && str[*giv->i + 1] != '\''
+			&& str[*giv->i + 1] != '\"')
 		{
 			if ((giv->word = fill_with_enviro(str, *enviro, giv)) == NULL)
 				return (NULL);
@@ -69,7 +69,8 @@ static void	*fill_single_quote(t_word *giv, const char *str, t_env *enviro, int 
 	return (giv->word);
 }
 
-static void	*fill_default(t_word *giv, const char *str, t_env *enviro, int c_doll)
+static void	*fill_default
+	(t_word *giv, const char *str, t_env *enviro, int c_doll)
 {
 	if (str[*giv->i] == '$' && c_doll == '$' && str[*giv->i + 1] != ' '
 		&& str[*giv->i + 1] != '\0'

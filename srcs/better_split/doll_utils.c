@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doll_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: velovo <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/16 19:50:35 by velovo            #+#    #+#             */
-/*   Updated: 2020/07/16 19:50:47 by velovo           ###   ########.fr       */
+/*   Created: 2020/08/03 17:10:49 by avan-pra          #+#    #+#             */
+/*   Updated: 2020/08/03 17:10:50 by avan-pra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,14 @@ char			*ft_itoa(int n)
 	return (r);
 }
 
-int				find_the_end_env(const char *str)	//WARNING
+int				find_the_end_env(const char *str)
 {
 	int i;
 
 	i = 0;
 	while (str[i] != '\0' && str[i] != '\\' && str[i] != ' '
-		&& str[i] != '$' && str[i] != '\'' && str[i] != '\"' && str[i] != ':' && str[i] != '=')
+		&& str[i] != '$' && str[i] != '\''
+		&& str[i] != '\"' && str[i] != ':' && str[i] != '=')
 		++i;
 	return (i);
 }

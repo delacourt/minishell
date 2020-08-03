@@ -139,6 +139,16 @@ typedef struct	s_main
 	char	**p_tab;
 }				t_main;
 
+typedef struct	s_pre
+{
+	int		i;
+	int		k;
+	char	*str;
+	char	*tmp;
+	char	*tmp2;
+	int		quote;
+}				t_pre;
+
 /*
 **	better_split
 */
@@ -156,6 +166,7 @@ void			*word_setup(const char *str, t_word *giv);
 char			**ft_enhanced_split(char const *str, t_env *enviro);
 char			*fill_word
 				(const char *str, t_env *enviro, int *c_split, int c_doll);
+void			d_quote_normal_case(t_word *giv, const char *str);
 
 /*
 **	builtin
@@ -191,7 +202,13 @@ int				setup_search(t_exec *ex, t_env *enviro, char **tabl);
 int				parse_exec
 				(char *line, t_r_output redir, t_env *enviro, t_pipe *pip);
 
-/*1
+int				d_exist(t_env *enviro, t_pipe *pip, t_exec *ex);
+int				i_directory(t_env *enviro, t_pipe *pip, t_exec *ex);
+int				p_denied(t_env *enviro, t_pipe *pip, t_exec *ex);
+
+int				exec_prog(t_exec *ex, t_r_output redir, t_pipe *pip, int i);
+
+/*
 **	main
 */
 

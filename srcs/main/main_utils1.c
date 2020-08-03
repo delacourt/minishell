@@ -37,44 +37,6 @@ int		perfect_exit(t_r_output *redir, t_pipe *pip, t_env *enviro, t_main *hub)
 	return (0);
 }
 
-void	close_and_wait(t_pipe *pip, t_env *enviro, t_main *hub)
-{
-	int		p;
-	int		v;
-	int		pid;
-
-	p = pip->total - 2;
-	while (p >= 0)
-	{
-		close(pip->pipefd[p][0]);
-		close(pip->pipefd[p][1]);
-		free(pip->pipefd[p]);
-		--p;
-	}
-	v = 0;
-	while (v < pip->founded)
-	{
-		while (pip->pid[v] == -1)
-			++v;
-		waitpid(pip->pid[v], &pid, 0);
-		if (enviro->lsc == 0)
-		{
-			if (WTERMSIG(pid) == 2)			//la ici il faut kill tt les programmes
-			{
-				enviro->lsc = 130;
-				hub->error = 5;
-			}
-			else if (hub->error == 0)
-				enviro->lsc = pid / 256;
-		}
-		++v;
-	}
-	free(pip->pipefd);
-	free_env(hub->p_tab);
-	free(hub->p_tab);
-	free(pip->pid);
-}
-
 void	setup_new_input(t_main *hub, t_env *enviro)
 {
 	free_env(hub->tabl);

@@ -26,6 +26,7 @@ SRC				=	./srcs/reader/inter_line.c\
 					./srcs/spliter/split_pipe_utils.c\
 					./srcs/spliter/split_semi_colon.c\
 					./srcs/builtin/builtin.c\
+					./srcs/builtin/builtin2.c\
 					./srcs/environement/handle_env.c\
 					./srcs/environement/env_utils.c\
 					./srcs/environement/new_env.c\
@@ -37,9 +38,15 @@ SRC				=	./srcs/reader/inter_line.c\
 					./srcs/better_split/count_split.c\
 					./srcs/better_split/count_words.c\
 					./srcs/better_split/fill_word.c\
+					./srcs/better_split/fill_word_utils.c\
 					./srcs/executor/exec_prog.c\
 					./srcs/executor/exec_prog_utils.c\
+					./srcs/executor/file_problem.c\
 					./srcs/executor/setup_exec.c\
+					./srcs/executor/true_exec_prog.c\
+					./srcs/executor/preliminar1.c\
+					./srcs/executor/preliminar2.c\
+					./srcs/main/close_all.c\
 					./srcs/main/main.c\
 					./srcs/main/sign_handle.c\
 					./srcs/main/prompt.c\

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_pipe.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: velovo <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/14 17:18:43 by velovo            #+#    #+#             */
-/*   Updated: 2020/07/14 17:19:37 by velovo           ###   ########.fr       */
+/*   Created: 2020/08/03 17:43:09 by avan-pra          #+#    #+#             */
+/*   Updated: 2020/08/03 17:43:10 by avan-pra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ int		is_broken_pipe(char *str)
 			++quote;
 		else if ((str[i] == '\"' || str[i] == '\'') && quote == 1)
 			--quote;
-		else if (str[i] == '|' && quote == 0 && is_empty_line(&str[i + 1], ' ') == 0)
+		else if (str[i] == '|' && quote == 0
+			&& is_empty_line(&str[i + 1], ' ') == 0)
 			return (1);
 		++i;
 	}

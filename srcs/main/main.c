@@ -71,7 +71,8 @@ int			main(int argc, char **argv, char **envp)
 			if (is_empty_line(hub.tabl[hub.i], ' ') == 1)
 			{
 				hub.error = setup_pipe_split(&hub, &enviro, &pip);
-				if ((hub.error = get_trough_pipe(&hub, &pip, &enviro, &redir)) != 0)
+				if ((hub.error =
+					get_trough_pipe(&hub, &pip, &enviro, &redir)) != 0)
 					return (enviro.lsc);
 				close_and_wait(&pip, &enviro, &hub);
 			}
