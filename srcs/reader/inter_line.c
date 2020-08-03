@@ -44,7 +44,7 @@ static int		check_key(t_env *enviro, t_read *t_r, int *end, t_key key)
 		k_ctrl_c(enviro, t_r, end);
 	else if (t_r->t == 28)
 		;
-	else if (ft_strncmp(t_r->c_key, key.g, 4) == 0 && (t_r->multi == 0 || *end - 1 >= t_r->multi))
+	else if (ft_strncmp(t_r->c_key, key.g, 4) == 0 && (t_r->multi == 0 || *end - 1 > t_r->multi))
 		k_left(key, end, t_r);
 	else if (ft_strncmp(t_r->c_key, key.d, 4) == 0 && (*end < t_r->multi - ft_strlen(t_r->tst)))
 		k_right(key, end, t_r);
@@ -80,7 +80,7 @@ static int		check_key(t_env *enviro, t_read *t_r, int *end, t_key key)
 		*end = ft_strlen(t_r->tst);
 		ft_memset(t_r->c_key, 0, 4);
 	}
-	else if (t_r->t == 127 && *end > 0 && (t_r->multi == 0 || *end - 1 >= t_r->multi))
+	else if (t_r->t == 127 && *end > 0 && (t_r->multi == 0 || *end - 1 > t_r->multi))
 		k_del(t_r, end, key);
 	else if (ft_strlen(t_r->c_key) == 0 && (t_r->t >= 32 && t_r->t <= 126))
 		write_char(t_r, end, key);
@@ -137,6 +137,17 @@ int			inter_line(char **line, t_env *enviro)
 			if (t_r.brok == 'p') //broken pipe ou backslash
 			{
 				end = ft_strlen(t_r.tst);
+				write(1, "\n> ", 3);
+				t_r.multi = t_r.multi - 1;
+			}
+			else if (t_r.brok == 'b') //broken pipe ou backslash
+			{
+				end = ft_strlen(t_r.tst);
+				t_r.t = '\0';
+				end = end - 1;
+				k_normal(&t_r, &end);
+				--end;
+				t_r.multi = t_r.multi - 2;
 				write(1, "\n> ", 3);
 			}
 			else

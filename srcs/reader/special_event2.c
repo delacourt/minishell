@@ -22,6 +22,8 @@ int		k_enter(t_env *enviro, char **line, t_read *t_r)
 	else if (is_broken_pipe(t_r->tst) == 1 || (ft_strlen(t_r->tst) > 0 && t_r->tst[ft_strlen(t_r->tst) - 1] == '\\'))
 	{
 		t_r->brok = 'p';
+		if (ft_strlen(t_r->tst) > 0 && t_r->tst[ft_strlen(t_r->tst) - 1] == '\\')
+			t_r->brok = 'b';
 		return (ft_strlen(t_r->tst));
 	}
 	put_in_histo(enviro, t_r->tst);
