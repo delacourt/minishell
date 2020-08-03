@@ -49,7 +49,7 @@ int				split_pipe(char *line, char ***attach)
 			*attach = p_tab;
 			return (1);
 		}
-		p_tab[i] = calloc(len_line(&line[j]) + 2, sizeof(char));
+		p_tab[i] = ft_calloc(len_line(&line[j]) + 2, sizeof(char));
 		copy_word(&line[j], p_tab[i]);
 		j = j + len_line(&line[j]);
 		++i;

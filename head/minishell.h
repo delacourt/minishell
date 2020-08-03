@@ -191,7 +191,7 @@ int				setup_search(t_exec *ex, t_env *enviro, char **tabl);
 int				parse_exec
 				(char *line, t_r_output redir, t_env *enviro, t_pipe *pip);
 
-/*
+/*1
 **	main
 */
 

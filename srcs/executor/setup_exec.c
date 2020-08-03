@@ -135,7 +135,7 @@ static		char *prel_ending(char *str)
 	char *tmp;
 	
 	tmp = str;
-	str = calloc(ft_strlen(tmp) + 2, sizeof(char));
+	str = ft_calloc(ft_strlen(tmp) + 2, sizeof(char));
 	ft_strlcpy(str, tmp, ft_strlen(tmp) + 1);
 	free(tmp);
 	return (str);

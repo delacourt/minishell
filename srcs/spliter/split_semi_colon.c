@@ -65,7 +65,7 @@ void			split_line_loop(char *line, t_split_sc *split)
 		if (line[split->line_i + 1] == ';'
 			&& line[split->line_i] != '\\' && split->quote == 0)
 		{
-			split->tabl[split->tabl_i] = calloc((split->line_j + 2),
+			split->tabl[split->tabl_i] = ft_calloc((split->line_j + 2),
 										sizeof(char));
 			while (split->line_const <= split->line_i)
 			{
@@ -86,10 +86,10 @@ char			**split_semi_colon(char *line)
 	t_split_sc split;
 
 	setup_t_split_sc(&split);
-	split.tabl = calloc((count_semi_colon(line) + 2), sizeof(char *));
+	split.tabl = ft_calloc((count_semi_colon(line) + 2), sizeof(char *));
 	split_line_loop(line, &split);
 	split.line_j--;
-	split.tabl[split.tabl_i] = calloc((split.line_j + 2), sizeof(char));
+	split.tabl[split.tabl_i] = ft_calloc((split.line_j + 2), sizeof(char));
 	while (split.line_const < split.line_i)
 	{
 		split.tabl[split.tabl_i][split.tabl_j] = line[split.line_const];

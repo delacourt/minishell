@@ -29,7 +29,7 @@ int		fill_t_pipe(t_pipe *pip, char **p_tab)
 		return (0);
 	while (n_pipe + 1 < pip->total)
 	{
-		pip->pipefd[n_pipe] = calloc(2, sizeof(int));
+		pip->pipefd[n_pipe] = ft_calloc(2, sizeof(int));
 		pipe(pip->pipefd[n_pipe]);
 		++n_pipe;
 	}
