@@ -23,7 +23,8 @@ int		fill_t_pipe(t_pipe *pip, char **p_tab)
 	pip->nbr = 0;
 	pip->total = env_len(p_tab);
 	n_pipe = 0;
-	pip->pipefd = malloc((pip->total) * sizeof(int*));
+	if (!(pip->pipefd = malloc((pip->total) * sizeof(int*))))
+		return (0);
 	pip->pipefd[0] = NULL;
 	if (pip->total < 2)
 		return (0);

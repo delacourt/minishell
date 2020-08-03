@@ -21,7 +21,8 @@ static void		*status_code
 {
 	dol->tmp2 = ft_itoa(enviro.lsc);
 	dol->tmp = ft_strjoin(giv->word, dol->tmp2);
-	dol->ret = malloc((ft_strlen(dol->tmp) + count_words(str) - 1));
+	if (!(dol->ret = malloc((ft_strlen(dol->tmp) + count_words(str) - 1))))
+		return (NULL);
 	ft_memset(dol->ret, 0, (ft_strlen(dol->tmp) + count_words(str) - 1));
 	ft_strlcpy(dol->ret, dol->tmp, ft_strlen(dol->tmp) + 1);
 	*giv->i = *giv->i + 1;
@@ -46,8 +47,9 @@ static void		*check_env
 		{
 			dol->tmp = ft_strjoin(
 				giv->word, &enviro.envp[dol->penv][dol->len + 1]);
-			dol->ret = malloc((ft_strlen(dol->tmp) + count_words(str)
-				- search_the_equal(enviro.envp[dol->penv])));
+			if (!(dol->ret = malloc((ft_strlen(dol->tmp) + count_words(str)
+				- search_the_equal(enviro.envp[dol->penv])))))
+				return (NULL);
 			ft_memset(dol->ret, 0, (ft_strlen(dol->tmp) + count_words(str)
 				- search_the_equal(enviro.envp[dol->penv])));
 			ft_strlcpy(dol->ret, dol->tmp, ft_strlen(dol->tmp) + 1);

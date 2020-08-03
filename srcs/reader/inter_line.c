@@ -17,7 +17,8 @@ static int	fake_exit(t_read *t_r, t_env *enviro)
 	enviro->ctrld = 1;
 	write(1, "exit", 4);
 	free(t_r->tst);
-	t_r->tst = malloc(5 * sizeof(char));
+	if (!(t_r->tst = malloc(5 * sizeof(char))))
+		return (0);
 	ft_strlcpy(t_r->tst, "exit", 5);
 	return (3);
 }

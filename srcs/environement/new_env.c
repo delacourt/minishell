@@ -22,15 +22,18 @@ static char	**new_env_variable(char *str, char **envp)
 	int		i;
 
 	i = 0;
-	newenvp = malloc((env_len(envp) + 2) * sizeof(char*));
+	if (!(newenvp = malloc((env_len(envp) + 2) * sizeof(char*))))
+		return (NULL);
 	while (envp[i] != NULL)
 	{
-		newenvp[i] = malloc((ft_strlen(envp[i]) + 1) * sizeof(char));
+		if (!(newenvp[i] = malloc((ft_strlen(envp[i]) + 1) * sizeof(char))))
+			return (NULL);
 		ft_strlcpy(newenvp[i], envp[i], ft_strlen(envp[i]) + 1);
 		free(envp[i]);
 		++i;
 	}
-	newenvp[i] = malloc((ft_strlen(str) + 1) * sizeof(char));
+	if (!(newenvp[i] = malloc((ft_strlen(str) + 1) * sizeof(char))))
+		return (NULL);
 	ft_strlcpy(newenvp[i], str, ft_strlen(str) + 1);
 	++i;
 	newenvp[i] = NULL;

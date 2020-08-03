@@ -36,7 +36,8 @@ int			setup_search(t_exec *ex, t_env *enviro, char **tabl)
 	if (enviro->envp[i] == NULL)
 	{
 		ex->path_exist = 0;
-		ex->path = malloc(1 * sizeof(char));
+		if (!(ex->path = malloc(1 * sizeof(char))))
+			return (0);
 		ex->path[0] = '\0';
 	}
 	return (0);
@@ -48,7 +49,8 @@ char		*ft_str_slash_join(char **tabl, char *pathed)
 	int		k;
 	char	*try;
 
-	try = malloc(ft_strlen(tabl[0]) + ft_strlen(pathed) + 2);
+	if (!(try = malloc(ft_strlen(tabl[0]) + ft_strlen(pathed) + 2)))
+		return(NULL);
 	j = 0;
 	k = 0;
 	while (pathed[j] != '\0')

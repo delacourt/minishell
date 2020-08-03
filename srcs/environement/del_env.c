@@ -22,14 +22,16 @@ static char	**del_env_variable(int len, char **envp)
 	int		i;
 	int		j;
 
-	newenvp = malloc((len + 1) * sizeof(char*));
+	if (!(newenvp = malloc((len + 1) * sizeof(char*))))
+		return (NULL);
 	i = 0;
 	j = 0;
 	while (i < len)
 	{
 		if (envp[i] != NULL)
 		{
-			newenvp[j] = malloc((ft_strlen(envp[i]) + 1) * sizeof(char));
+			if (!(newenvp[j] = malloc((ft_strlen(envp[i]) + 1) * sizeof(char))))
+				return (NULL);
 			ft_strlcpy(newenvp[j], envp[i], ft_strlen(envp[i]) + 1);
 			free(envp[i]);
 			++j;

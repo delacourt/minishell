@@ -84,11 +84,13 @@ char	**new_env(char **envp)
 	char	**tenv;
 	int		i;
 
-	tenv = malloc((env_len(envp) + 1) * sizeof(char*));
+	if (!(tenv = malloc((env_len(envp) + 1) * sizeof(char*))))
+		return (NULL);
 	i = 0;
 	while (envp[i] != NULL)
 	{
-		tenv[i] = malloc((ft_strlen(envp[i]) + 1) * sizeof(char));
+		if (!(tenv[i] = malloc((ft_strlen(envp[i]) + 1) * sizeof(char))))
+			return (NULL);
 		ft_strlcpy(tenv[i], envp[i], ft_strlen(envp[i]) + 1);
 		++i;
 	}
