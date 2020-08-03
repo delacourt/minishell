@@ -201,9 +201,9 @@ void			close_and_wait(t_pipe *pip, t_env *enviro, t_main *hub);
 void			setup_new_input(t_main *hub, t_env *enviro);
 void			get_line_split_semi_colon
 				(t_inter_read *term, t_main *hub, t_env *enviro);
-void			setup_pipe_split(t_main *hub, t_env *enviro, t_pipe *pip);
+int				setup_pipe_split(t_main *hub, t_env *enviro, t_pipe *pip);
 int				get_the_line(t_inter_read *term, char **line, t_env *enviro);
-void			split_pipe_error
+int				split_pipe_error
 				(int *error, t_env *enviro, t_pipe *pip, char **p_tab);
 void			split_r_in_out_error(int *error, t_env *enviro, t_pipe *pip);
 int				is_empty_line(char *str, char c);

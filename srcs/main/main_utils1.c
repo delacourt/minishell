@@ -91,9 +91,11 @@ void	get_line_split_semi_colon
 	hub->i = 0;
 }
 
-void	setup_pipe_split(t_main *hub, t_env *enviro, t_pipe *pip)
+int		setup_pipe_split(t_main *hub, t_env *enviro, t_pipe *pip)
 {
 	hub->error = split_pipe(hub->tabl[hub->i], &hub->p_tab);
-	split_pipe_error(&hub->error, enviro, pip, hub->p_tab);
 	hub->n_pipe = 0;
+	if (split_pipe_error(&hub->error, enviro, pip, hub->p_tab) == 1)
+		return (5);
+	return (0);
 }

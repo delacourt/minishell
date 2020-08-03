@@ -23,11 +23,11 @@ int		get_the_line(t_inter_read *term, char **line, t_env *enviro)
 	return (i);
 }
 
-void	split_pipe_error(int *error, t_env *enviro, t_pipe *pip, char **p_tab)
+int		split_pipe_error(int *error, t_env *enviro, t_pipe *pip, char **p_tab)
 {
 	if (*error > 0)
 	{
-		enviro->lsc = 1;
+		enviro->lsc = 2;
 		if (*error == 1)
 			write(2, "mash: syntax error, unexpected token\n", 37);
 		else if (*error == 2)
@@ -37,6 +37,7 @@ void	split_pipe_error(int *error, t_env *enviro, t_pipe *pip, char **p_tab)
 	fill_t_pipe(pip, p_tab);
 	pip->founded = pip->total;
 	pip->pid = ft_calloc(pip->total, sizeof(int));
+	return (*error);
 }
 
 void	split_r_in_out_error(int *error, t_env *enviro, t_pipe *pip)
