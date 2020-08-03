@@ -21,6 +21,7 @@ static void	setup_shell
 	enviro->lsc = 0;
 	enviro->envp = new_env(envp);
 	signal(SIGINT, sighandler);
+	signal(SIGQUIT, sighandler);
 	setup_intera_mode(term);
 	print_new_line(enviro->lsc);
 	j = 0;
