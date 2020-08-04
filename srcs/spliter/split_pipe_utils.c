@@ -50,9 +50,13 @@ int		count_pipe(char *line)
 	n_pipe = 0;
 	while (line[i] != '\0')
 	{
-		if ((line[i] == '\"' || line[i] == '\'') && quotes == 0)
+		if (((i == 0 && (line[i] == '\"' || line[i] == '\''))
+			|| (i > 0 && line[i - 1] != '\\'
+			&& (line[i] == '\"' || line[i] == '\''))) && quotes == 0)
 			quotes++;
-		else if ((line[i] == '\"' || line[i] == '\'') && quotes == 1)
+		else if (((i == 0 && (line[i] == '\"' || line[i] == '\''))
+			|| (i > 0 && line[i - 1] != '\\'
+			&& (line[i] == '\"' || line[i] == '\''))) && quotes == 1)
 			quotes--;
 		else if (line[i + 1] == '|' && line[i] != '\\' && quotes == 0)
 			++n_pipe;
@@ -72,9 +76,13 @@ int		len_line(char *line)
 	l_line = 0;
 	while (line[i] != '\0')
 	{
-		if ((line[i] == '\"' || line[i] == '\'') && quotes == 0)
+		if (((i == 0 && (line[i] == '\"' || line[i] == '\''))
+			|| (i > 0 && line[i - 1] != '\\'
+			&& (line[i] == '\"' || line[i] == '\''))) && quotes == 0)
 			quotes++;
-		else if ((line[i] == '\"' || line[i] == '\'') && quotes == 1)
+		else if (((i == 0 && (line[i] == '\"' || line[i] == '\''))
+			|| (i > 0 && line[i - 1] != '\\'
+			&& (line[i] == '\"' || line[i] == '\''))) && quotes == 1)
 			quotes--;
 		else if (line[i + 1] == '|' && line[i] != '\\' && quotes == 0)
 			return (i + 2);
@@ -93,9 +101,13 @@ void	copy_word(char *src, char *dest)
 	while (src[i] != '\0')
 	{
 		dest[i] = src[i];
-		if ((src[i] == '\"' || src[i] == '\'') && quotes == 0)
+		if (((i == 0 && (src[i] == '\"' || src[i] == '\''))
+			|| (i > 0 && src[i - 1] != '\\'
+			&& (src[i] == '\"' || src[i] == '\''))) && quotes == 0)
 			quotes++;
-		else if ((src[i] == '\"' || src[i] == '\'') && quotes == 1)
+		else if (((i == 0 && (src[i] == '\"' || src[i] == '\''))
+			|| (i > 0 && src[i - 1] != '\\'
+			&& (src[i] == '\"' || src[i] == '\''))) && quotes == 1)
 			quotes--;
 		else if (src[i + 1] == '|' && src[i] != '\\' && quotes == 0)
 			break ;
