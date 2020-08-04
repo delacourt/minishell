@@ -37,8 +37,10 @@ int		perfect_exit(t_r_output *redir, t_pipe *pip, t_env *enviro, t_main *hub)
 	return (0);
 }
 
-void	setup_new_input(t_main *hub, t_env *enviro)
+void	setup_new_input(t_main *hub, t_env *enviro, int argc, char **argv)
 {
+	(void)argc;
+	(void)argv;
 	free_env(hub->tabl);
 	free(hub->tabl);
 	print_new_line(enviro->lsc);

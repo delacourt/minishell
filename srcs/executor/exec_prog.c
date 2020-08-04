@@ -110,7 +110,6 @@ int					search_relative
 int					search_and_exec
 	(char **tabl, t_env *enviro, t_r_output redir, t_pipe *pip)
 {
-	struct stat	statbuff;
 	t_exec		ex;
 
 	enviro->lsc = 0;

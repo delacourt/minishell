@@ -76,7 +76,7 @@ int			main(int argc, char **argv, char **envp)
 			}
 			++hub.i;
 		}
-		setup_new_input(&hub, &enviro);
+		setup_new_input(&hub, &enviro, argc, argv);
 	}
 	return (0);
 }

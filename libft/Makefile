@@ -14,6 +14,8 @@ NAME			= libft.a
 
 NAMED			= bonus.a
 
+CFLAGS			= -Wall -Wextra -Werror
+
 SRC				=	ft_atoi.c\
 					ft_bzero.c\
 					ft_calloc.c\

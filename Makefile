@@ -12,7 +12,7 @@
 
 NAME			= minishell
 
-#CFLAGS			= -Wall -Wextra -Werror -g3 #-fsanitize=address
+CFLAGS			= -Wall -Wextra -Werror -g3 #-fsanitize=address
 
 SRC				=	./srcs/reader/inter_line.c\
 					./srcs/reader/read_utils.c\

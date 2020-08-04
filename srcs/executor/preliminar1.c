@@ -95,7 +95,8 @@ char		*preliminar_replacement(char *line, t_env enviro)
 		if (line[p_r.i] == '\\' && (line[p_r.i + 1] == '$'))
 			++p_r.i;
 		if ((p_r.i > 0 && line[p_r.i] == '$'
-			&& line[p_r.i - 1] != '\\' && line[p_r.i + 1] != ' ' && p_r.q_type != '\'')
+			&& line[p_r.i - 1] != '\\' && line[p_r.i + 1] !=
+				' ' && p_r.q_type != '\'')
 			|| (p_r.i == 0 && line[p_r.i] == '$'
 			&& line[p_r.i + 1] != ' ' && p_r.q_type != '\''))
 			rep_doll_str(enviro, line, &p_r, &dol);
