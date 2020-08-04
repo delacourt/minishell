@@ -139,6 +139,16 @@ typedef struct	s_main
 	char	**p_tab;
 }				t_main;
 
+typedef struct	s_pre
+{
+	int		i;
+	int		k;
+	char	*str;
+	char	*tmp;
+	char	*tmp2;
+	int		quote;
+}				t_pre;
+
 /*
 **	better_split
 */
@@ -156,6 +166,7 @@ void			*word_setup(const char *str, t_word *giv);
 char			**ft_enhanced_split(char const *str, t_env *enviro);
 char			*fill_word
 				(const char *str, t_env *enviro, int *c_split, int c_doll);
+void			d_quote_normal_case(t_word *giv, const char *str);
 
 /*
 **	builtin
@@ -191,7 +202,24 @@ int				setup_search(t_exec *ex, t_env *enviro, char **tabl);
 int				parse_exec
 				(char *line, t_r_output redir, t_env *enviro, t_pipe *pip);
 
-/*1
+int				d_exist(t_env *enviro, t_pipe *pip, t_exec *ex);
+int				i_directory(t_env *enviro, t_pipe *pip, t_exec *ex);
+int				p_denied(t_env *enviro, t_pipe *pip, t_exec *ex);
+
+int				exec_prog(t_exec *ex, t_r_output redir, t_pipe *pip, int i);
+
+char			*inp_back(char *str, int pos, char *line);
+void			set_len(t_doll *dol, char *envp, char *line);
+char			*re_back(int o, char *str, char *line, int *quote);
+char			*prel_ending(char *str);
+void			normal_case(char *line, t_pre *p_r);
+void			setup_p_r(char *line, t_pre *p_r);
+void			fill_current_split
+				(t_pre *p_r, char *envp, char *line, t_doll *dol);
+void			rep_doll_str(t_env enviro, char *line, t_pre *p_r, t_doll *dol);
+char			*preliminar_replacement(char *line, t_env enviro);
+
+/*
 **	main
 */
 
@@ -201,9 +229,9 @@ void			close_and_wait(t_pipe *pip, t_env *enviro, t_main *hub);
 void			setup_new_input(t_main *hub, t_env *enviro);
 void			get_line_split_semi_colon
 				(t_inter_read *term, t_main *hub, t_env *enviro);
-void			setup_pipe_split(t_main *hub, t_env *enviro, t_pipe *pip);
+int				setup_pipe_split(t_main *hub, t_env *enviro, t_pipe *pip);
 int				get_the_line(t_inter_read *term, char **line, t_env *enviro);
-void			split_pipe_error
+int				split_pipe_error
 				(int *error, t_env *enviro, t_pipe *pip, char **p_tab);
 void			split_r_in_out_error(int *error, t_env *enviro, t_pipe *pip);
 int				is_empty_line(char *str, char c);
@@ -230,6 +258,11 @@ void			k_ctrl_c(t_env *enviro, t_read *t_r, int *end);
 void			k_normal(t_read *t_r, int *end);
 void			k_del(t_read *t_r, int *end, t_key key);
 void			write_char(t_read *t_r, int *end, t_key key);
+
+void			k_home(t_key key, t_read *t_r, int *end);
+void			k_end(t_key key, t_read *t_r, int *end);
+
+int				multine_hub(t_read *t_r, t_env *enviro, char **line, int *end);
 
 /*
 **	spliter

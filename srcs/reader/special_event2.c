@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   special_event2.c                                   :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: velovo <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/16 14:16:42 by velovo            #+#    #+#             */
-/*   Updated: 2020/07/16 14:16:44 by velovo           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../head/minishell.h"
 
 int		k_enter(t_env *enviro, char **line, t_read *t_r)
@@ -19,10 +7,13 @@ int		k_enter(t_env *enviro, char **line, t_read *t_r)
 		t_r->brok = 'q';
 		return (ft_strlen(t_r->tst));
 	}
-	else if (is_broken_pipe(t_r->tst) == 1 || (ft_strlen(t_r->tst) > 0 && t_r->tst[ft_strlen(t_r->tst) - 1] == '\\'))
+	else if (is_broken_pipe(t_r->tst) == 1
+		|| (ft_strlen(t_r->tst) > 0
+		&& t_r->tst[ft_strlen(t_r->tst) - 1] == '\\'))
 	{
 		t_r->brok = 'p';
-		if (ft_strlen(t_r->tst) > 0 && t_r->tst[ft_strlen(t_r->tst) - 1] == '\\')
+		if (ft_strlen(t_r->tst) > 0
+			&& t_r->tst[ft_strlen(t_r->tst) - 1] == '\\')
 			t_r->brok = 'b';
 		return (ft_strlen(t_r->tst));
 	}

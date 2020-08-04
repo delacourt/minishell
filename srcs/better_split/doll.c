@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doll.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: velovo <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/16 17:11:37 by velovo            #+#    #+#             */
-/*   Updated: 2020/07/16 17:11:52 by velovo           ###   ########.fr       */
+/*   Created: 2020/08/03 17:10:54 by avan-pra          #+#    #+#             */
+/*   Updated: 2020/08/03 17:10:56 by avan-pra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ static void		*check_env
 	{
 		dol->len = search_the_equal(enviro.envp[dol->penv]);
 		dol->lentest = find_the_end_env(&str[*giv->i + 1]);
-		if (dol->len < dol->lentest)
-			dol->len = dol->lentest;
+		dol->len = (dol->len < dol->lentest) ? dol->lentest : dol->len;
 		if (ft_strncmp(
 			&str[*giv->i + 1], enviro.envp[dol->penv], dol->len) == 0)
 		{

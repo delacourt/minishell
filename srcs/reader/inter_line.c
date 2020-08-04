@@ -1,18 +1,6 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   inter_line.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: velovo <marvin@42.fr>                      +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/15 18:41:48 by velovo            #+#    #+#             */
-/*   Updated: 2020/07/15 18:42:34 by velovo           ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "../../head/minishell.h"
 
-static int	fake_exit(t_read *t_r, t_env *enviro)
+static int		fake_exit(t_read *t_r, t_env *enviro)
 {
 	enviro->ctrld = 1;
 	write(1, "exit", 4);
@@ -37,6 +25,20 @@ static int	fake_exit(t_read *t_r, t_env *enviro)
 **		marquer le caractere si il est ok
 */
 
+static int		check_key_next(t_env *enviro, t_read *t_r, int *end, t_key key)
+{
+	if (ft_strncmp(t_r->c_key, key.home, 4) == 0 && t_r->multi == 0)
+		k_home(key, t_r, end);
+	else if (ft_strncmp(t_r->c_key, key.end, 4) == 0 && t_r->multi == 0)
+		k_end(key, t_r, end);
+	else if (t_r->t == 127 && *end > 0
+		&& (t_r->multi == 0 || *end - 1 > t_r->multi))
+		k_del(t_r, end, key);
+	else if (ft_strlen(t_r->c_key) == 0 && (t_r->t >= 32 && t_r->t <= 126))
+		write_char(t_r, end, key);
+	return (0);
+}
+
 static int		check_key(t_env *enviro, t_read *t_r, int *end, t_key key)
 {
 	if (t_r->t == 4 && ft_strlen(t_r->tst) == 0)
@@ -45,46 +47,18 @@ static int		check_key(t_env *enviro, t_read *t_r, int *end, t_key key)
 		k_ctrl_c(enviro, t_r, end);
 	else if (t_r->t == 28)
 		;
-	else if (ft_strncmp(t_r->c_key, key.g, 4) == 0 && (t_r->multi == 0 || *end - 1 > t_r->multi))
+	else if (ft_strncmp(t_r->c_key, key.g, 4) == 0
+		&& (t_r->multi == 0 || *end - 1 > t_r->multi))
 		k_left(key, end, t_r);
-	else if (ft_strncmp(t_r->c_key, key.d, 4) == 0 && (*end < t_r->multi - ft_strlen(t_r->tst)))
+	else if (ft_strncmp(t_r->c_key, key.d, 4) == 0
+		&& (*end < t_r->multi - ft_strlen(t_r->tst)))
 		k_right(key, end, t_r);
 	else if (ft_strncmp(t_r->c_key, key.h, 4) == 0 && t_r->multi == 0)
 		k_up(enviro, t_r, key, end);
 	else if (ft_strncmp(t_r->c_key, key.b, 4) == 0 && t_r->multi == 0)
 		k_down(enviro, t_r, key, end);
-	else if (ft_strncmp(t_r->c_key, key.home, 4) == 0 && t_r->multi == 0)
-	{
-		unsigned int k;
-
-		k = *end;
-		while (k > 0)
-		{
-			write(1, key.g, 3);
-			--k;
-		}
-		*end = 0;
-		ft_memset(t_r->c_key, 0, 4);
-	}
-	else if (ft_strncmp(t_r->c_key, key.end, 4) == 0 && t_r->multi == 0)
-	{
-		unsigned int k;
-		unsigned int len;
-
-		k = *end;
-		len = ft_strlen(t_r->tst);
-		while (k < len)
-		{
-			write(1, key.d, 3);
-			++k;
-		}
-		*end = ft_strlen(t_r->tst);
-		ft_memset(t_r->c_key, 0, 4);
-	}
-	else if (t_r->t == 127 && *end > 0 && (t_r->multi == 0 || *end - 1 > t_r->multi))
-		k_del(t_r, end, key);
-	else if (ft_strlen(t_r->c_key) == 0 && (t_r->t >= 32 && t_r->t <= 126))
-		write_char(t_r, end, key);
+	else
+		return (check_key_next(enviro, t_r, end, key));
 	return (0);
 }
 
@@ -92,7 +66,7 @@ static int		check_key(t_env *enviro, t_read *t_r, int *end, t_key key)
 **	setup function for the read
 */
 
-static void	setup_read(t_key *key, t_read *t_r, char c_key[4], int *end)
+static void		setup_read(t_key *key, t_read *t_r, char c_key[4], int *end)
 {
 	*end = 0;
 	t_r->c_key = c_key;
@@ -113,7 +87,7 @@ static void	setup_read(t_key *key, t_read *t_r, char c_key[4], int *end)
 **	reset special key (to not segfault (shift + directionnal key))
 */
 
-int			inter_line(char **line, t_env *enviro)
+int				inter_line(char **line, t_env *enviro)
 {
 	int		k;
 	t_read	t_r;
@@ -130,35 +104,8 @@ int			inter_line(char **line, t_env *enviro)
 			k_normal(&t_r, &end);
 		if (t_r.t == 27 || ft_strlen(c_key) > 0)
 			c_key[ft_strlen(c_key)] = t_r.t;
-		if (t_r.t == '\n')
-		{
-			t_r.multi = k_enter(enviro, line, &t_r);
-			if (t_r.multi == 0) //return
-				return (1);
-			if (t_r.brok == 'p') //broken pipe ou backslash
-			{
-				end = ft_strlen(t_r.tst);
-				write(1, "\n> ", 3);
-				t_r.multi = t_r.multi - 1;
-			}
-			else if (t_r.brok == 'b') //broken pipe ou backslash
-			{
-				end = ft_strlen(t_r.tst);
-				t_r.t = '\0';
-				end = end - 1;
-				k_normal(&t_r, &end);
-				--end;
-				t_r.multi = t_r.multi - 2;
-				write(1, "\n> ", 3);
-			}
-			else
-			{
-				end = ft_strlen(t_r.tst);
-				t_r.t = '\n';
-				k_normal(&t_r, &end);
-				write(1, "\n> ", 3);
-			}
-		}
+		if (t_r.t == '\n' && multine_hub(&t_r, enviro, line, &end) == 1)
+			return (1);
 		else
 		{
 			if (check_key(enviro, &t_r, &end, key) == 3)

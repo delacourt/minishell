@@ -50,7 +50,7 @@ char		*ft_str_slash_join(char **tabl, char *pathed)
 	char	*try;
 
 	if (!(try = malloc(ft_strlen(tabl[0]) + ft_strlen(pathed) + 2)))
-		return(NULL);
+		return (NULL);
 	j = 0;
 	k = 0;
 	while (pathed[j] != '\0')

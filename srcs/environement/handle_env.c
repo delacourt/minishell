@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: velovo <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: avan-pra <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/07/16 15:29:43 by velovo            #+#    #+#             */
-/*   Updated: 2020/07/16 15:29:53 by velovo           ###   ########.fr       */
+/*   Created: 2020/08/03 17:35:38 by avan-pra          #+#    #+#             */
+/*   Updated: 2020/08/03 17:35:39 by avan-pra         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 **	+ some utils function
 */
 
-int		search_the_equal(char *str)
+int				search_the_equal(char *str)
 {
 	int i;
 
@@ -35,7 +35,7 @@ int		search_the_equal(char *str)
 	return (-1);
 }
 
-void	free_env(char **envp)
+void			free_env(char **envp)
 {
 	int i;
 
@@ -47,7 +47,7 @@ void	free_env(char **envp)
 	}
 }
 
-int		env_len(char **env)
+int				env_len(char **env)
 {
 	int i;
 
@@ -79,7 +79,7 @@ static void		inc_shlvl(char **envp)
 	}
 }
 
-char	**new_env(char **envp)
+char			**new_env(char **envp)
 {
 	char	**tenv;
 	int		i;
