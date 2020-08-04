@@ -45,26 +45,14 @@ static void	*fill_double_quote
 }
 
 static void	*fill_single_quote
-	(t_word *giv, const char *str, t_env *enviro, int c_doll)
+	(t_word *giv, const char *str)
 {
 	++*giv->i;
 	while (str[*giv->i] != '\'' && str[*giv->i] != '\0')
 	{
-		if (str[*giv->i] == '$' && c_doll == '$' && str[*giv->i + 1] != ' '
-			&& str[*giv->i + 1] != '\0' && str[*giv->i + 1] != '$'
-			&& str[*giv->i + 1] != '\\' && str[*giv->i + 1] != '\''
-			&& str[*giv->i + 1] != '\"')
-		{
-			if ((giv->word = fill_with_enviro(str, *enviro, giv)) == NULL)
-				return (NULL);
-			++*giv->i;
-		}
-		else
-		{
-			giv->word[*giv->dep] = str[*giv->i];
-			++*giv->dep;
-			++*giv->i;
-		}
+		giv->word[*giv->dep] = str[*giv->i];
+		++*giv->dep;
+		++*giv->i;
 	}
 	return (giv->word);
 }
@@ -96,7 +84,7 @@ static void	*fill_loop(t_word *giv, const char *str, t_env *enviro, int c_doll)
 	}
 	else if (str[*giv->i] == '\'')
 	{
-		if (fill_single_quote(giv, str, enviro, c_doll) == NULL)
+		if (fill_single_quote(giv, str) == NULL)
 			return (NULL);
 	}
 	else if (str[*giv->i] == '\\')
