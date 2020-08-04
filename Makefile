@@ -12,6 +12,8 @@
 
 NAME			= minishell
 
+CFLAGS			= -Wall -Wextra -Werror -g3 #-fsanitize=address
+
 SRC				=	./srcs/reader/inter_line.c\
 					./srcs/reader/read_utils.c\
 					./srcs/reader/special_event1.c\
@@ -52,7 +54,6 @@ ROAD_O			= $(OBJ)
 
 ROAD_B			= $(SRCB)
 
-FLAGS			= -Wall -Wextra -Werror -g3 #-fsanitize=address
 
 OBJ				= $(SRC:.c=.o)
 
@@ -62,7 +63,7 @@ HEADER_DIR		= -I./head/get_next_line.h -I./head/minishell.h
 
 $(NAME) :		$(OBJ)
 				cd libft && make
-				$(CC) $(FLAGS) $(OBJ) libft/libft.a -ltermcap -o $(NAME)
+				$(CC) $(OBJ) libft/libft.a -ltermcap -o $(NAME)
 
 LIBFT			= libft
 
