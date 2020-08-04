@@ -147,6 +147,7 @@ typedef struct	s_pre
 	char	*tmp;
 	char	*tmp2;
 	int		quote;
+	int		q_type;
 }				t_pre;
 
 /*

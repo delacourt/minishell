@@ -15,9 +15,18 @@
 void		normal_case(char *line, t_pre *p_r)
 {
 	if ((line[p_r->i] == '\"' || line[p_r->i] == '\'') && p_r->quote == 0)
+	{
 		++p_r->quote;
+		if (line[p_r->i] == '\"')
+			p_r->q_type = '\"';
+		else if (line[p_r->i] == '\'')
+			p_r->q_type = '\'';
+	}
 	else if ((line[p_r->i] == '\"' || line[p_r->i] == '\'') && p_r->quote == 1)
+	{
 		--p_r->quote;
+		p_r->q_type = 0;
+	}
 	p_r->str[p_r->k] = line[p_r->i];
 	++p_r->i;
 	++p_r->k;
@@ -28,6 +37,7 @@ void		setup_p_r(char *line, t_pre *p_r)
 	p_r->i = 0;
 	p_r->k = 0;
 	p_r->quote = 0;
+	p_r->q_type = 0;
 	p_r->str = ft_calloc(ft_strlen(line) + 1, sizeof(char));
 }
 
@@ -85,9 +95,9 @@ char		*preliminar_replacement(char *line, t_env enviro)
 		if (line[p_r.i] == '\\' && (line[p_r.i + 1] == '$'))
 			++p_r.i;
 		if ((p_r.i > 0 && line[p_r.i] == '$'
-			&& line[p_r.i - 1] != '\\' && line[p_r.i + 1] != ' ')
+			&& line[p_r.i - 1] != '\\' && line[p_r.i + 1] != ' ' && p_r.q_type != '\'')
 			|| (p_r.i == 0 && line[p_r.i] == '$'
-			&& line[p_r.i + 1] != ' '))
+			&& line[p_r.i + 1] != ' ' && p_r.q_type != '\''))
 			rep_doll_str(enviro, line, &p_r, &dol);
 		else
 			normal_case(line, &p_r);
