@@ -62,3 +62,29 @@ int			is_broken_quote(char *line)
 	}
 	return (0);
 }
+
+int			count_quote(int *quotes, int *i, char *line, int *q_type)
+{
+	int ret;
+
+	ret = 0;
+	if (((*i == 0 && (line[*i] == '\"' || line[*i] == '\''))
+		|| (*i > 0 && line[*i - 1] != '\\'
+		&& (line[*i] == '\"' || line[*i] == '\''))) && *quotes == 0)
+	{
+		*q_type = '\'';
+		if (line[*i] == '\"')
+			*q_type = '\"';
+		++*quotes;
+		ret = 1;
+	}
+	else if (((*i == 0 && (line[*i] == '\"' || line[*i] == '\''))
+		|| (*i > 0 && line[*i - 1] != '\\' && line[*i] == *q_type
+		&& (line[*i] == '\"' || line[*i] == '\''))) && *quotes == 1)
+	{
+		*q_type = 0;
+		--*quotes;
+		ret = 1;
+	}
+	return (ret);
+}

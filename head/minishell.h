@@ -272,6 +272,7 @@ int				multine_hub(t_read *t_r, t_env *enviro, char **line, int *end);
 
 int				is_broken_pipe(char *str);
 int				is_broken_quote(char *line);
+int				count_quote(int *quotes, int *i, char *line, int *q_type);
 int				split_pipe(char *line, char ***attach);
 int				fill_t_pipe(t_pipe *pip, char **p_tab);
 int				count_pipe(char *line);
