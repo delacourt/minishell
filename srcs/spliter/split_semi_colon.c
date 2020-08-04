@@ -17,16 +17,16 @@ static int		count_semi_colon(char *line)
 	int	sc;
 	int	i;
 	int	q;
+	int	q_type;
 
 	i = 0;
 	q = 0;
+	q_type = 0;
 	sc = 0;
 	while (line[i])
 	{
-		if (line[i] == '\"' && q == 0)
-			q++;
-		else if (line[i] == '\"' && q == 1)
-			q--;
+		if (count_quote(&q, &i, line, &q_type) == 1)
+			;
 		if (line[i + 1] == ';' && line[i] != '\\' && q == 0)
 			sc++;
 		i++;
@@ -56,12 +56,13 @@ void			reset_values_loop(t_split_sc *split)
 
 void			split_line_loop(char *line, t_split_sc *split)
 {
+	int q_type;
+
+	q_type = 0;
 	while (line[split->line_i])
 	{
-		if (line[split->line_i] == '\"' && split->quote == 0)
-			split->quote++;
-		else if (line[split->line_i] == '\"' && split->quote == 1)
-			split->quote--;
+		if (count_quote(&split->quote, &split->line_i, line, &q_type) == 1)
+			;
 		if (line[split->line_i + 1] == ';'
 			&& line[split->line_i] != '\\' && split->quote == 0)
 		{
