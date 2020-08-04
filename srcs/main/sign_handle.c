@@ -15,5 +15,4 @@
 void	sighandler(int signum)
 {
 	(void)signum;
-	write(1, "\n", 1);
 }

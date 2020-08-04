@@ -50,6 +50,7 @@ void		close_and_wait(t_pipe *pip, t_env *enviro, t_main *hub)
 		{
 			if (WTERMSIG(pid) == 2)
 			{
+				write(1, "\n", 1);
 				enviro->lsc = 130;
 				hub->error = 5;
 			}
