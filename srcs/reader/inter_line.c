@@ -37,7 +37,7 @@ static int		fake_exit(t_read *t_r, t_env *enviro)
 **		marquer le caractere si il est ok
 */
 
-static int		check_key_next(t_env *enviro, t_read *t_r, int *end, t_key key)
+static int		check_key_next(t_read *t_r, int *end, t_key key)
 {
 	if (ft_strncmp(t_r->c_key, key.home, 4) == 0 && t_r->multi == 0)
 		k_home(key, t_r, end);
@@ -63,14 +63,14 @@ static int		check_key(t_env *enviro, t_read *t_r, int *end, t_key key)
 		&& (t_r->multi == 0 || *end - 1 > t_r->multi))
 		k_left(key, end, t_r);
 	else if (ft_strncmp(t_r->c_key, key.d, 4) == 0
-		&& (*end < t_r->multi - ft_strlen(t_r->tst)))
+		&& ((size_t)(*end) < (t_r->multi - ft_strlen(t_r->tst))))
 		k_right(key, end, t_r);
 	else if (ft_strncmp(t_r->c_key, key.h, 4) == 0 && t_r->multi == 0)
 		k_up(enviro, t_r, key, end);
 	else if (ft_strncmp(t_r->c_key, key.b, 4) == 0 && t_r->multi == 0)
 		k_down(enviro, t_r, key, end);
 	else
-		return (check_key_next(enviro, t_r, end, key));
+		return (check_key_next(t_r, end, key));
 	return (0);
 }
 
@@ -101,7 +101,6 @@ static void		setup_read(t_key *key, t_read *t_r, char c_key[4], int *end)
 
 int				inter_line(char **line, t_env *enviro)
 {
-	int		k;
 	t_read	t_r;
 	t_key	key;
 	int		end;

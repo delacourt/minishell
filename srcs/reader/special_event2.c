@@ -67,7 +67,7 @@ void	k_del(t_read *t_r, int *end, t_key key)
 	write(1, &t_r->tst[*end], ft_strlen(&t_r->tst[*end]));
 	write(1, " ", 1);
 	j = 0;
-	while (j <= ft_strlen(&t_r->tst[*end]))
+	while ((size_t)(j) <= ft_strlen(&t_r->tst[*end]))
 	{
 		write(1, &key.g, 3);
 		++j;
@@ -81,7 +81,7 @@ void	write_char(t_read *t_r, int *end, t_key key)
 	write(1, &t_r->t, 1);
 	write(1, &t_r->tst[*end], ft_strlen(&t_r->tst[*end]));
 	i = 0;
-	while (i < ft_strlen(&t_r->tst[*end]))
+	while ((size_t)(i) < ft_strlen(&t_r->tst[*end]))
 	{
 		write(1, &key.g, 3);
 		++i;

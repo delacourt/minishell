@@ -24,7 +24,7 @@ void		k_left(t_key key, int *end, t_read *t_r)
 
 void		k_right(t_key key, int *end, t_read *t_r)
 {
-	if (*end < ft_strlen(t_r->tst))
+	if ((size_t)(*end) < ft_strlen(t_r->tst))
 	{
 		write(1, &key.d, 3);
 		++*end;
@@ -56,7 +56,7 @@ void		k_up(t_env *enviro, t_read *t_r, t_key key, int *end)
 	ft_memset(t_r->c_key, 0, 4);
 }
 
-static void	k_down_next(t_env *enviro, t_read *t_r, t_key key, int *end)
+static void	k_down_next(t_read *t_r, t_key key, int *end)
 {
 	unsigned int k;
 
@@ -100,6 +100,6 @@ void		k_down(t_env *enviro, t_read *t_r, t_key key, int *end)
 		*end = ft_strlen(t_r->tst);
 	}
 	else if (t_r->ou <= 2)
-		k_down_next(enviro, t_r, key, end);
+		k_down_next(t_r, key, end);
 	ft_memset(t_r->c_key, 0, 4);
 }

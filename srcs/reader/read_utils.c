@@ -50,8 +50,6 @@ void	fill_key(t_key *key)
 
 void	put_in_histo(t_env *enviro, char *tst)
 {
-	char	*tmp;
-	char	*tmp2;
 	int		i;
 
 	i = NCMD - 2;

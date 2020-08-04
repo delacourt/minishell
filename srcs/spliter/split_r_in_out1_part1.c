@@ -22,7 +22,6 @@ int				split_r_in_out(char *line, t_r_output *redir, t_env *enviro)
 	int			i;
 	int			j;
 	int			quotes;
-	char		*filename;
 	t_etup_i_o	giv;
 
 	giv.ret = 0;

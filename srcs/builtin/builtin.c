@@ -84,8 +84,6 @@ int		is_atoiable(char *str)
 
 int		end(char **tabl, t_env *enviro)
 {
-	int i;
-
 	if (enviro->ctrld == 0)
 		write(2, "exit\n", 5);
 	if (env_len(tabl) == 2 && ft_strlen(tabl[1]) > 0

@@ -124,6 +124,7 @@ char		*fill_word(const char *str, t_env *enviro, int *c_split, int c_doll)
 	giv.c_split = c_split;
 	giv.dep = &dep;
 	giv.i = &i;
+	word = NULL;
 	giv.word = word;
 	word_setup(str, &giv);
 	while (str[i] != '\0' && str[i] != ' ' && str[i] != '<' && str[i] != '>')
