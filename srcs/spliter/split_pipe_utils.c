@@ -54,7 +54,9 @@ int		count_pipe(char *line)
 	{
 		if (count_quote(&quotes, &i, line, &q_type) == 1)
 			;
-		else if (((i == 0 && line[i] == '|') || (i > 0 && line[i] == '|' && line[i - 1] != '\\')) && quotes == 0)
+		else if (((i == 0 && line[i] == '|')
+			|| (i > 0 && line[i] == '|'
+			&& line[i - 1] != '\\')) && quotes == 0)
 			++n_pipe;
 		i++;
 	}
@@ -76,7 +78,9 @@ int		len_line(char *line)
 	{
 		if (count_quote(&quotes, &i, line, &q_type) == 1)
 			;
-		else if (((i == 0 && line[i] == '|') || (i > 0 && line[i] == '|' && line[i - 1] != '\\')) && quotes == 0)
+		else if (((i == 0 && line[i] == '|')
+			|| (i > 0 && line[i] == '|'
+			&& line[i - 1] != '\\')) && quotes == 0)
 			return (i + 1);
 		i++;
 	}
@@ -97,7 +101,9 @@ void	copy_word(char *src, char *dest)
 		dest[i] = src[i];
 		if (count_quote(&quotes, &i, src, &q_type) == 1)
 			;
-		else if (((i == 0 && src[i] == '|') || (i > 0 && src[i] == '|' && src[i - 1] != '\\')) && quotes == 0)
+		else if (((i == 0 && src[i] == '|')
+			|| (i > 0 && src[i] == '|'
+			&& src[i - 1] != '\\')) && quotes == 0)
 			break ;
 		i++;
 	}

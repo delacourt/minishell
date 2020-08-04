@@ -50,8 +50,18 @@ void	setup_new_input(t_main *hub, t_env *enviro, int argc, char **argv)
 void	get_line_split_semi_colon
 	(t_inter_read *term, t_main *hub, t_env *enviro)
 {
+	int i;
+
+	i = 0;
 	get_the_line(term, &hub->line, enviro);
 	hub->tabl = split_semi_colon(hub->line);
+	skip_space(hub->line, &i);
+	if (hub->line[i] == ';')
+	{
+		hub->error = 5;
+		write(2, "mash: syntax error, unexpected token ';'\n", 41);
+		enviro->lsc = 2;
+	}
 	hub->i = 0;
 }
 
