@@ -39,6 +39,7 @@ void		close_and_wait(t_pipe *pip, t_env *enviro, t_main *hub)
 	int		v;
 	int		pid;
 
+	pid = 0;
 	close_pipe(pip);
 	v = 0;
 	while (v < pip->founded)
@@ -52,6 +53,12 @@ void		close_and_wait(t_pipe *pip, t_env *enviro, t_main *hub)
 			{
 				write(1, "\n", 1);
 				enviro->lsc = 130;
+				hub->error = 5;
+			}
+			else if (WTERMSIG(pid) == 3)
+			{
+				write(1, "Quit\n", 5);
+				enviro->lsc = 131;
 				hub->error = 5;
 			}
 			else if (hub->error == 0)

@@ -34,7 +34,7 @@ int			exec_prog(t_exec *ex, t_r_output redir, t_pipe *pip, int i)
 			close(pip->pipefd[i][1]);
 			--i;
 		}
-		execve(ex->path, ex->argv, ex->envp);
+		exit(execve(ex->path, ex->argv, ex->envp));
 	}
 	pip->pid[pip->nbr] = pid;
 	++pip->nbr;

@@ -28,7 +28,13 @@ static int		count_semi_colon(char *line)
 		if (count_quote(&q, &i, line, &q_type) == 1)
 			;
 		if (line[i + 1] == ';' && line[i] != '\\' && q == 0)
+		{
 			sc++;
+			++i;
+			while (line[i] != '\0' && line[i + 1] == ';')
+				line[i++] = ' ';
+			--i;
+		}
 		i++;
 	}
 	return (sc);
@@ -85,7 +91,10 @@ void			split_line_loop(char *line, t_split_sc *split)
 char			**split_semi_colon(char *line)
 {
 	t_split_sc split;
+	char *tmp;
 
+	tmp = line;
+	line = ft_strdup(tmp);
 	setup_t_split_sc(&split);
 	split.tabl = ft_calloc((count_semi_colon(line) + 2), sizeof(char *));
 	split_line_loop(line, &split);
@@ -100,5 +109,7 @@ char			**split_semi_colon(char *line)
 	split.tabl[split.tabl_i][split.tabl_j] = '\0';
 	split.tabl_i++;
 	split.tabl[split.tabl_i] = NULL;
+	free(line);
+	line = tmp;
 	return (split.tabl);
 }
