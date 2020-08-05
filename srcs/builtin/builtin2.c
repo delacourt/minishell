@@ -36,7 +36,9 @@ int		cd(char **tabl, int *lsc, char **envp)
 {
 	int		i;
 
-	i = chdir(tabl[0]);
+	i = 0;
+	if (tabl[0] != NULL)
+		i = chdir(tabl[0]);
 	*lsc = 0;
 	if (i == -1)
 	{
